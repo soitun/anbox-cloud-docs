@@ -1,5 +1,5 @@
 (howto-access-stream-gateway)=
-# How to access the stream gateway
+# Access the stream gateway
 
 Similar to the Anbox Management Service (AMS), the stream gateway exposes its API over an HTTP interface. Clients can be anything from the Anbox Cloud web dashboard to any custom client that you develop.
 
@@ -8,8 +8,9 @@ Similar to the Anbox Management Service (AMS), the stream gateway exposes its AP
 ### Prerequisites
 
 To access the stream gateway,
-* The gateway's HTTP API must be exposed. This is the default configuration.
-* All calls to the stream gateway must be authenticated. Authentication takes the form of a single token per client that you must embed in your requests. A token is associated to a *service account*, has a limited lifetime, and can be revoked at any time.
+
+- The gateway's HTTP API must be exposed. This is the default configuration.
+- All calls to the stream gateway must be authenticated. Authentication takes the form of a single token per client that you must embed in your requests. A token is associated to a *service account*, has a limited lifetime, and can be revoked at any time.
 
 ### Creating a token
 
@@ -60,7 +61,7 @@ Type `anbox-stream-gateway --help` to list all commands.
 
 ## Related topics
 
-* {ref}`exp-application-streaming`
-* {ref}`exp-ams`
-* {ref}`tut-set-up-stream-client`
-* {ref}`sec-streaming-sdk`
+- {ref}`exp-application-streaming`
+- {ref}`exp-ams`
+- {ref}`tut-set-up-stream-client`
+- {ref}`sec-streaming-sdk`

@@ -1,5 +1,5 @@
 (howto-backup-restore-application-data)=
-# How to back up and restore application data
+# Back up and restore application data
 
 Backup and restoration of application data can be achieved easily with the `aam`  (Anbox Application Manager) utility helper installed in the image. The `aam` can bundle any necessary application data together into a tarball file or extract the tarball file to a particular application folder according to the specified package name.
 
@@ -14,12 +14,12 @@ TARBALL_FILE=$(basename $(find ./ -name *.tar.bz2))
  # Upload the tarball to public or private cloud storage service
 curl -i -X POST --data-binary @"${TARBALL_FILE}" <cloud_storage_upload_url>
 ```
+
 Running this script in an addon post-stop hook will back up the user data of a particular application with `aam` and upload the resulting tarball file to the cloud storage service when an instance is stopped.
 
 If `boot-package` is specified in the application manifest file, you can also back up the boot application data simply with the flag `--boot-package`.
 
     aam backup --boot-package
-
 
 `aam` will automatically query the boot package name from the instance and back up the relevant application data. As result `aam` will create a tarball file with the name `<package name>.tar.bz2`.
 
@@ -48,7 +48,7 @@ Sometimes, not every piece of data is useful (for example, cache), and backing u
 `include`    | Include files in resulting tarball with a wildcard
 `exclude`    | Exclude files in resulting tarball with a wildcard
 
-Please refer to the pattern syntax [in the Go documentation](https://golang.org/pkg/path/filepath/#Match).
+Please refer to the pattern syntax [in the Go documentation](https://pkg.go.dev/path/filepath#Match).
 
 For example, with the following filters:
 
@@ -67,9 +67,9 @@ The resulting tarball file will include the following files:
 
 And exclude the following files:
 
-* Files with `jpeg` suffix below the folder `/sdcard/Android/data/com.canonical.candy/user_data`
-* Files with `cfg` suffix below the folder `/data/data/com.canonical.candy/new_level`
+- Files with `jpeg` suffix below the folder `/sdcard/Android/data/com.canonical.candy/user_data`
+- Files with `cfg` suffix below the folder `/data/data/com.canonical.candy/new_level`
 
 ## Related topics
 
-* {ref}`howto-backup-restore-example`
+- {ref}`howto-backup-restore-example`

@@ -1,10 +1,10 @@
 (howto-enable-ha)=
-# How to enable High Availability
+# Enable High Availability
 
 Anbox Cloud comes with support for High Availability (HA) for both Core and the Streaming Stack.
-In addition to Juju's support for high availability of the Juju controller( see [Juju documentation](https://juju.is/docs/juju/manage-controllers#heading--make-a-controller-highly-available)), you can add HA for the Anbox Management Service (AMS) and the Anbox Stream Gateway to ensure fault tolerance and higher uptime.
+In addition to Juju's support for high availability of the Juju controller( see [Juju documentation](https://documentation.ubuntu.com/juju/latest/howto/manage-controllers#make-a-controller-highly-available)), you can add HA for the Anbox Management Service (AMS) and the Anbox Stream Gateway to ensure fault tolerance and higher uptime.
 
-Enabling High Availability (HA for short) is achieved by adding new units via Juju(see [Juju documentation](https://juju.is/docs/juju/manage-applications#heading--scale-an-application)).
+Enabling High Availability (HA for short) is achieved by adding new units via Juju(see [Juju documentation](https://documentation.ubuntu.com/juju/latest/howto/manage-applications#scale-an-application)).
 This will allocate a new machine, run new instances of the scaled application and configure the cluster automatically.
 
 Adding a unit is done with the following syntax:
@@ -16,13 +16,12 @@ For example, to go from 1 to 5 AMS units, you would run the following:
     juju add-unit ams -n 4
 
 ```{tip}
-By default, Juju allocates small machines to limit costs but you can request better resources by [enforcing constraints](https://canonical-juju.readthedocs-hosted.com/en/latest/user/reference/constraint/):
+By default, Juju allocates small machines to limit costs but you can request better resources by [enforcing constraints](https://documentation.ubuntu.com/juju/latest/user/reference/constraint/):
 
 `juju set-constraints anbox-stream-gateway cores=4 memory=8GB`
 
 This is heavily recommended on production environments.
 ```
-
 
 ## Anbox Cloud Core
 
@@ -80,7 +79,7 @@ anbox-stream-gateway/2      active    idle   4       10.212.218.136  4000/tcp,70
 
 ## Scaling down
 
-Scaling down can be done by removing units via Juju (see [Juju documentation](https://juju.is/docs/olm/manage-applications#heading--scale-an-application)). You have to specifically target the unit that you want to remove:
+Scaling down can be done by removing units via Juju (see [Juju documentation](https://documentation.ubuntu.com/terraform-provider-juju/latest/howto/manage-applications/#scale-an-application)). You have to specifically target the unit that you want to remove:
 
     juju remove-unit anbox-stream-agent/2
 

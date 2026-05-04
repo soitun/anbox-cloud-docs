@@ -1,5 +1,5 @@
 (howto-enable-client-side-video-upscaling)=
-# How to enable client-side video upscaling
+# Enable client-side video upscaling
 
 The [Anbox Streaming SDK](https://github.com/canonical/anbox-streaming-sdk) offers experimental video upscaling features for client side streaming, leveraging [AMD FidelityFX Super Resolution 1.0](https://gpuopen.com/fidelityfx-superresolution/). This feature allows video to be transmitted at lower resolutions, saving bandwidth without losing too much detail. The SDK sets up a [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL) context and utilizes a fragment shader based on the FSR 1.0 algorithm for post-processing, producing clearer and sharper video frames before they are displayed on the screen.
 
@@ -51,6 +51,6 @@ When using a custom fragment shader in WebGL, you need to manage the following p
 
 ## Related topics
 
-* {ref}`exp-application-streaming`
-* {ref}`tut-set-up-stream-client`
-* {ref}`sec-streaming-sdk`
+- {ref}`exp-application-streaming`
+- {ref}`tut-set-up-stream-client`
+- {ref}`sec-streaming-sdk`

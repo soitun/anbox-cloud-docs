@@ -1,14 +1,27 @@
 (howto-create-instance)=
-# How to create an instance
+# Create an instance
 To launch an application or an image, Anbox Cloud creates an instance for it. To create and launch an instance, you can use the Anbox Cloud dashboard or the CLI.
 
-`````{tabs}
-````{group-tab} CLI
+**Check out this video that explains the differences between an instance created from an application vs an instance created from an image:**
+
+```{raw} html
+<iframe width="640" height="360"
+        src="https://www.youtube.com/embed/nBUqb_Bnx2Y"
+        title="Differentiate application based and image based instances"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+</iframe>
+```
+
+::::{tab-set}
+:::{tab-item} CLI
+:sync: cli
 
 Depending on what you need, you can use the either of the following commands to create an instance for a registered application or an image.
 
-* `amc launch` creates and starts the instance.
-* `amc init` only creates the instance.
+- `amc launch` creates and starts the instance.
+- `amc init` only creates the instance.
 
 By default, the instance will run headless.
 
@@ -51,6 +64,7 @@ You can launch a raw instance from an image. To do so, get the ID of the image b
 ```{tip}
 If you don't know what a raw instance is, see {ref}`sec-application-raw-instances`.
 ```
+
     amc image ls
 
 This command lists the available images along with their IDs and status:
@@ -84,6 +98,10 @@ AMS will automatically create a streaming session for the instance. You can find
 If you want to to further customize the streaming configuration such as display settings or frame rate, use the corresponding arguments: `--display-size`, `--display-density` and `--fps`. For example, to create an instance with a 1080p resolution, a frame rate of 60 and a DPI of 120, run:
 
     amc launch --enable-streaming --display-size=1920x1080 --display-density=120 --fps=60 ...
+
+```{note}
+If you provide a display width or height that is an odd number, Anbox will automatically adjust it to the nearest even number by increasing it by 1 for proper video encoding.
+```
 
 ## Launch an instance with a specific name
 
@@ -129,9 +147,20 @@ To launch an instance with development mode enabled, add the `--devmode` flag to
 
     amc launch --devmode <application_id>
 
-````
+## Launch an instance without disk reservation
 
-```{group-tab} Dashboard
+By default, AMS reserves the full logical disk quota to ensure guaranteed disk space availability on the target node. In deployments backed by the ZFS storage driver, which provides Copy-on-Write(CoW) capabilities, you can use the `--no-disk-reserve` flag to achieve higher instance density by skipping strict logical quota checks:
+
+    amc launch --no-disk-reserve <application_id>
+
+```{note}
+Using this flag makes "out of disk" scenarios possible on the node. To better handle such cases, future AMS releases will introduce additional storage-level safety mechanisms to prevent new instances from being scheduled when physical disk space is critically low. In the meantime, you should closely monitor LXD node's physical disk usage via the monitor system. See {ref}`howto-monitor-anbox` for more details.
+```
+
+:::
+
+:::{tab-item} Dashboard
+:sync: dashboard
 
 You can create instances from the *Images* and *Applications* pages using the *Create an Instance* button ( ![create instance icon](/images/icons/create-instance-icon.png) ). You can also create instances from the details page of an image and an application.
 
@@ -147,7 +176,7 @@ Once you create an instance by providing the necessary attributes, you can view 
 
 You can view details about a particular instance when you click on the instance name in the *Instances* list page. The instance details page offers three types of information: *Overview*, *Terminal*, and *Logs*.
 
-The *Overview* tab provides detailed information about the instance, including sections for the instance details, associated image or application, streaming configurations, network settings, and tags.
+The *Overview* tab provides detailed information about the instance, including sections for the instance details, associated image or application, streaming configurations, network settings, tags and security. In the security section you can enable the delete protection feature, to prevent instances from being accidentally deleted.
 
 The *Terminal* tab features a terminal interface for the Anbox instance, helping you to monitor system processes in real-time, check memory usage, view android and system logs, and much more.
 
@@ -155,12 +184,11 @@ The *Logs* tab helps you debug issues with the instances as it provides  downloa
 
 The instance details page also contains all the available actions including streaming, setting up sharing, connecting ADB, starting or stopping the instance, and deleting the instance.
 
-```
-
-`````
+:::
+::::
 
 ## Related topics
 
-* {ref}`exp-application-streaming`
-* {ref}`exp-instances`
-* {ref}`howto-access-instance`
+- {ref}`exp-application-streaming`
+- {ref}`exp-instances`
+- {ref}`howto-access-instance`

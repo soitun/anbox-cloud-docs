@@ -1,5 +1,5 @@
 (howto-create-application)=
-# How to create an application
+# Create an application
 
 An application can be created using the Anbox Cloud dashboard or through the CLI.
 
@@ -46,8 +46,9 @@ resources:
   disk-size: 8GB
 ```
 
-`````{tabs}
-````{group-tab} CLI
+::::{tab-set}
+:::{tab-item} CLI
+:sync: cli
 
 An application can be created from a directory, a zip archive or a tarball file. If you cannot use a directory, the second best option is to use a zip archive that provides better optimization when compared to a tarball.
 
@@ -119,21 +120,23 @@ resources:
   disk-size: 8GB
 ```
 
-````
+:::
 
-```{group-tab} Dashboard
+:::{tab-item} Dashboard
+:sync: dashboard
 
 Click *Create application* on the applications page, enter the required and any optional details that you want to provide and confirm with *Create*.
 
 An application can be created either in a VM or a container. Selecting one of these options will update the image dropdown to only include images of the chosen type. The default image for the selected type is selected by default in the image dropdown.
 
 The *Configuration (optional)* section allows you to customize additional fields, including the following attributes:
-* {ref}`manifest version name <ref-application-manifest>`
-* {ref}`boot package <ref-application-manifest>`
-* {ref}`boot activity <ref-application-manifest>`
-* {ref}`tags <ref-application-manifest>`
-* {ref}`features <ref-feature-flags>` 
-* {ref}`sec-application-manifest-watchdog`
+
+- {ref}`manifest version name <ref-application-manifest>`
+- {ref}`boot package <ref-application-manifest>`
+- {ref}`boot activity <ref-application-manifest>`
+- {ref}`tags <ref-application-manifest>`
+- {ref}`features <ref-feature-flags>`
+- {ref}`sec-application-manifest-watchdog`
 
 The switch *Customize manifest.yaml* at the bottom of the form allows to directly customize your application manifest with a YAML editor.
 
@@ -142,11 +145,11 @@ There may be more advanced scenarios while creating an application that cannot b
 After you create an application, the *Applications* page lists all the available applications. Clicking an application name opens the *Application details* page that displays information about the application, its configuration, and deployment features in the *Overview* section.
 
 The *Versions* section lists all created versions of the application. Use the *Actions* menu to either upload to the registry, unpublish, or delete a specific version. Click a specific version to open the version side panel, which provides detailed information about the version related to the parent image and watchdog.
-```
-`````
+:::
+::::
 
 Once the status of the application switches to `ready`, the application is ready and can be used. See {ref}`howto-wait-for-application` for information about how to monitor the application status.
 
 ## Related topics
 
-* {ref}`sec-application-bootstrap`
+- {ref}`sec-application-bootstrap`

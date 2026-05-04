@@ -1,7 +1,31 @@
 (howto-expose-services)=
-# How to expose services on an instance
+# Expose services on an instance
 
-AMS allows an instance to expose a service to the outer network. For that, it provides a feature called instance services which let you define a port to expose on the instance endpoints. The set of services to expose is defined when the instance is launched. For example, the following command exposes port `22` on the instance's private endpoint:
+AMS allows an instance to expose a service to the outer network using instance services. You can do this by defining a port to expose on the instance endpoints.
+
+## Prerequisites
+
+By default, external access to Anbox instances is restricted for security reasons. If you need to allow external access, you must enable access manually.
+
+For charmed deployments, external access is blocked by the [LXD charm](https://charmhub.io/ams-lxd). To allow access, expose this charm and configure the allowed port range:
+
+    juju expose lxd
+    juju config lxd exposed_instance_ports=10000-11000
+
+For appliance deployments on public clouds, external access is controlled by the [cloud platform](https://documentation.ubuntu.com/anbox-cloud/howto/install-appliance/#supported-cloud-platforms). To enable access to Anbox instances, you must manually update the firewall or security group settings:
+
+For AWS, [configure the associated security group](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-security-group-rules.html) to allow inbound traffic on ports 10000-11000.
+
+For Google Cloud, [adjust the firewall rules](https://documentation.ubuntu.com/anbox-cloud/howto/install-appliance/install-on-google-cloud/#firewall-setup) to open the port range 10000-11000.
+
+For Azure, perform the following action depending on whether you are doing this for a fresh deployment or an existing deployment:
+
+- If you are using the [template](https://github.com/Azure/azure-quickstart-templates/tree/master/quickstarts/canonical/anbox) for a fresh deployment, set `exposeAnboxContainerServices` to `true`.
+- For existing deployments, [update the network security group](https://learn.microsoft.com/en-us/azure/virtual-network/manage-network-security-group?tabs=network-security-group-portal#create-a-security-rule) to include 10000–11000 in the `Destination port range`.
+
+## Expose a service
+
+The set of services to expose is defined when the instance is launched. For example, the following command exposes port `22` on the instance's private endpoint:
 
     amc launch -s tcp:22 bdp7kmahmss3p9i8huu0
 

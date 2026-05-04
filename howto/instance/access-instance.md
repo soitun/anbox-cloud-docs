@@ -1,5 +1,5 @@
 (howto-access-instance)=
-# How to access an instance
+# Access an instance
 
 In some cases, it might be necessary to access an individual instance for debugging reasons.
 You can do this on the command line with the `amc` command.

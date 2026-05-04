@@ -1,8 +1,8 @@
-## anbox-cloud-appliance
+# anbox-cloud-appliance
 
 Anbox Cloud Appliance, bringing Android at scale to any cloud
 
-### Synopsis
+## Synopsis
 
 Command-Line client for the Anbox Cloud Appliance
 
@@ -20,14 +20,15 @@ and stream graphical output in real time to any web or mobile client. Unleash yo
 creativity to invent new mobile user experiences with Anbox Cloud Appliance.
 
 
-### Options
+## Options
 
 ```
   -h, --help   help for anbox-cloud-appliance
 ```
 
-### SEE ALSO
+## SEE ALSO
 
+* [anbox-cloud-appliance ams](anbox-cloud-appliance_ams.md)	 - Manage the AMS service of the Anbox Cloud Appliance
 * [anbox-cloud-appliance buginfo](anbox-cloud-appliance_buginfo.md)	 - Collection information for effective bug reports
 * [anbox-cloud-appliance completion](anbox-cloud-appliance_completion.md)	 - Generate the autocompletion script for the specified shell
 * [anbox-cloud-appliance config](anbox-cloud-appliance_config.md)	 - Managed the Anbox Cloud Appliance configuration
@@ -36,6 +37,6 @@ creativity to invent new mobile user experiences with Anbox Cloud Appliance.
 * [anbox-cloud-appliance disable](anbox-cloud-appliance_disable.md)	 - Disable individual features of the Anbox Cloud Appliance
 * [anbox-cloud-appliance enable](anbox-cloud-appliance_enable.md)	 - Enable individual features of the Anbox Cloud Appliance
 * [anbox-cloud-appliance init](anbox-cloud-appliance_init.md)	 - Initialize and configure the Anbox Cloud Appliance
-* [anbox-cloud-appliance prepare-node-script](anbox-cloud-appliance_prepare-node-script.md)	 - Generate a shell script to prepare a machine for the Anbox Cloud Appliance
+* [anbox-cloud-appliance prepare-node-script](anbox-cloud-appliance_prepare-node-script.md)	 - Generate a shell script to prepare or upgrade a machine for the Anbox Cloud Appliance
 * [anbox-cloud-appliance status](anbox-cloud-appliance_status.md)	 - Retrieves the current status of the Anbox Cloud Appliance
 

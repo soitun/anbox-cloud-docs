@@ -1,5 +1,5 @@
 (howto-configure-image-server)=
-# How to configure an image server
+# Configure an image server
 
   The Canonical image server provides different Anbox Cloud images that are updated regularly. AMS automatically synchronizes new image versions in regular intervals and updates your applications to use these new versions. The images on the image server are updated for important security updates or bug fixes, and with every release of Anbox Cloud.
 

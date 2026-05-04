@@ -12,9 +12,9 @@ Currently Anbox Cloud does not support GPU for virtual machines.
 
 Being a cloud solution, Anbox Cloud is optimized for GPUs that are designed for a data center. We currently support the following GPU vendors:
 
-* NVIDIA
-* Intel
-* AMD
+- NVIDIA
+- Intel
+- AMD
 
 Mixing GPUs from different vendors is not supported.
 
@@ -43,11 +43,11 @@ See {ref}`ref-component-versions` to refer to the actual version supported for a
 
 Anbox Cloud can make use of different [platforms](https://canonical.github.io/anbox-cloud.github.com/latest/anbox-platform-sdk/) to customize its behavior and currently supports 3 platforms.
 
-| Name     	| Behavior                                                                                                                                            	|
-|----------	|-----------------------------------------------------------------------------------------------------------------------------------------------------	|
-| `null`   	|  A headless-GL platform. No rendering is performed. No audio input/output. Useful for functional tests. It's used by default if no platform is specified when launching an instance.                                                                       	|
-| `webrtc` 	| Full-featured WebRTC based streaming platform. Includes driver and integration for AMD and NVIDIA GPUs as well as LLVMpipe based software rendering if no GPU is detected.  Support audio input/output. |
-| `swrast` 	| (DEPRECATED) Software Rasterization platform. A LLVMpipe based software rendering platform. Useful for visual tests. No audio input/output.    |
+| Name      | Behavior                                                                                                                                             |
+|---------- |----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `null`    |  A headless-GL platform. No rendering is performed. No audio input/output. Useful for functional tests. It's used by default if no platform is specified when launching an instance.                                                                        |
+| `webrtc`  | Full-featured WebRTC based streaming platform. Includes driver and integration for AMD and NVIDIA GPUs as well as LLVMpipe based software rendering if no GPU is detected.  Support audio input/output. |
+| `swrast`  | (DEPRECATED) Software Rasterization platform. A LLVMpipe based software rendering platform. Useful for visual tests. No audio input/output.    |
 
 For rendering, you can use the `swrast` or the `null` platforms depending on your requirements.
 
@@ -69,10 +69,10 @@ Support for API extensions on all supported GPUs depends on the availability of 
 
 The following OpenGL ES extensions are known to be unsupported by all used GPU drivers:
 
-* [`GL_EXT_shader_framebuffer_fetch`](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_shader_framebuffer_fetch.txt)
-* [`GL_EXT_shader_framebuffer_fetch_non_coherent`](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_shader_framebuffer_fetch.txt)
+- [`GL_EXT_shader_framebuffer_fetch`](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_shader_framebuffer_fetch.txt)
+- [`GL_EXT_shader_framebuffer_fetch_non_coherent`](https://registry.khronos.org/OpenGL/extensions/EXT/EXT_shader_framebuffer_fetch.txt)
 
 ## Related topics
 
-* {ref}`exp-rendering-architecture`
-* {ref}`exp-platforms`
+- {ref}`exp-rendering-architecture`
+- {ref}`exp-platforms`

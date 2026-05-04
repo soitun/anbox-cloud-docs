@@ -1,5 +1,5 @@
 (howto-configure-watchdog)=
-# How to configure the watchdog
+# Configure the watchdog
 
 The {ref}`sec-application-manifest-watchdog` monitors the app installed by the boot package. By default, it terminates the instance if the app crashes or is moved to the background.
 
