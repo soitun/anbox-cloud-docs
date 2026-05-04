@@ -1,5 +1,5 @@
 (howto-customize-installation)=
-# How to customize your installation
+# Customize installation
 
 There are two main ways to customize the Anbox Cloud deployment:
 
@@ -12,23 +12,23 @@ Saving a copy of the bundle file and editing that file means that your customiza
 
 ## Use overlay files
 
-An [overlay bundle](https://juju.is/docs/juju/bundle) is a fragment of valid YAML that is dynamically merged on top of a bundle file before deployment, similar to a patch file. The fragment can contain additional or alternative YAML that is intelligible to Juju. For example, you could use a bundle overlay to specify custom instance types for the machines you use (note that the specified constraints are just an example and not a recommendation):
+An [overlay bundle](https://documentation.ubuntu.com/juju/latest/reference/bundle/) is a fragment of valid YAML that is dynamically merged on top of a bundle file before deployment, similar to a patch file. The fragment can contain additional or alternative YAML that is intelligible to Juju. For example, you could use a bundle overlay to specify custom instance types for the machines you use (note that the specified constraints are just an example and not a recommendation):
 
     machines:
       '0':
         series: focal
         constraints: "instance-type=m5.xlarge root-disk=40G"
       '1':
-        series: jammy
+        series: noble
         constraints: "instance-type=m5.xlarge root-disk=40G"
       '2':
-        series: jammy
+        series: noble
         constraints: "instance-type=g4dn.2xlarge root-disk=100G"
       '3':
-        series: jammy
+        series: noble
         constraints: "instance-type=m5.xlarge root-disk=100G"
 
-See the [Juju bundle documentation](https://canonical-charmcraft.readthedocs-hosted.com/en/stable/reference/files/bundle-yaml-file/ ) for more information about Juju's bundle format and valid YAML.
+See the [Juju bundle documentation](https://documentation.ubuntu.com/charmcraft/stable/reference/files/bundle-yaml-file/ ) for more information about Juju's bundle format and valid YAML.
 
 To use one or more overlay files with the Anbox Cloud bundle, specify them during the deployment:
 
@@ -36,6 +36,9 @@ To use one or more overlay files with the Anbox Cloud bundle, specify them durin
 
 Make sure to use the correct local path and file name for your overlay file(s).
 
+```{note}
+Anbox Cloud charms supports deployment on both Ubuntu noble 24.04 and Ubuntu jammy 22.04. The examples above use **noble**. If you prefer to deploy on Ubuntu jammy 22.04, simply modify the `series` configuration accordingly.
+```
 
 ### Change configuration settings
 
@@ -75,14 +78,13 @@ This will give the same result as configuring the proxy values through Juju:
     juju config anbox-stream-gateway https_proxy=https://proxy.example.com
     juju config anbox-stream-gateway snap_proxy=https://snap-proxy.example.com
 
-
 ## Edit a bundle file
 
 Another way to change or customize a deployment is to store the YAML bundle file locally and edit it with a text editor.
 
 The latest version of the Anbox Cloud bundles can be retrieved by fetching the current stable version from [Charmhub](https://charmhub.io/). See {ref}`sec-juju-bundles` for more details on the available bundles.
 
-Be careful when editing the YAML file, because the format is very strict. For more details on the format used by Juju, see the [Juju bundle documentation](https://canonical-charmcraft.readthedocs-hosted.com/en/stable/reference/files/bundle-yaml-file/ ).
+Be careful when editing the YAML file, because the format is very strict. For more details on the format used by Juju, see the [Juju bundle documentation](https://documentation.ubuntu.com/charmcraft/stable/reference/files/bundle-yaml-file/ ).
 
 ### Retrieve a bundle from a running model
 
@@ -102,4 +104,4 @@ Running this command will output login information and a URL for the GUI interfa
 
 ![Anbox Cloud - Juju GUI|690x444](/images/install_customize_juju_model.png)
 
-For more information on the Juju GUI, see the [Juju documentation](https://canonical-juju.readthedocs-hosted.com/en/latest/user/howto/manage-the-juju-dashboard/#manage-the-juju-dashboard).
+For more information on the Juju GUI, see the [Juju documentation](https://documentation.ubuntu.com/juju/latest/user/howto/manage-the-juju-dashboard/#manage-the-juju-dashboard).

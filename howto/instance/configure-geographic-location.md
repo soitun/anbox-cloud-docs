@@ -1,5 +1,5 @@
 (howto-configure-geographic-location)=
-# How to configure geographic location
+# Configure geographic location
 
 Anbox Cloud allows specifying a geographic location for an Android container. This location can either be specified statically through a configuration file or dynamically through the HTTP API.
 
@@ -35,4 +35,5 @@ To update the geographic location of an Android container dynamically while the 
 See {ref}`sec-anbox-https-api-location` for information on the PATCH method and the specification of the data format.
 
 ## Related topics
-* {ref}`howto-addons`
+
+- {ref}`howto-addons`

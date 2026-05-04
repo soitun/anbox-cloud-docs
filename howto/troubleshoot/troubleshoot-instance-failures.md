@@ -1,9 +1,30 @@
 (howto-ts-instance-failures)=
 # Troubleshoot instance failures
 
-The following information should help you in determining why your instance failed.
+The following information should help you in determining issues related to instances.
 
-## More information on instance failures
+## Images not available
+
+*Applies to: Anbox Cloud, Anbox Cloud Appliance*
+
+> I completed the installation and initialization process correctly. When I try creating an instance, I don't see any available images.
+
+This issue occurs most likely because the Ubuntu Pro token was not attached before the appliance was initialized for the first time. Even when you attach the Ubuntu Pro token later on, the authentication to sync images from the media server is not set correctly and hence the images are inaccessible.
+
+On the appliance, you can confirm this by running:
+
+    amc config show | grep images.auth
+
+If you are using the charmed deployment, you will need to first `ssh` into the machine:
+
+    juju ssh ams/leader
+    amc config show | grep images.auth
+
+If `images.auth` is set to `false`, then the image authentication not being set properly is the issue. To correct the authentication and access images on the appliance, run:
+
+    amc config set images.auth bearer:$(sudo cat /var/lib/ubuntu-advantage/private/machine-token.json | jq -r '.resourceTokens[] | select(.type=="anbox-images").token')
+
+## Instance failed to start
 
 *Applies to: Anbox Cloud, Anbox Cloud Appliance*
 

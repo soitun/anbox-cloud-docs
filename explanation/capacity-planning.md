@@ -5,17 +5,17 @@ When planning your Anbox Cloud deployment, you should start by estimating how mu
 
 When estimating capacity, consider the following questions to better understand your requirements:
 
-* Application resources:
-    - How much CPU, memory and disk space does your application need?
-    - Will the application use hardware- or software-based video encoding?
-    - If the application uses hardware-based encoding, how much GPU capacity is needed?
-* CPU and memory:
-    - Does every instance need dedicated access to the CPU and memory, or can the capacity be shared between several instances?
-* Application:
-    - What type of application are you running?
-    - What frame rate and what resolution does your application need?
-    - How many instances will be running simultaneously?
-    - What would be the impact of not being able to serve all users?
+- Application resources:
+  * How much CPU, memory and disk space does your application need?
+  * Will the application use hardware- or software-based video encoding?
+  * If the application uses hardware-based encoding, how much GPU capacity is needed?
+- CPU and memory:
+  * Does every instance need dedicated access to the CPU and memory, or can the capacity be shared between several instances?
+- Application:
+  * What type of application are you running?
+  * What frame rate and what resolution does your application need?
+  * How many instances will be running simultaneously?
+  * What would be the impact of not being able to serve all users?
 
 ## Application resources
 
@@ -56,8 +56,9 @@ When you launch an instance for an application, AMS reserves the number of GPU s
 ```{important}
 GPU slots are used to share GPUs among instances, but they do not impose limits on GPU usage. Therefore, increasing the number of required GPU slots for an application does not guarantee that more GPU resources are allocated to the corresponding application instances. For example, an intensive game that is configured to use one GPU slot might consume more GPU resources than a simple photo gallery app that is configured to use five GPU slots.
 
-The main purpose of GPU slots is to control the number of instances that are launched on a node that has a GPU installed, which reduces contention for GPU resources.
+A [default number](https://documentation.ubuntu.com/anbox-cloud/reference/ams-configuration/#node-specific-configuration) of GPU slots and GPU encoder slots are configured depending on the GPU used but this value can be changed. The main purpose of GPU slots is to control the number of instances that are launched on a node that has a GPU installed, which reduces contention for GPU resources.
 ```
+
 (sec-over-committing)=
 ## Over-committing resources
 
@@ -115,5 +116,5 @@ To avoid your cluster running out of resources even at peak loads, you must size
 
 ## Related topics
 
-* {ref}`exp-clustering`
-* {ref}`ref-application-manifest`
+- {ref}`exp-clustering`
+- {ref}`ref-application-manifest`

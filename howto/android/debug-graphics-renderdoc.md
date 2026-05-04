@@ -1,5 +1,5 @@
 (howto-debug-graphics-renderdoc)=
-# How to debug graphics with Renderdoc
+# Debug graphics with Renderdoc
 
 [Renderdoc](https://github.com/baldurk/renderdoc) is a graphics frame debugger which supports Android applications.
 

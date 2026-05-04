@@ -1,5 +1,5 @@
 (howto-install-apk-system-app)=
-# How to install an APK as a system app
+# Install an APK as a system app
 
 Usually, Anbox Cloud installs APKs as user apps in the Android container. It is possible to install apps as system apps though.
 
@@ -7,7 +7,7 @@ Usually, Anbox Cloud installs APKs as user apps in the Android container. It is 
 Installing apps as system apps is not supported on AAOS images.
 ```
 
-A user app is normally signed by the developer and has restricted permissions at runtime. A system app, on the other hand, is usually [signed with the platform key](https://source.android.com/devices/tech/ota/sign_builds) when building an Android image. It is pre-installed under the system partition and runs a process with some ["signature" protection level permissions](https://developer.android.com/guide/topics/manifest/permission-element.html#plevel) in the Android container.
+A user app is normally signed by the developer and has restricted permissions at runtime. A system app, on the other hand, is usually [signed with the platform key](https://source.android.com/docs/core/ota/sign_builds) when building an Android image. It is pre-installed under the system partition and runs a process with some ["signature" protection level permissions](https://developer.android.com/guide/topics/manifest/permission-element.html#plevel) in the Android container.
 
 An application must be running as a system app if:
 
@@ -59,7 +59,19 @@ aam install-system-app \
   --package-name=<package_name>
 ```
 
-The values of the `package-name` and the `permissions` parameters must match the ones defined in the `AndroidManifest.xml` file of the Android project. If the app requires access to hidden Android APIs to function, add the `--access-hidden-api` parameter to the above command. Use `aam install-system-app --help` for details about this command.
+The values of the `package-name` and the `permissions` parameters must match the ones defined in the `AndroidManifest.xml` file of the Android project. For instance, if your `AndroidManifest.xml` contains the following system-level permissions:
+
+```xml
+...
+    <uses-permission android:name="android.permission.MANAGE_USB" />
+    <uses-permission android:name="android.permission.SET_TIME" />
+    <uses-permission android:name="android.permission.SET_TIME_ZONE" />
+...
+```
+
+Then, the `permissions` parameter must be: `android.permission.MANAGE_USB,android.permission.SET_TIME,android.permission.SET_TIME_ZONE`.
+
+If the app requires access to hidden Android APIs to function, add the `--access-hidden-api` parameter to the above command. Use `aam install-system-app --help` for details about this command.
 
 The final layout of the addon should look as follows:
 

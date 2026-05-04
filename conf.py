@@ -1,7 +1,7 @@
 import datetime
-import ast
 import os
 import subprocess
+import yaml
 
 # Configuration for the Sphinx documentation builder.
 # All configuration specific to your project should be done in this file.
@@ -61,7 +61,7 @@ html_title = "Anbox Cloud" + " documentation"
 #         -H 'Accept: application/vnd.github.v3.raw' \
 #         https://api.github.com/repos/canonical/<REPO> | jq '.created_at'
 
-copyright = "%s CC-BY-SA, %s" % (datetime.date.today().year, author)
+copyright = f"{datetime.date.today().year}"
 
 
 # Documentation website URL
@@ -85,7 +85,7 @@ ogp_site_name = "Anbox Cloud"
 #
 # To customise the preview image, update as needed.
 
-ogp_image = "https://assets.ubuntu.com/v1/253da317-image-document-ubuntudocs.svg"
+ogp_image = "https://assets.ubuntu.com/v1/cc828679-docs_illustration.svg"
 
 
 # Product favicon; shown in bookmarks, browser tabs, etc.
@@ -107,7 +107,7 @@ html_context = {
     # If there's no such website,
     #       remove the {{ product_page }} link from the page header template
     #       (usually .sphinx/_templates/header.html; also, see README.rst).
-    "product_page": "anbox-cloud.io",
+    "product_page": "canonical.com/anbox-cloud",
     # Product tag image; the orange part of your logo, shown in the page header
     #
     # To add a tag image, uncomment and update as needed.
@@ -137,7 +137,7 @@ html_context = {
     # Docs branch in the repo; used in links for viewing the source files
     #
     # To customise the branch, uncomment and update as needed.
-    'repo_version': 'main',
+    'repo_default_branch': 'main',
     # Docs location in the repo; used in links for viewing the source files
     #
 
@@ -152,6 +152,15 @@ html_context = {
 
     # Required for feedback button
     'github_issues': 'enabled',
+
+    # Inherit the author value
+    "author": author,
+
+    # License information
+    "license": {
+        "name": "CC-BY-SA-3.0",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/",
+    },
 }
 
 # To enable the edit button on pages, uncomment and change the link to a
@@ -172,49 +181,58 @@ html_context = {
 
 slug = 'anbox-cloud'
 
+#######################
+# Sitemap configuration: https://sphinx-sitemap.readthedocs.io/
+#######################
+
+# Base URL of RTD hosted project
+# Include the trailing slash in the URL, it makes a difference
+
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "/")
+
+# URL scheme; {link} is the default configuration
+
+sitemap_url_scheme = "{link}"
+
+# Include lastmod dates in the sitemap
+sitemap_show_lastmod = True
+
 # Template and asset locations
 
-html_static_path = [".sphinx/_static"]
-templates_path = [".sphinx/_templates"]
+html_static_path = [
+    ".sphinx/_static",
+    # This is required for Google Analytics to work till we unify
+    # all the static files into one well-known directory.
+    "_static",
+]
+templates_path = [
+    # This is required for Google Analytics to work.
+    "_templates",
+]
+
+# Exclude unnecessary URLs for better indexing
+
+sitemap_excludes = [
+    "genindex/",
+    "404/",
+    "search/",
+]
 
 
 #############
 # Redirects #
 #############
 
-# To set up redirects: https://documatt.gitlab.io/sphinx-reredirects/usage.html
-# For example: 'explanation/old-name.html': '../how-to/prettify.html',
+# Redirects are defined in redirects.txt
+# https://sphinxext-rediraffe.readthedocs.io/en/latest/
 
 # To set up redirects in the Read the Docs project dashboard:
 # https://docs.readthedocs.io/en/stable/guides/redirects.html
 
-# NOTE: If undefined, set to None, or empty,
-#       the sphinx_reredirects extension will be disabled.
+rediraffe_redirects = "redirects.txt"
 
-redirects = {
-
-    'reference/roadmap': '../release-notes/release-notes',
-    'reference/supported-versions': '../release-notes/release-notes',
-    'explanation/gpus-instances': '../rendering-graphics',
-    'howto/update/landing': '../../upgrade/landing',
-    'howto/update/upgrade-anbox': '../../upgrade/upgrade-anbox',
-    'howto/update/upgrade-appliance': '../../upgrade/upgrade-appliance',
-    'howto/update/control-updates': '../../upgrade/landing',
-    'howto/addons/customise-android-example': '../customize-android-example',
-    'howto/install/customise-installation': '../customize-installation',
-    'howto/anbox/manage-images': '../../images/landing',
-    'tutorial/getting-started-aaos': '../../howto/android/set-automotive-properties',
-    'tutorial/getting-started-dashboard': '../create-test-virtual-device',
-    'tutorial/getting-started': '../create-test-virtual-device',
-    'tutorial/creating-addon': '../../howto/addons/create-addon',
-    'explanation/cryptography/crypto_ams': '../../security/crypto_ams',
-    'explanation/cryptography/crypto_anbox_runtime': '../../security/crypto_anbox_runtime',
-    'explanation/cryptography/crypto_charms': '../../security/crypto_charms',
-    'explanation/cryptography/crypto_dashboard': '../../security/crypto_dashboard',
-    'explanation/cryptography/crypto_stream_agent': '../../security/crypto_stream_agent',
-    'explanation/cryptography/crypto_stream_gateway': '../../security/crypto_stream_gateway',
-    'explanation/anbox-security': '../security/landing',
-}
+# Strips '/index.html' from destination URLs when building with 'dirhtml'
+rediraffe_dir_only = True
 
 
 ###########################
@@ -225,6 +243,7 @@ redirects = {
 #
 # Remove or adjust the ACME entry after you update the contributing guide
 
+# We're getting a 403 for vulkan.org in CI for some reason
 linkcheck_ignore = [
     'http://127.0.0.1:8000',
     'https://support.canonical.com/',
@@ -232,7 +251,8 @@ linkcheck_ignore = [
     'https://images.anbox-cloud.io/stable/',
     'https://10.2.9.2/',
     'http://Add-SECURITY.md',
-    'https://jwt.io/'
+    'https://jwt.io/',
+    'https://www.vulkan.org/'
     ]
 
 # This setting will check the links but not the anchors
@@ -254,7 +274,19 @@ linkcheck_exclude_documents = [
 
 # give linkcheck multiple tries on failure
 linkcheck_timeout = 30
-linkcheck_retries = 3
+linkcheck_retries = 5
+
+# decrease parallelism to avoid rate-limiting at the cost of longer runs
+linkcheck_workers = 3
+
+# Specific headers for link checking
+# ceph.io fails with 500 if the Accept-Language is unset, so set it to something
+# to let it pass
+linkcheck_request_headers = {
+    "https://ceph.io/": {
+        "Accept-Language": "en-US",
+    }
+}
 
 ########################
 # Configuration extras #
@@ -266,31 +298,36 @@ linkcheck_retries = 3
 # NOTE: By default, the following MyST extensions are enabled:
 #       substitution, deflist, linkify
 
-# myst_enable_extensions = set()
+myst_enable_extensions = set({"colon_fence"})
 
 
 # Custom Sphinx extensions; see
 # https://www.sphinx-doc.org/en/master/usage/extensions/index.html
 
 # NOTE: The canonical_sphinx extension is required for the starter pack.
-#       It automatically enables the following extensions:
-#       - custom-rst-roles
-#       - myst_parser
-#       - notfound.extension
-#       - related-links
-#       - sphinx_copybutton
-#       - sphinx_design
-#       - sphinx_reredirects
-#       - sphinx_tabs.tabs
-#       - sphinxcontrib.jquery
-#       - sphinxext.opengraph
-#       - terminal-output
-#       - youtube-links
+#       canonical_sphinx v0.6 does not reliably auto-load all extensions,
+#       so all required extensions are listed explicitly below.
 
 extensions = [
     "canonical_sphinx",
+    "myst_parser",
+    "notfound.extension",
+    "sphinx_config_options",
+    "sphinx_contributor_listing",
+    "sphinx_design",
+    "sphinx_filtered_toctree",
+    "sphinx_related_links",
+    "sphinx_rerediraffe",
+    "sphinx_roles",
+    "sphinx_tabs.tabs",
+    "sphinx_terminal",
+    "sphinx_ubuntu_images",
+    "sphinx_youtube_links",
     "sphinxcontrib.cairosvgconverter",
+    "sphinxcontrib.jquery",
+    "sphinxext.opengraph",
     "sphinx_last_updated_by_git",
+    "sphinx_sitemap",
 ]
 
 # Excludes files or directories from processing
@@ -300,16 +337,22 @@ exclude_patterns = [
     'README.md',
     'SECURITY.md',
     '.github/pull_request_template.md',
+    '.venv',
+    '**/*.dist-info/**',
 ]
 
 # Adds custom CSS files, located under 'html_static_path'
 
-# html_css_files = []
+html_css_files = [
+    "https://assets.ubuntu.com/v1/d86746ef-cookie_banner.css",
+]
 
 
 # Adds custom JavaScript files, located under 'html_static_path'
 
-# html_js_files = []
+html_js_files = [
+    "https://assets.ubuntu.com/v1/287a5e8f-bundle.js",
+]
 
 
 # Specifies a reST snippet to be appended to each .rst file
@@ -354,7 +397,12 @@ rst_prolog = """
 # Workaround for https://github.com/canonical/canonical-sphinx/issues/34
 
 if "discourse_prefix" not in html_context and "discourse" in html_context:
-    html_context["discourse_prefix"] = html_context["discourse"] + "/t/"
+    html_context["discourse_prefix"] = f"{html_context['discourse']}/t/"
+
+# Workaround for substitutions.yaml
+if os.path.exists('./reuse/substitutions.yaml'):
+    with open('./reuse/substitutions.yaml', 'r') as fd:
+        myst_substitutions = yaml.safe_load(fd.read())
 
 #============================================#
 # Anbox Cloud specific configurations
@@ -364,7 +412,7 @@ if "discourse_prefix" not in html_context and "discourse" in html_context:
 #============================================#
 
 ## Generate dynamic configuration using scripts
-# Inject AMS configuration valuues and Node configuration values from the swagger
+# Inject AMS configuration values and Node configuration values from the swagger
 # specification hosted on Github.
 
 custom_required_modules = []

@@ -1,5 +1,5 @@
 (howto-list-applications)=
-# How to list applications
+# List applications
 
 When using the CLI, to list all available applications, run:
 

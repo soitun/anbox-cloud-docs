@@ -1,5 +1,5 @@
 (howto-enable-addons-globally)=
-# How to enable an addon globally
+# Enable an addon globally
 
 To enable an addon for an application, you must add it to the application manifest.
 
@@ -19,4 +19,4 @@ Addons can delay the start of your applications. Therefore, keep them light.
 
 ## Related topics
 
-* {ref}`ref-application-manifest`
+- {ref}`ref-application-manifest`

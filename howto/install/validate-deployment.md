@@ -1,18 +1,18 @@
 (howto-validate-deployment)=
-# How to validate the deployment
+# Validate your deployment
 
 Anbox Cloud includes a test suite which allows the validation of an Anbox Cloud deployment. It comes with various tests covering different features of Anbox Cloud and can be used to ensure everything works as expected.
 
 The validation tests currently cover the following areas of an Anbox Cloud deployment:
 
-* AMS
-   * Instance creation and deletion in different configurations
-   * Expected images are present
-   * Configuration is setup as expected
-* Anbox Stream Gateway API
+- AMS
+  * Instance creation and deletion in different configurations
+  * Expected images are present
+  * Configuration is setup as expected
+- Anbox Stream Gateway API
   * Session creation and deletion
   * Stress testing
-* Streaming
+- Streaming
   * Stream selected applications in different configurations from Anbox Cloud while ensuring performance is as expected
 
 ## Install Validation Tests
@@ -34,7 +34,7 @@ Do you want to test AMS? [default=yes]
 What is the address of AMS? https://1.2.3.4:8444
 Generating TLS certificate and key for AMS ...
 NOTE: You have to register the certificate generated manually with
- AMS. See https://anbox-cloud.io/docs/manage/managing-ams-access for
+ AMS. See https://documentation.ubuntu.com/anbox-cloud/howto/anbox/control-ams-remotely/ for
  details
 Do you want to test the Anbox Stream Gateway? [default=yes]
 What is the location of the Anbox Stream Gateway? https://2.3.4.5
@@ -106,6 +106,6 @@ If you want to focus on a specific subset of the tests you can specify a focus f
 
 The following focus areas are available
 
-* `streaming`
-* `gateway`
-* `ams`
+- `streaming`
+- `gateway`
+- `ams`

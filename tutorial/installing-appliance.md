@@ -9,18 +9,30 @@ Before beginning the tutorial, it is important to understand that:
 
 - Remember that installing the appliance will take over the entire instance, install packages and override existing components. For example, if you have existing LXD containers, installing and initializing the appliance could override any existing configuration.
 
-> A [video version](https://youtu.be/D9iEd88IYBs) of this tutorial is also available.
+**A video version of this tutorial is also available:**
+
+```{raw} html
+<iframe width="640" height="360"
+        src="https://www.youtube.com/embed/D9iEd88IYBs"
+        title="How to install Anbox Cloud Appliance"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+</iframe>
+```
 
 ## Prerequisites
 
 To proceed with the tutorial, we need:
 
 - An Ubuntu SSO account. If you don't have one yet, [create one now](https://login.ubuntu.com).
-- Your Ubuntu Pro token for an Ubuntu Pro subscription. If you don't have one yet, [speak to your Canonical representative](https://anbox-cloud.io/contact-us). If you already have a valid Ubuntu Pro token, log in to [Ubuntu Pro](https://ubuntu.com/pro) to retrieve it.
+- Your Ubuntu Pro token for an Ubuntu Pro subscription. If you don't have one yet, [speak to your Canonical representative](https://canonical.com/anbox-cloud#get-in-touch). If you already have a valid Ubuntu Pro token, log in to [Ubuntu Pro](https://ubuntu.com/pro) to retrieve it.
+
 ```{note}
 The *Ubuntu Pro (Infra-only)* token does not work and will result in a failed deployment. You need an *Ubuntu Pro* subscription.
 ```
-- A virtual or a bare metal machine running Ubuntu 22.04. We will be using a Multipass virtual machine.
+
+- A virtual or a bare metal machine running a {ref}`supported Ubuntu version <ref-requirements>`. We will be using a Multipass virtual machine.
 
 ## Prepare a Multipass instance
 
@@ -31,10 +43,10 @@ The *Ubuntu Pro (Infra-only)* token does not work and will result in a failed de
 2. Create a virtual machine:
 
         multipass launch --name=anbox --cpus 8 --disk 50G --memory 8G
-    
+
 Make sure to allocate sufficient disk space, memory and CPUs as shown in the example. Otherwise, the VM will run out of space while creating the application. See {ref}`ref-requirements` for information on minimum resource requirements.
 
-3. Shell into the virtual machine:
+1. Shell into the virtual machine:
 
         multipass shell anbox
 
@@ -100,6 +112,10 @@ For everything else, accept the defaults for everything else until the bootstrap
 
 When the initialization process has finished, we can see the welcome page on the local host. Try accessing `https://multipass-machine-address` using a browser.
 
+```{important}
+Version 1.29.0 onward: If an OIDC provider is configured, dashboard user registration is not required and the steps in this section can be skipped. {ref}`sec-create-identity` in AMS instead.
+```
+
 To start using Anbox Cloud, there is still one last command we need to run to register a user account. Run the following command with your Ubuntu SSO account email address:
 
     sudo anbox-cloud-appliance dashboard register your_email@email.com
@@ -108,7 +124,7 @@ The command outputs a link to finish the registration. By default, this registra
 
 When the registration is complete, you can use Ubuntu SSO to sign in to the dashboard.
 
-## Success!
+## Success
 
 After registering, you can log into the appliance dashboard at `https://multipass-machine-address` with your Ubuntu SSO account.
 

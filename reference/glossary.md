@@ -64,10 +64,11 @@ Anbox Platform SDK
 
     See {ref}`sec-platform-sdk` for more information.
 
-Anbox shell
-    A command-line tool (`anbox-shell`) that provides an ADB shell with root permissions granted, which you can use to access the Android system in the instance.
+anbox-connect
+    A tool that helps you to remotely connect to an Android container that is running inside the Anbox instance. through a secure ADB connection. It must be installed on your host machine.
 
-    See {ref}`howto-access-android-instance` for more information.
+anbox-shell
+    A command-line tool for interacting with the Android container within the Anbox instance. It acts as a streamlined Android Debug Bridge(ADB) interface, allowing access to the Android environment with `root` privileges. It must be used within the context of an Anbox instance.
 
 Anbox Streaming SDK
     An SDK that allows the development of custom streaming clients, using JavaScript.
@@ -85,7 +86,7 @@ Android Archive (AAR)
 Android Debug Bridge (ADB)
     A command-line tool that is included in the Android SDK Platform-Tools package and that allows to connect to and communicate with an Android device from your computer.
 
-    See [Android Debug Bridge (ADB)](https://developer.android.com/studio/command-line/adb) in the Android developer documentation.
+    See [Android Debug Bridge (ADB)](https://developer.android.com/tools/adb) in the Android developer documentation.
 
 Android Package Kit (APK)
     The file format used to package apps for the Android operating system.
@@ -133,7 +134,8 @@ Core stack
     - etcd
     - At least 1 LXD worker
     - 1 AMS Node Controller per LXD worker
-    - Easy-RSA
+    - EasyRSA (deprecated)
+    - Self-signed-certificates (CA)
 
     See {ref}`exp-anbox-cloud` for more information.
 
@@ -179,12 +181,12 @@ Instance type
 Juju
     A charmed operator framework that helps you deploy, integrate and manage applications across multiple environments. Anbox Cloud is installed using Juju. The Anbox Cloud Appliance uses Juju under the hood.
 
-    See [the Juju website](https://juju.is/) for more information.
+    See [the Juju website](https://canonical.com/juju) for more information.
 
 LXD
     A system container and virtual machine manager that offers a unified user experience around full Linux systems running inside containers or virtual machines. Anbox Cloud is based on LXD.
 
-    See [the LXD website](https://ubuntu.com/lxd) for more information.
+    See [the LXD website](https://canonical.com/lxd) for more information.
 
 LXD cluster
     A set of LXD nodes that share the same distributed database that holds the configuration for the cluster members and their instances.

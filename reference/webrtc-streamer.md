@@ -10,13 +10,14 @@ The configuration file uses the JSON format. It has the following structure:
 | Name | Value type | Default | Description |
 |------|------------|---------|-------------|
 | `video.bitrate_limits` | array of objects | `[]` | Bitrate limits to apply to the video encoder. |
+| `video.disabled_codecs` | array of strings | `[]` | List of video codecs which should be explicitly disabled and not advertised, even if supported by the client. Possible values are: AV1, H264, VP8
 | `nvidia_h264.multipass`<br>`nvidia_av1.multipass` | bool | `false` | If set to true, multi-pass encoding is enabled. |
 | `nvidia_h264.multipass_quarter_resolution`<br>`nvidia_av1.multipass_quarter_resolution` | bool | `false` | If set to true, multi-pass encoding will be run only for a quarter of a frame's resolution. |
 | `nvidia_h264.aq`<br>`nvidia_av1.aq` | bool | `false` | If set to true, adaptive quantization is enabled. |
 | `nvidia_h264.aq_strength`<br>`nvidia_av1.aq_strength` | integer | `0` | Strength of adaptive quantization: a value from `1` (least aggressive) to `15` (most aggressive). `0` means the encoder will automatically decide. |
 | `nvidia_h264.preset`<br>`nvidia_av1.preset` | integer | `0` | Preset to use (a value from `1` to `7`). `0` means Anbox will automatically decide. |
 
-See the [NVENC Video Encoder API](https://docs.nvidia.com/video-technologies/video-codec-sdk/12.0/nvenc-video-encoder-api-prog-guide/) documentation for more details on the NVIDIA video encoder options.
+See the [NVENC Video Encoder API](https://docs.nvidia.com/video-technologies/video-codec-sdk/13.0/nvenc-video-encoder-api-prog-guide/index.html) documentation for more details on the NVIDIA video encoder options.
 
 ## Video bitrate limits
 
@@ -26,8 +27,8 @@ As different resolutions require different bitrates, the bitrate limits allow de
 
 The WebRTC streamer will pick the closest limit for the configured resolution by comparing the number of pixels and frame rate. The following rules apply:
 
-* If more than one limit is specified, the WebRTC streamer selects the nearest limit with a number of pixels higher than the number of pixels that a frame of the given resolution has.
-* If multiple limits have the same number of pixels, the streamer will sort limits descending by frame rate and apply the nearest.
+- If more than one limit is specified, the WebRTC streamer selects the nearest limit with a number of pixels higher than the number of pixels that a frame of the given resolution has.
+- If multiple limits have the same number of pixels, the streamer will sort limits descending by frame rate and apply the nearest.
 
 The JSON object defining a bitrate limit has the following possible fields:
 

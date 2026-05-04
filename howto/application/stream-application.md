@@ -1,10 +1,11 @@
 (howto-stream-applications)=
-# How to stream applications
+# Stream applications
 
 You can stream applications using the Anbox Cloud dashboard or your custom stream client. You can also stream applications by launching an instance with streaming enabled, using the `amc` CLI.
 
-````{tabs}
-```{group-tab} CLI
+::::{tab-set}
+:::{tab-item} CLI
+:sync: cli
 
 If you are using the `amc` CLI, you can use the `--enable-streaming` option at the time of launching the instance:
 
@@ -13,15 +14,22 @@ If you are using the `amc` CLI, you can use the `--enable-streaming` option at t
 When the `--enable-streaming` option is specified, the Anbox Management Service (AMS) automatically creates a streaming session for the instance. You can find the id of the session as a tag on the instance in the format `session=<id>`.
 
 To further customize the streaming configuration, use the following arguments:
-* `--display-size`
-* `--display-density`
-* `--fps`
+
+- `--display-size`
+- `--display-density`
+- `--fps`
 
 For example, to create an instance with a 1080p resolution, a frame rate of 60 and a DPI of 120, run:
 
     amc launch --enable-streaming --display-size=1920x1080 --display-density=120 --fps=60 <application_id>
+
+```{note}
+If you provide a display width or height that is an odd number, Anbox will automatically adjust it to the nearest even number by increasing it by 1 for proper video encoding.
 ```
-```{group-tab} Dashboard
+
+:::
+:::{tab-item} Dashboard
+:sync: dashboard
 
 The dashboard has in-browser streaming capabilities through WebRTC. It uses the {ref}`sec-streaming-sdk`.
 
@@ -30,8 +38,8 @@ When creating an instance, make sure you select the *Enable Streaming* capabilit
 You can start a streaming session for any of the successfully created applications. Once the associated instance is created and ready, click *Stream* ( ![stream icon](/images/icons/stream-icon.png) ) to start the stream.
 
 To understand how the streaming stack of Anbox Cloud works, see {ref}`exp-application-streaming`.
-```
-````
+:::
+::::
 
 ## Streaming statistics
 
@@ -61,30 +69,30 @@ The downloaded `.csv` file has the following statistics:
 
 ### Sharing a streaming session
 
+::::{tab-set}
+:::{tab-item} CLI
+:sync: cli
 
-````{tabs}
-```{group-tab} CLI
 ```{tip}
 If you are running the appliance, use `anbox-cloud-appliance.gateway` for all gateway commands instead of `anbox-stream-gateway`
 ```
 
 You can share an authenticated session with another user by running:
 
-    anbox-stream-gateway share <session_id> --description="Grant access to xxx"
+    anbox-stream-gateway session share <session_id> --description="Grant access to xxx"
 
 Running this command generates a presigned URL for the session, that is valid for a specified duration.
 
 You can later update the expiration date and description of a shared session. See {ref}`howto-access-android-instance` for detailed steps.
 
-```
+:::
 
-```{group-tab} Dashboard
+:::{tab-item} Dashboard
+:sync: dashboard
 
 To share your stream with users without an account, click *Set up sharing* ( ![set up sharing icon](/images/icons/share-stream-icon.png) ) on the *Instances* page.
 
 Set your stream title and expiration details and generate a link that can be shared with others.
-```
-````
 
 ### Developer Tools
 
@@ -100,12 +108,22 @@ The *Logs* tabs allows you to view logs as you interact with your Android stream
 
 In the *Logs* tabs, you can toggle auto-scroll, pause and resume log messages, clear the logs, adjust the verbosity of the logs, search using free text search or regular expressions, and export the logs.
 
-For a detailed demonstration of the *Developer Tools* and their full capabilities, refer to: [Developer Tools](https://youtu.be/M1N8pfIUjOI?t=257&si=DJsoziD0NRTrLPff).
+**For a detailed demonstration of the *Developer Tools* and their full capabilities, see this video:**
 
+```{raw} html
+<iframe width="640" height="360"
+        src="https://www.youtube.com/embed/M1N8pfIUjOI?start=257"
+        title="Developer tools demonstration"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+</iframe>
 ```
-````
+
+:::
+::::
 
 ## Related topics
 
-* {ref}`tut-set-up-stream-client`
-* {ref}`howto-access-stream-gateway`
+- {ref}`tut-set-up-stream-client`
+- {ref}`howto-access-stream-gateway`

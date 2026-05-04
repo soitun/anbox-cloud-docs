@@ -5,14 +5,8 @@ import json
 import os
 from typing import Dict
 
-import requests
 from jinja2 import Environment
 from jinja2.loaders import FileSystemLoader
-
-SWAGGER_URL = (
-    "https://canonical.github.io/anbox-cloud.github.com/latest/ams/swagger.json"
-)
-
 
 def main() -> int:
     parser = argparse.ArgumentParser(
@@ -34,17 +28,9 @@ def main() -> int:
         default="reference/ams-configuration.md",
     )
     args = parser.parse_args()
-    if args.swagger_path:
-        with open(args.swagger_path, mode="r") as f:
-            swagger = json.load(f)
-    else:
-        swagger = get_swagger_from_url()
+    with open(args.swagger_path, mode="r") as f:
+        swagger = json.load(f)
     parse_swagger(swagger, args.output_file)
-
-
-def get_swagger_from_url() -> Dict:
-    response = requests.get(SWAGGER_URL)
-    return response.json()
 
 
 def insert_custom_fields(props: Dict):

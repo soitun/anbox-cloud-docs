@@ -1,18 +1,47 @@
 (tut-create-virtual-device)=
 # Create and test a virtual device
 
-> Before you start, complete: {ref}`tut-installing-appliance` but when initializing, remember to answer *Yes* to the question: *Do you want to setup access to the AMS API for your current user (ubuntu, uid=1000)?*
-
 In this tutorial, we will go through the first steps of using Anbox Cloud to create a virtual Android device. By *virtual device*, we mean a simulated device that runs a plain Android operating system without any special apps installed. Anbox Cloud treats such a virtual device as an *empty* application, meaning an application that is not running a specific APK.
 
 By the end of this tutorial, we will be familiar with an {term}`Application` and an {term}`Instance` in Anbox Cloud that are used to create and stream the virtual Android device.
 
 This tutorial has two paths - you can use the CLI or the dashboard, depending on your learning goals. The CLI is more powerful and gives you access to all features of Anbox Cloud, while the dashboard is a simpler user interface. For this tutorial, it does not matter which path you choose.
 
-`````{tabs}
-````{group-tab} CLI
+**A video version of this tutorial using the dashboard is also available:**
+
+```{raw} html
+<iframe width="640" height="360"
+        src="https://www.youtube.com/embed/_F2hGlpe0OY"
+        title="Create a virtual Android device"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+</iframe>
+```
+
+::::{tab-set}
+:::{tab-item} CLI
+:sync: cli
 
 We will use the {term}`Anbox Management Client (AMC)` in this tutorial to work with applications and instances. AMC communicates with the {term}`Anbox Management Service (AMS)`, the instance management module of Anbox Cloud.
+
+## Preparation: Set up your authorization
+
+When you {ref}`installed and initialized the appliance <tut-installing-appliance>`, you should have provided *Yes* to the question:
+
+*Do you want to setup access to the AMS API for your current user (ubuntu, uid=1000)?*
+
+If you had done so, skip this section and proceed to create the device.
+
+If you hadn't set up the authorization then, you should first authorize the relevant user now:
+
+For a `sudo` user trying to authorize themselves:
+
+      sudo anbox-cloud-appliance ams authorize
+
+For a `sudo` user trying to authorize another user:
+
+      sudo anbox-cloud-appliance ams authorize <UID>
 
 ## Create the device
 
@@ -35,6 +64,7 @@ resources:
    memory: 4GB
    disk-size: 3GB
 ```
+
 This example will use the default image as we haven't mentioned a specific image.
 
 Now, let's create the application:
@@ -44,10 +74,10 @@ Now, let's create the application:
 This command will return the application ID.
 
 ```{terminal}
-      :input: amc application create my-app/
       :user: ubuntu
       :host: vm
       :dir: ~
+amc application create my-app/
 
 cv3a7ofg2e7td2g9smt0
 ```
@@ -61,11 +91,11 @@ The application is created and bootstrapped. Now, to see the application details
 The output of this command should look similar to the following. Watch this output till the application becomes *ready*. The time taken for the application to become ready could depend on your network speed but with a good network connection, it shouldn't take more than 10 minutes.
 
 ```{terminal}
-      :input: amc application list
       :user: ubuntu
       :host: vm
       :dir: ~
       :scroll:
+amc application list
 
 +----------------------+--------------+---------------+--------+------+-----------+--------------+---------------------+-------+
 |          ID          |     NAME     | INSTANCE TYPE | ADDONS | TAGS | PUBLISHED |    STATUS    |    LAST UPDATED     |  VM   |
@@ -83,10 +113,10 @@ When the application is *ready*, let's launch an instance:
       amc launch my-first-app --enable-streaming
 
 ```{terminal}
-      :input: amc launch my-first-app --enable-streaming
       :user: ubuntu
       :host: vm
       :dir: ~
+amc launch my-first-app --enable-streaming
 
 cv3ct202cdutj02fttsg
 ```
@@ -104,11 +134,11 @@ To see the instance details and its status, run:
 You will see an output similar to the following:
 
 ```{terminal}
-   :input: amc ls
    :user: ubuntu
    :host: vm
    :dir: ~
    :scroll:
+amc ls
 
 +----------------------+------+--------------+------+---------+------+------+---------+-----------+-------+----------------+
 |          ID          | NAME | APPLICATION  | TYPE | STATUS  | TAGS | NODE | ADDRESS | ENDPOINTS |  VM   | STATUS MESSAGE |
@@ -120,11 +150,11 @@ You will see an output similar to the following:
 When the instance reaches the *running* status, the output for `amc ls` should look like:
 
 ```{terminal}
-:input: amc ls
    :user: ubuntu
    :host: vm
    :dir: ~
    :scroll:
+amc ls
 
 +----------------------+------+--------------+---------+---------+------------------------------+------+--------------+-----------+-------+----------------+
 |          ID          | NAME | APPLICATION  |  TYPE   | STATUS  |             TAGS             | NODE |   ADDRESS    | ENDPOINTS |  VM   | STATUS MESSAGE |
@@ -175,11 +205,11 @@ The `list` command displays the list of applications available. As an applicatio
 The `show` command displays the application information along with its versions:
 
 ```{terminal}
-:input: amc application show my-first-app
    :user: ubuntu
    :host: vm
    :dir: ~
    :scroll:
+amc application show my-first-app
 
 id: cv3a7ofg2e7td2g9smt0
 name: my-first-app
@@ -224,15 +254,15 @@ resources:
 Now if we launch our application without explicitly specifying a version, our latest published version will be considered:
 
 ```{terminal}
-:input: amc launch my-first-app
    :user: ubuntu
    :host: vm
    :dir: ~
    :scroll:
+amc launch my-first-app
 
 cv3d5ag2cdutj02fttvg
 
-:input: amc ls
+amc ls
 
 +----------------------+------+--------------+---------+---------+------------------------------+------+--------------+-----------+-------+----------------+
 |          ID          | NAME | APPLICATION  |  TYPE   | STATUS  |             TAGS             | NODE |   ADDRESS    | ENDPOINTS |  VM   | STATUS MESSAGE |
@@ -252,12 +282,13 @@ To look at a visual output of the stream-enabled instance that we created, we ne
 
 Go to `https://machine-address` using a browser and go to the *Instances* page where we can see the instance we created. See the *Dashboard* tab for details on using the dashboard to test the virtual device.
 
-## Success!
-You now know how to use the command line to create and test an Android virtual device in Anbox Cloud. 
+## Success
+You now know how to use the command line to create and test an Android virtual device in Anbox Cloud.
 
-````
+:::
 
-````{group-tab} Dashboard
+:::{tab-item} Dashboard
+:sync: dashboard
 
 ## Create the device
 
@@ -267,7 +298,7 @@ The next step is to give our application, a name: *my-application*.
 
 We can select whether we want to create the application in a container or a virtual machine. For this tutorial, let's select *Container*.
 
-Then, we can select the Android image. Observe that the image can be identified if it is an Android (AOSP) or an Android automotive (AAOS) image by looking at the image names. Let's select `jammy:android14:amd64` which is an Ubuntu 22.04 based Android 14 image for AMD64 architecture.
+Then, we can select the Android image. Observe that the image can be identified if it is an Android (AOSP) or an Android automotive (AAOS) image by looking at the image names. Let's select `jammy:android14:amd64` which is an Ubuntu 22.04 LTS based Android 14 image for AMD64 architecture.
 
 Next, let's select the resource type. We can leave it to the default value for this tutorial.
 
@@ -283,7 +314,7 @@ Click *Create* and watch the *Applications* page as our application gets initial
 
 **Launch an instance**
 
-Now, we need an instance that can be streamed to test our Android virtual device. 
+Now, we need an instance that can be streamed to test our Android virtual device.
 
 The *Create instance* button becomes available when the application is *ready*. Let's click *Create instance*.
 
@@ -323,18 +354,18 @@ When we click *Set up*, we are provided with a URL to our Android stream that ca
 
 If we click on our instance name, we can explore the instance details, interact with it using a terminal and view logs for debugging.
 
-This terminal is the shell for the Linux instance that runs the Android container. You can run commands in the Linux instance, or you can type `anbox-shell` and to gain access to the nested Android container. 
+This terminal is the shell for the Linux instance that runs the Android container. You can run commands in the Linux instance, or you can type `anbox-shell` and to gain access to the nested Android container.
 
 The `exit` command takes you back from the Android container shell to the Linux instance shell.
 
 If you have an instance with an *error* status, you can explore the different types of logs available for the instance.
 
-## Success!
+## Success
 
-You now know how to use the Anbox Cloud dashboard to create and test an Android virtual device. 
+You now know how to use the Anbox Cloud dashboard to create and test an Android virtual device.
 
-````
-`````
+:::
+::::
 
 > Next: You can check out the following how-to sections to try out other applications with applications and instances:
 

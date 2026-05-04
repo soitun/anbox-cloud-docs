@@ -7,30 +7,53 @@ info:
     \ to the\nunix socket. For remote users, the default authentication method is\
     \ TLS client\ncertificates.\n\n## Authentication\n\nNot all REST API endpoints\
     \ require authentication, for example, the following API calls are allowed for\
-    \ everyone:\n\n`GET /`\n`GET /1.0`\n`GET /1.0/version`\n\nSome endpoints require\
-    \ an additional authentication token to ensure that the requester is authorised\
-    \ to access the resource, for example:\n\n`GET /1.0/artifacts`\n`PATCH /1.0/instances/<name>`\n\
-    \n## API versioning\n\nThe details of a version of the API can be retrieved using\
-    \ `GET /<version>`. For example, `GET /1.0`.\n\nIf an API version is bumped to\
-    \ a major version, it indicates that backward compatibility is affected.\n\nFeature\
-    \ additions done without breaking backward compatibility only result in additions\
-    \ to `api_extensions` which can be used by the client to check if a given feature\
-    \ is supported by the server.\n\n## Return values\n\nThere are three standard\
-    \ return types:\n\nStandard return value\nBackground operation\nError\n\n### Standard\
-    \ return value\n\nFor a standard synchronous operation, the following dict is\
-    \ returned:\n\n```json\n{\n\"type\": \"sync\",\n\"status\": \"Success\",\n\"status_code\"\
-    : 200,\n\"metadata\": {}\n}\n```\n\nHTTP response status code is 200.\n\n### Background\
-    \ operation\n\nWhen a request results in a background operation, the HTTP code\
-    \ is set to 202 (Accepted) and the Location HTTP header is set to the operation\
-    \ URL.\n\nThe response body is a dict with the following structure:\n\n```json\n\
-    {\n\"type\": \"async\",\n\"status\": \"OK\",\n\"status_code\": 100,\n\"operation\"\
-    : \"/1.0/containers/<id>\",\n\"metadata\": {}\n}\n```\n\nThe operation metadata\
-    \ structure looks like:\n\n```json\n{\n\"id\": \"c6832c58-0867-467e-b245-2962d6527876\"\
-    ,\n\"class\": \"task\",\n\"created_at\": \"2018-04-02T16:49:36.341463206+02:00\"\
-    ,\n\"updated_at\": \"2018-04-02T16:49:36.341463206+02:00\",\n\"status\": \"Running\"\
-    ,\n\"status_code\": 103,\n\"resources\": {\n\"containers\": [\n\"/1.0/containers/3apqo5te\"\
-    \n]\n},\n\"metadata\": null,\n\"may_cancel\": false,\n\"err\": \"\"\n}\n```\n\n\
-    The body is mostly provided as a user friendly way of seeing what's going on without\
+    \ everyone:\n\n - `GET /`\n - `GET /1.0`\n - `GET /1.0/version`\n\n## API Authentication\n\
+    \nThe API can be accessed in one of the following ways:\n\n  * **Unix Domain Socket**:\n\
+    \  \tWhen using this type of connection, the API endpoints are protected using\
+    \ Unix Peer Cred authentication i.e. only certain unix uids\n  \tare given access\
+    \ to the API endpoints. These user uids can be configured in the AMS Daemon configuration\
+    \ by setting `allowed_uids`.\n\n  * **Standard HTTPS Connection**:\n  When using\
+    \ this type of connection, the API endpoints are protected depending on the service\
+    \ configuration. The APIs support two types\n  of authentication mechanisms:\n\
+    \ \t  - mTLS Authentication:\n \t\tBy default AMS uses certificate based authentication\
+    \ or mTLS (Mutual TLS) to protect its API endpoints. Only certificates added to\
+    \ AMS\n \t\tTrust Store are allowed access to the APIs. The certificates can be\
+    \ added or removed using `/1.0/certificates` endpoints by using a\n \t\tUnix Domain\
+    \ Socket connection. This client certificate can then be used to make requests\
+    \ to AMS.\n\n \t\t*NOTE*:\n \t \tSome endpoints require an additional authentication\
+    \ token to ensure that the requester is authorised to access the resource, for\
+    \ example:\n\n \t \t* `GET /1.0/artifacts`\n \t \t* `PATCH /1.0/instances/<name>`\n\
+    \n \t - OIDC Based Authentication\n \t   AMS supports token based authentication\
+    \ for all its endpoints. Enabling this feature requires configuring AMS with an\
+    \ OIDC (OpenID Connect 2.0)\n \t   Compliant Identity Provider. This can be configured\
+    \ in AMS daemon by setting the configuration items `oidc.*` to appropriate values.\n\
+    \ \t   This enables the AMS API server to enable token based authentication and\
+    \ authorization as issued by the identity provider.\n\nIf an API version is bumped\
+    \ to a major version, it indicates that backward compatibility is affected.\n\n\
+    Feature additions done without breaking backward compatibility only result in\
+    \ additions to `api_extensions` which can be used by the client to check if a\
+    \ given feature is supported by the server.\n\n## API versioning\n\nThe details\
+    \ of a version of the API can be retrieved using `GET /<version>`. For example,\
+    \ `GET /1.0`.\n\nIf an API version is bumped to a major version, it indicates\
+    \ that backward compatibility is affected.\n\nFeature additions done without breaking\
+    \ backward compatibility only result in additions to `api_extensions` which can\
+    \ be used by the client to check if a given feature is supported by the server.\n\
+    \n## Return values\n\nThere are three standard return types:\n\n * Standard return\
+    \ value\n * Background operation\n * Error\n\n### Standard return value\n\nFor\
+    \ a standard synchronous operation, the following dict is returned:\n\n```json\n\
+    {\n\"type\": \"sync\",\n\"status\": \"Success\",\n\"status_code\": 200,\n\"metadata\"\
+    : {}\n}\n```\n\nHTTP response status code is 200.\n\n### Background operation\n\
+    \nWhen a request results in a background operation, the HTTP code is set to 202\
+    \ (Accepted) and the Location HTTP header is set to the operation URL.\n\nThe\
+    \ response body is a dict with the following structure:\n\n```json\n{\n\"type\"\
+    : \"async\",\n\"status\": \"OK\",\n\"status_code\": 100,\n\"operation\": \"/1.0/containers/<id>\"\
+    ,\n\"metadata\": {}\n}\n```\n\nThe operation metadata structure looks like:\n\n\
+    ```json\n{\n\"id\": \"c6832c58-0867-467e-b245-2962d6527876\",\n\"class\": \"task\"\
+    ,\n\"created_at\": \"2018-04-02T16:49:36.341463206+02:00\",\n\"updated_at\": \"\
+    2018-04-02T16:49:36.341463206+02:00\",\n\"status\": \"Running\",\n\"status_code\"\
+    : 103,\n\"resources\": {\n\"containers\": [\n\"/1.0/containers/3apqo5te\"\n]\n\
+    },\n\"metadata\": null,\n\"may_cancel\": false,\n\"err\": \"\"\n}\n```\n\nThe\
+    \ body is mostly provided as a user friendly way of seeing what's going on without\
     \ having to pull the target operation, all information in the body can also be\
     \ retrieved from the background operation URL.\n\n### Error\n\nThere are various\
     \ situations in which something may immediately go wrong, in those cases, the\
@@ -95,6 +118,7 @@ info:
 paths:
   /1.0/:
     get:
+      security: []
       description: 'This endpoint returns the service status and its supported API
         extensions.
 
@@ -134,6 +158,15 @@ paths:
           default: 0
           description: Expand the returned resource definition
           name: recursion
+          in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Include entitlements for the addons (only works if recursion
+            is 1)
+          name: entitlements
           in: query
       responses:
         '200':
@@ -208,6 +241,14 @@ paths:
           name: name
           in: path
           required: true
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Include entitlements for the addon
+          name: entitlements
+          in: query
       responses:
         '200':
           description: Success response of the service
@@ -344,6 +385,15 @@ paths:
           default: 0
           description: Expand the returned resource definition
           name: recursion
+          in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Include entitlements for the addons (only works if recursion
+            is 1)
+          name: entitlements
           in: query
       responses:
         '200':
@@ -561,6 +611,14 @@ paths:
           name: id
           in: path
           required: true
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements for this application.
+          name: entitlements
+          in: query
       responses:
         '200':
           description: Success response of the service
@@ -672,12 +730,13 @@ paths:
         \         |\n   resources               |   no                           \
         \           |\n   inhibit_auto_updates    |   no                         \
         \             |\n   services                |   yes                      \
-        \               |\n   watchdog                |   yes                    \
-        \                 |\n   boot_activity           |   yes                  \
-        \                   |\n   required_permissions    |   yes                \
-        \                     |\n   video_encoder           |   yes              \
-        \                       |\n   manifest_version        |   yes            \
-        \                         |\n\nRequired Extensions:\n`application_partial_updates`:\
+        \               |\n   features                |   yes                    \
+        \                 |\n   watchdog                |   yes                  \
+        \                   |\n   boot_activity           |   yes                \
+        \                     |\n   required_permissions    |   yes              \
+        \                       |\n   video_encoder           |   yes            \
+        \                         |\n   manifest_version        |   yes          \
+        \                           |\n\nRequired Extensions:\n`application_partial_updates`:\
         \ To use those fields that would create a new\napplication version on application\
         \ update."
       consumes:
@@ -725,7 +784,7 @@ paths:
       consumes:
         - application/json
       produces:
-        - application/json
+        - application/octet-stream
       tags:
         - applications
       summary: Get an application's manifest
@@ -887,7 +946,7 @@ paths:
       consumes:
         - application/json
       produces:
-        - application/json
+        - application/octet-stream
       tags:
         - applications
       summary: Get the manifest for a specific version of an application
@@ -1007,6 +1066,15 @@ paths:
           description: Filter applications by tags.
           name: tags
           in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements per application. This
+            only works when `recursion=1` is also passed.
+          name: entitlements
+          in: query
       responses:
         '200':
           description: Success response of the service
@@ -1021,6 +1089,436 @@ paths:
                 items:
                   $ref: '#/definitions/Application'
         default:
+          $ref: '#/responses/InternalServerError'
+  /1.0/auth/groups:
+    get:
+      description: This endpoint returns a list of groups known to AMS.
+      produces:
+        - application/json
+      tags:
+        - groups
+      summary: Get a list of groups
+      operationId: groups_get
+      parameters:
+        - type: integer
+          description: Maximum number of groups to provide
+          name: limit
+          in: query
+        - type: integer
+          description: Offset at which to start with listing groups
+          name: offset
+          in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Expand the returned resource definition
+          name: recursion
+          in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements per group. This only
+            works when `recursion=1` is also passed.
+          name: entitlements
+          in: query
+        - type: string
+          example: test-group
+          description: Filter groups by name. This is an fuzzy match for the string.
+          name: name
+          in: query
+      responses:
+        '200':
+          description: API endpoints
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/definitions/NoMetaSyncResponse'
+            properties:
+              metadata:
+                description: List of groups
+                type: array
+                items:
+                  type: string
+                example: "[\n  \"/1.0/auth/groups/foo\",\n  \"/1.0/auth/groups/bar\"\
+                  \n]"
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+    post:
+      description: This endpoint adds a new authorization group to AMS.
+      produces:
+        - application/json
+      tags:
+        - groups
+      summary: Create a new AMS authorization group
+      operationId: auth_groups_post
+      responses:
+        '202':
+          $ref: '#/definitions/OperationResponse'
+        '400':
+          $ref: '#/definitions/ErrorBadRequest'
+        default:
+          $ref: '#/responses/InternalServerError'
+  /1.0/auth/groups/{name}:
+    get:
+      description: This endpoint returns information about a specific group.
+      produces:
+        - application/json
+      tags:
+        - groups
+      summary: Get information about a specific group.
+      operationId: auth_group_get
+      parameters:
+        - type: string
+          name: name
+          in: path
+          required: true
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements for the resource.
+          name: entitlements
+          in: query
+      responses:
+        '200':
+          description: Auth Group details
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/definitions/NoMetaSyncResponse'
+            properties:
+              metadata:
+                $ref: '#/definitions/AuthGroup'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+    delete:
+      description: 'This endpoint deletes a specific group. The deletion process happens
+
+        asynchronously. The operation progress can be checked via the returned
+
+        operation object.'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - groups
+      summary: Delete a specific group
+      operationId: groups_delete
+      parameters:
+        - type: string
+          name: name
+          in: path
+          required: true
+        - description: Deletion options for an auth group
+          name: details
+          in: body
+          schema:
+            $ref: '#/definitions/AuthGroupDelete'
+      responses:
+        '202':
+          description: Success response of the service
+          schema:
+            $ref: '#/definitions/OperationResponse'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  /1.0/auth/groups/{name}/:
+    put:
+      description: 'This endpoint updates an auth group. This endpoint can be used
+        to assign or
+
+        revoke entitlements from the auth group.'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - groups
+      summary: Update an auth group
+      operationId: group_put
+      parameters:
+        - type: string
+          description: name of the auth group
+          name: name
+          in: path
+          required: true
+        - description: Details of the attributes to update
+          name: details
+          in: body
+          schema:
+            $ref: '#/definitions/AuthGroupPut'
+      responses:
+        '202':
+          description: Success response of the service
+          schema:
+            $ref: '#/definitions/OperationResponse'
+          headers:
+            Etag:
+              type: string
+              description: E-Tag of the resource
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        default:
+          $ref: '#/responses/InternalServerError'
+  /1.0/auth/identites/{id}:
+    get:
+      description: This endpoint returns information about a specific identity.
+      produces:
+        - application/json
+      tags:
+        - identities
+      summary: Get information about a specific identity.
+      operationId: identity_get
+      parameters:
+        - type: string
+          name: id
+          in: path
+          required: true
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements for the resource.
+          name: entitlements
+          in: query
+      responses:
+        '200':
+          description: Identity details
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/definitions/NoMetaSyncResponse'
+            properties:
+              metadata:
+                $ref: '#/definitions/Identity'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  /1.0/auth/identities:
+    get:
+      description: This endpoint returns a list of identities known to AMS.
+      produces:
+        - application/json
+      tags:
+        - identities
+      summary: Get a list of identities
+      operationId: identities_get
+      parameters:
+        - type: integer
+          description: Maximum number of identities to provide
+          name: limit
+          in: query
+        - type: integer
+          description: Offset at which to start with listing identities
+          name: offset
+          in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Expand the returned resource definition
+          name: recursion
+          in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements per resource. This only
+            works when `recursion=1` is also passed.
+          name: entitlements
+          in: query
+        - type: string
+          example: cilsreunfpfec9b1ktg0
+          description: Filter identities by id. This is an exact match for the string.
+          name: id
+          in: query
+        - enum:
+            - oidc
+            - tls
+          type: string
+          description: Filter identities by authentication type.
+          name: auth_type
+          in: query
+      responses:
+        '200':
+          description: API endpoints
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/definitions/NoMetaSyncResponse'
+            properties:
+              metadata:
+                description: List of identities
+                type: array
+                items:
+                  type: string
+                example: "[\n  \"/1.0/auth/identities/foo\",\n  \"/1.0/auth/identities/bar\"\
+                  \n]"
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+    post:
+      description: 'This endpoint adds a new identity to AMS.
+
+        NOTE**: This is an experimental endpoint and may change or be removed in the
+        future.'
+      produces:
+        - application/json
+      tags:
+        - identities
+      summary: Register an identity into AMS
+      operationId: identity_post
+      responses:
+        '200':
+          $ref: '#/definitions/NoMetaSyncResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
+  /1.0/auth/identities/{id}:
+    put:
+      description: This endpoint allows modification to groups of an identity.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - identities
+      summary: Edit group membership of identity
+      operationId: identities_put
+      parameters:
+        - type: string
+          name: id
+          in: path
+          required: true
+        - description: Specification of the modifiable fields of an identity
+          name: details
+          in: body
+          schema:
+            $ref: '#/definitions/IdentityPut'
+      responses:
+        '202':
+          description: Success response of the service
+          schema:
+            $ref: '#/definitions/OperationResponse'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+    delete:
+      description: 'This endpoint deletes a specific identity. The deletion process
+        happens
+
+        asynchronously. The operation progress can be checked via the returned
+
+        operation object.'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - identities
+      summary: Delete a specific identity
+      operationId: identities_delete
+      parameters:
+        - type: string
+          name: id
+          in: path
+          required: true
+        - description: Deletion optionf for an identity
+          name: details
+          in: body
+          schema:
+            $ref: '#/definitions/IdentityDelete'
+      responses:
+        '202':
+          description: Success response of the service
+          schema:
+            $ref: '#/definitions/OperationResponse'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  /1.0/auth/oidc:
+    get:
+      security: []
+      description: 'This endpoint returns the service status and its supported API
+        extensions.
+
+        It also returns whether the connection is trusted or not.'
+      produces:
+        - application/json
+      tags:
+        - auth
+      summary: Get the status and features supported by the service
+      operationId: oidc_get
+      responses:
+        '200':
+          description: Current config for the service
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/definitions/NoMetaSyncResponse'
+            properties:
+              metadata:
+                $ref: '#/definitions/OIDCResponse'
+        default:
+          $ref: '#/responses/InternalServerError'
+  /1.0/auth/permissions:
+    get:
+      description: This endpoint returns a list of permissions based on the identity's
+        entitlements.
+      produces:
+        - application/json
+      tags:
+        - permissions
+      summary: Get a list of permissions possessed by the current identity.
+      operationId: auth_permissions
+      responses:
+        '200':
+          description: List of permissions
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/definitions/NoMetaSyncResponse'
+            properties:
+              metadata:
+                $ref: '#/definitions/Permission'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        '500':
           $ref: '#/responses/InternalServerError'
   /1.0/certificates:
     get:
@@ -1218,36 +1716,45 @@ paths:
                     type: object
                     properties:
                       agent.api.fingerprint:
-                        description: Fingerprint of certificate in the AMS trust store
-                          which is trusted when communicating with the stream agent
+                        description: 'Fingerprint of the certificate used by stream
+                          agent on
+
+                          its HTTPS endpoint. This is used by AMS for
+
+                          mutual TLS authentication with Stream Agent. The fingerprint
+
+                          must be provided as a 64 character hexadecimal string and
+                          represents
+
+                          the SHA256 hash of the DER encoded certificate.'
                         type: string
                         default: ''
-                        example: fd42316b32df
+                        example: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
                       agent.api.token:
-                        description: Token to be used for API authentication with
-                          stream agent
+                        description: Token used for API authentication with Stream
+                          Agent.
                         type: string
                         default: ''
                         example: foobar
                       agent.api.url:
-                        description: URL for stream agent API endpoint.
+                        description: URL for Stream Agent's API endpoint.
                         type: string
                         default: ''
                         example: https://foo.bar:9001
                       application.addons:
                         description: 'Comma-separated list of addons that every
 
-                          application managed by AMS will use.'
+                          application managed by AMS uses.'
                         type: string
                         default: ''
                         x-docs-ref: howto-enable-addons-globally
                         example: my-addon
                       application.auto_publish:
-                        description: 'If set to `true`, AMS automatically published
+                        description: 'If set to `true`, AMS automatically publishes
 
                           new application versions when the bootstrap
 
-                          process is finished. `false` disables this.'
+                          process is complete.'
                         type: boolean
                         default: true
                         x-docs-ref: sec-publish-app-versions
@@ -1256,9 +1763,7 @@ paths:
 
                           applications whenever any dependencies
 
-                          (parent image, addons, global configuration) change.
-
-                          `false` disables this.'
+                          (parent image, addons, global configuration) change.'
                         type: boolean
                         default: true
                         x-docs-ref: sec-configure-automatic-app-updates
@@ -1272,13 +1777,14 @@ paths:
                         default: ''
                         example: arm64-v8a
                       application.max_published_versions:
-                        description: 'Maximum number of published versions per
+                        description: 'Maximum number of published versions allowed
+                          for
 
-                          application. If the number of versions of
+                          application. If the number of application versions
 
-                          an application exceeds this configuration,
+                          exceeds this configuration, AMS automatically
 
-                          AMS will automatically clean up older versions.'
+                          cleans up older versions.'
                         type: integer
                         format: int32
                         default: 3
@@ -1286,9 +1792,7 @@ paths:
                       container.apt_mirror:
                         description: '*(Deprecated)* APT mirror to use within
 
-                          the containers. This configuration item
-
-                          is deprecated since 1.20, use `instance.apt_mirror`
+                          the containers. Use `instance.apt_mirror`
 
                           instead.'
                         type: string
@@ -1300,9 +1804,7 @@ paths:
 
                           that Anbox Cloud uses by default to launch
 
-                          containers. This configuration item is deprecated
-
-                          since 1.20, use `instance.default_platform` instead.'
+                          containers. Use `instance.default_platform` instead.'
                         type: string
                         default: 'null'
                         enum:
@@ -1312,45 +1814,56 @@ paths:
                         x-deprecated-since: '1.20'
                         example: webrtc
                       container.features:
-                        description: '"*(Deprecated)* Comma-separated list of
+                        description: '*(Deprecated)* Comma-separated list of
 
-                          features to enable. This configuration
+                          features to enable. Use `instance.features`
 
-                          item is deprecated since 1.20, use `instance.features`
-
-                          instead."'
+                          instead.'
                         type: string
                         default: ''
                         x-deprecated-since: '1.20'
                         example: enable_virtual_keyboard,foo
                       container.security_updates:
-                        description: '*(Deprecated)* If set to `true`, automatic Ubuntu
-                          security updates are applied during the application bootstrap
-                          process. `false` disables this.'
+                        description: '*(Deprecated)* If set to `true`, automatic
+
+                          Ubuntu security updates are applied during
+
+                          the application bootstrap process.
+
+                          Use `instance.security_updates` instead.'
                         type: boolean
                         default: true
                         x-deprecated-since: '1.20'
                       core.debug_address:
-                        description: Address used to expose debug information on
+                        description: The address used to serve debugging information.
                         type: string
                         default: ''
                         example: https://127.0.0.1:9090
+                      core.https_address:
+                        description: (read only) The address on which AMS listens.
+                        type: string
+                        default: ''
+                        example: 127.0.0.1:8444
+                      core.max_requests_per_second:
+                        description: Maximum number of requests allowed on the HTTPS
+                          endpoint.
+                        type: int32
+                        default: 1000
+                        example: 100
                       core.proxy_http:
-                        description: HTTP proxy to use for HTTP requests that AMS
-                          performs.
+                        description: HTTP proxy for HTTP requests performed by AMS.
                         type: string
                         default: ''
                         example: http://my-proxy:8000
                       core.proxy_https:
-                        description: HTTPS proxy to use for HTTPS requests that AMS
-                          performs.
+                        description: HTTPS proxy for HTTPS requests performed by AMS.
                         type: string
                         default: ''
                         example: http://my-proxy:8000
                       core.proxy_ignore_hosts:
-                        description: 'Comma-separated list that defines the hosts
+                        description: 'Comma-separated list of hosts
 
-                          for which a configured proxy is not used.'
+                          that bypass the configured proxy.'
                         type: string
                         default: ''
                         example: localhost,127.0.0.1
@@ -1359,7 +1872,7 @@ paths:
 
                           AMS does not expose the actual password
 
-                          but only the fact that it is set or not.'
+                          but only whether it is set.'
                         type: string
                         default: ''
                         example: sUp3rS3cR3t
@@ -1376,22 +1889,10 @@ paths:
                           - pinning
                         x-docs-ref: exp-performance
                         example: scheduler
-                      gpu.allocation_mode:
-                        description: 'Method of allocating GPUs: `all` tells
-
-                          AMS to allocate all available GPUs on a
-
-                          system to an instance. `single` allocates
-
-                          only a single GPU.'
-                        type: string
-                        default: single
-                        enum:
-                          - all
-                          - single
-                        example: single
                       gpu.type:
-                        description: 'Type of GPU: `none`, `intel`, `nvidia`, `amd`'
+                        description: 'Type of GPU.
+
+                          Possible values are: `none`, `intel`, `nvidia`, `amd`.'
                         type: string
                         default: none
                         enum:
@@ -1405,17 +1906,17 @@ paths:
 
                           untrusted certificates provided by the
 
-                          configured image server."'
+                          configured image server.'
                         type: boolean
                         default: false
                       images.auth:
                         description: 'Authentication details for AMS to access
 
-                          the image server. When reading this configuration,
+                          the image server. To avoid exposing credentials,
 
-                          a Boolean value that indicates whether the item
+                          a boolean value indicating if the item
 
-                          is set is returned, to avoid exposing credentials.'
+                          is set is returned.'
                         type: string
                         default: ''
                         example: user:password
@@ -1426,31 +1927,32 @@ paths:
                         default: 5m
                         example: 5m
                       images.url:
-                        description: URL of the image server to use.
+                        description: URL of the image server.
                         type: string
                         default: https://images.anbox-cloud.io/stable/
                         example: https://images.anbox-cloud.io/stable/
                       images.version_lockstep:
-                        description: 'Whether to put the version of the latest
+                        description: 'If set to `true`, enables version lockstep between
+                          AMS and
 
-                          pulled image and the AMS version in a lockstep.
+                          the last downloaded image. This ensures that
 
-                          This ensures that a deployment is not automatically
+                          a deployment is not automatically updated to
 
-                          updated to newer image versions if AMS is still at
+                          newer image versions if AMS is still at
 
-                          an older version. This only applies for new major
+                          an earlier version. This only applies for new major
 
-                          and minor but not patch version updates.'
+                          and minor version upgrades but not for patch release updates.'
                         type: boolean
                         default: true
                       instance.apt_mirror:
-                        description: APT mirror to use within the instances.
+                        description: APT mirror to be used inside instances.
                         type: string
                         default: ''
                         example: http://ports.ubuntu.com/ubuntu-ports
                       instance.default_platform:
-                        description: 'The name of the platform that Anbox Cloud
+                        description: 'The platform that Anbox Cloud
 
                           uses by default to launch instances.'
                         type: string
@@ -1466,9 +1968,9 @@ paths:
                         default: ''
                         example: enable_virtual_keyboard,foo
                       instance.network_proxy:
-                        description: 'Network proxy to use inside the instances.
+                        description: 'The network proxy to be used inside instances.
 
-                          This value must have the format `<hostname>:<port>`'
+                          This value must be provided in the format `<hostname>:<port>`.'
                         type: string
                         default: ''
                         example: myproxy.com:9090
@@ -1481,13 +1983,15 @@ paths:
                         type: boolean
                         default: true
                       load_balancer.url:
-                        description: 'URL of the load balancer behind which AMS sits.
+                        description: 'URL of the load balancer in front of AMS.
 
-                          The URL is handed to instances started by AMS to
+                          This URL is provided to instances started by AMS to
 
-                          allow them to contact AMS through the load balancer
+                          allow them to communicate with AMS
 
-                          and not via the address of an individual AMS instance.'
+                          via the load balancer instead of direct communication
+
+                          with an individual AMS instance.'
                         type: string
                         default: ''
                         example: https://load-balanced-ams.com
@@ -1496,7 +2000,7 @@ paths:
 
                           to start and stop instances per LXD node.
 
-                          Changing the value requires a restart of AMS.'
+                          Changing this value requires a restart of AMS.'
                         type: integer
                         format: int32
                         default: 100
@@ -1504,35 +2008,106 @@ paths:
                       node.workers_per_queue:
                         description: 'Number of workers processing instance start
 
-                          and stop requests. Changing the value requires
+                          and stop requests. Changing this value requires
 
                           a restart of AMS.'
                         type: integer
                         format: int32
                         default: 4
                         example: 4
+                      oidc.allow_insecure:
+                        description: 'Allow AMS to connect to OpenID Connect
+
+                          provider without verifying TLS certificates'
+                        type: boolean
+                        default: false
+                      oidc.audience:
+                        description: 'Audience to use while requesting for a token
+
+                          from the OpenID Connect provider.'
+                        type: string
+                        default: ''
+                        example: https://myinstance.us.auth0.com/api/v2/
+                      oidc.client_id:
+                        description: 'Client ID to use while authenticating or
+
+                          validating the access token from the
+
+                          identity provider.'
+                        type: string
+                        default: ''
+                        example: asfASDweIOBjnDFggFSj
+                      oidc.issuer_url:
+                        description: 'Issuer URL to use for connecting to the
+
+                          OpenID Connect compatible identity provider.'
+                        type: string
+                        default: ''
+                        example: https://myinstance.us.auth0.com/
+                      openfga.api.fingerprint:
+                        description: 'Fingerprint of the certificate used by OpenFGA
+                          on
+
+                          its HTTPS endpoint. This is used by AMS for
+
+                          mutual TLS authentication with OpenFGA. The fingerprint
+
+                          must be provided as a 64 character hexadecimal string and
+                          represents
+
+                          the SHA256 hash of the DER encoded certificate.'
+                        type: string
+                        default: ''
+                        example: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+                      openfga.api.token:
+                        description: Token to use while connecting to OpenFGA
+                        type: string
+                        default: ''
+                        example: fd42316b32dfdsafas
+                      openfga.api.url:
+                        description: 'URL for the openfga instance to connect
+
+                          to for authorization.'
+                        type: string
+                        default: ''
+                        example: https://test.openfga.net:8080
+                      openfga.store.id:
+                        description: 'A pre-created OpenFGA store to load the
+
+                          the authrorization model and data from.
+
+                          This is required and will be used for
+
+                          all OpenFGA queries.'
+                        type: string
+                        default: ''
+                        example: 01K5B31JNF0QYCQMRDAGNVJZGW
                       registry.filter:
                         description: 'Comma-separated list of tags to filter
 
                           for when applications are fetched from
 
-                          aar. If empty, no filter is applied.'
+                          AAR. If empty, no filter is applied.'
                         type: string
                         default: ''
                         x-docs-ref: exp-aar
                         example: foo,bar
                       registry.fingerprint:
-                        description: 'Fingerprint of the certificate that the
+                        description: 'Fingerprint of the certificate used by registry
+                          on
 
-                          AAR uses to TLS-secure its HTTPS endpoint.
+                          its HTTPS endpoint. This is used by AMS for
 
-                          This is used by AMS for mutual TLS authentication
+                          mutual TLS authentication with the registry. The fingerprint
 
-                          with the registry.'
+                          must be provided as a 64 character hexadecimal string and
+                          represents
+
+                          the SHA256 hash of the DER encoded certificate.'
                         type: string
                         default: ''
                         x-docs-ref: exp-aar
-                        example: my-registry-fingerprint
+                        example: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
                       registry.mode:
                         description: 'Mode in which the AAR client in AMS
 
@@ -1552,7 +2127,7 @@ paths:
                         x-docs-ref: exp-aar
                         example: 1h
                       registry.url:
-                        description: URL of the AAR to use.
+                        description: URL of the AAR.
                         type: string
                         default: ''
                         x-docs-ref: exp-aar
@@ -1562,7 +2137,7 @@ paths:
 
                           in AMS uses to distribute instances across
 
-                          available LXD nodes: `binpack`, `spread`<br/>
+                          available LXD nodes: `binpack`, `spread`.<br/>
 
                           Choose a scheduling strategy that best suits
 
@@ -1626,6 +2201,14 @@ paths:
       summary: Get a list of containers
       operationId: containers_get
       parameters:
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements for the resource.
+          name: entitlements
+          in: query
         - type: integer
           description: Maximum number of containers to provide
           name: limit
@@ -1813,6 +2396,14 @@ paths:
           name: id
           in: path
           required: true
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements for the resource.
+          name: entitlements
+          in: query
       responses:
         '200':
           description: Container instance details
@@ -2030,6 +2621,14 @@ paths:
       summary: Get a list of containers
       operationId: containers_get_recursion1
       parameters:
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements for the resource.
+          name: entitlements
+          in: query
         - type: integer
           description: Maximum number of containers to provide
           name: limit
@@ -2165,6 +2764,26 @@ paths:
             $ref: '#/definitions/Event'
         default:
           $ref: '#/responses/InternalServerError'
+  /1.0/events/auth:
+    post:
+      description: 'This endpoint will issue a JWT token which can be used to connect
+        to
+
+        the events websocket endpoint GET /1.0/events'
+      produces:
+        - application/json
+      tags:
+        - events
+      summary: Get authentication token for events websocket
+      operationId: events_auth
+      responses:
+        '200':
+          description: This api endpoint returns a signed JWT token with expiry in
+            the payload.
+          schema:
+            $ref: '#/definitions/EventAuth'
+        default:
+          $ref: '#/responses/InternalServerError'
   /1.0/images:
     get:
       description: This endpoint returns a list of images available in the cluster.
@@ -2182,6 +2801,14 @@ paths:
           default: 0
           description: Expand the returned resource definition
           name: recursion
+          in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Include entitlements for each image (requires recursion=1)
+          name: entitlements
           in: query
       responses:
         '200':
@@ -2290,6 +2917,14 @@ paths:
           default: container
           description: Type of the image variant to return could be `vm` or `container`
           name: type
+          in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Include entitlements for the image
+          name: entitlements
           in: query
       responses:
         '200':
@@ -2484,6 +3119,14 @@ paths:
           description: Expand the returned resource definition
           name: recursion
           in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Include entitlements for each image (requires recursion=1)
+          name: entitlements
+          in: query
       responses:
         '200':
           description: Success response of the service
@@ -2508,6 +3151,14 @@ paths:
       summary: Get a list of instances
       operationId: instances_get
       parameters:
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements for the resource.
+          name: entitlements
+          in: query
         - type: integer
           description: Maximum number of instances to provide
           name: limit
@@ -2618,10 +3269,48 @@ paths:
         '500':
           $ref: '#/responses/InternalServerError'
     post:
-      description: 'This endpoint creates a new instance instance with the provided
-        specification.
+      description: 'This endpoint creates a new instance based on an application,
+        image, or
 
-        If AMS cannot fullfil the resource requirements for creating the instance,
+        an existing instance.
+
+
+        To create from an existing instance, ensure that the source instance is in
+
+        the "stopped" or "error" state; otherwise, the request will fail with an
+
+        error (for example, "instance must be stopped"), then:
+
+        1. leave ''app_id'' and ''image_id'' empty.
+
+        2. populate the ''source'' object with the source instance ID and type ''instance''.
+
+
+        When creating from an existing instance, certain properties are derived from
+        the
+
+        source instance and are not freely configurable in the request:
+
+        addons
+
+        image architecture
+
+        disk size
+
+        application ID and version
+
+        image ID and version
+
+
+        All other configuration fields (e.g., CPU, Memory, GPU slots, Display settings)
+
+        are NOT inherited from the source instance. If not provided in the request,
+
+        they will be initialized with their default values, just like a standard instance
+        creation.
+
+
+        If AMS cannot fulfill the resource requirements for creating the instance,
 
         the request will fail.'
       consumes:
@@ -2701,6 +3390,14 @@ paths:
           name: id_or_name
           in: path
           required: true
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements for the resource.
+          name: entitlements
+          in: query
       responses:
         '200':
           description: Instance instance details
@@ -2895,7 +3592,6 @@ paths:
           in: path
           required: true
         - type: string
-          description: Name of the log to retrieve
           name: name
           in: path
           required: true
@@ -2908,6 +3604,104 @@ paths:
           $ref: '#/responses/ErrorNotFound'
         '500':
           $ref: '#/responses/InternalServerError'
+  /1.0/instances/{id}/shares:
+    post:
+      description: 'Create a share for the specified instance which allows accessing
+
+        the instance over WebRTC with the specified transport protocol
+
+        (e.g. ADB).'
+      produces:
+        - application/json
+      tags:
+        - instances
+      summary: Create a share for an instance
+      operationId: instances_shares_post
+      parameters:
+        - description: Details of the share to create
+          name: details
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/SharesPost'
+      responses:
+        '200':
+          description: Share created successfully
+          schema:
+            $ref: '#/definitions/SharesPostResponse'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+  /1.0/instances/{id}/shares/{shareId}:
+    post:
+      description: Delete a share by ID for an instance
+      produces:
+        - application/json
+      tags:
+        - instances
+      summary: Delete a share
+      operationId: instance_share_delete
+      parameters:
+        - type: string
+          description: ID of the instance the share belongs to
+          name: id
+          in: path
+          required: true
+        - type: string
+          description: ID of the share to delete
+          name: shareId
+          in: path
+          required: true
+      responses:
+        '202':
+          description: Success response of the service
+          schema:
+            $ref: '#/definitions/OperationResponse'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        default:
+          $ref: '#/responses/InternalServerError'
+    patch:
+      description: Update a share by ID
+      produces:
+        - application/json
+      tags:
+        - instances
+      summary: Update a share
+      operationId: instance_share_patch
+      parameters:
+        - type: string
+          description: ID of the instance the share belongs to
+          name: id
+          in: path
+          required: true
+        - type: string
+          description: ID of the share to update
+          name: shareId
+          in: path
+          required: true
+        - description: Details of the share to update
+          name: details
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/SharePatch'
+      responses:
+        '200':
+          description: Success response of the service
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        default:
+          $ref: '#/responses/InternalServerError'
   /1.0/instances?recursion=1:
     get:
       description: This endpoint returns a list of instances.
@@ -2918,6 +3712,14 @@ paths:
       summary: Get a list of instances
       operationId: instances_get_recursion1
       parameters:
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements for the resource.
+          name: entitlements
+          in: query
         - type: integer
           description: Maximum number of instances to provide
           name: limit
@@ -3025,6 +3827,27 @@ paths:
           $ref: '#/responses/ErrorNotFound'
         '500':
           $ref: '#/responses/InternalServerError'
+  /1.0/metrics:
+    get:
+      description: 'Required Extensions:
+
+        `metrics_api_endpoint`: The use of this API requires this extension to be
+        present'
+      produces:
+        - application/octet-stream
+      tags:
+        - metrics
+      summary: Get metrics in the Prometheus data format from AMS.
+      operationId: metrics_get
+      responses:
+        '200':
+          description: Success response of the service
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '403':
+          $ref: '#/responses/ErrorForbidden'
+        default:
+          $ref: '#/responses/InternalServerError'
   /1.0/nodes:
     get:
       description: This endpoint returns a list of available nodes known to AMS.
@@ -3042,6 +3865,15 @@ paths:
           default: 0
           description: Expand the returned resource definition
           name: recursion
+          in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements per node. This only
+            works when `recursion=1` is also passed.
+          name: entitlements
           in: query
       responses:
         '200':
@@ -3109,6 +3941,14 @@ paths:
           name: name
           in: path
           required: true
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements for this node.
+          name: entitlements
+          in: query
       responses:
         '200':
           description: Success response of the service
@@ -3221,6 +4061,15 @@ paths:
           default: 0
           description: Expand the returned resource definition
           name: recursion
+          in: query
+        - enum:
+            - 0
+            - 1
+          type: integer
+          default: 0
+          description: Attach current identity's entitlements per node. This only
+            works when `recursion=1` is also passed.
+          name: entitlements
           in: query
       responses:
         '200':
@@ -3457,6 +4306,108 @@ paths:
                   $ref: '#/definitions/Operation'
         default:
           $ref: '#/responses/InternalServerError'
+  /1.0/registry/applications:
+    get:
+      produces:
+        - application/json
+      tags:
+        - registry_applications
+      summary: Get a list of applications stored in the registry.
+      operationId: registry_applications_get
+      responses:
+        '200':
+          description: Success response of the service
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/definitions/CollectionResponse'
+            properties:
+              metadata:
+                type: array
+                items:
+                  $ref: '#/definitions/RegistryApplication'
+        default:
+          $ref: '#/responses/InternalServerError'
+  /1.0/registry/applications/pull:
+    post:
+      description: This endpoints allows pulling a single application from the registry.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - registry_applications
+      summary: Pull an application from the registry
+      operationId: registry_applications_pull
+      parameters:
+        - type: string
+          description: ID of the application to pull
+          name: id
+          in: path
+          required: true
+      responses:
+        '202':
+          description: Success response of the service
+          schema:
+            $ref: '#/definitions/OperationResponse'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        default:
+          $ref: '#/responses/InternalServerError'
+  /1.0/registry/applications/push:
+    post:
+      description: This endpoints allows pushing a single application to the registry.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - registry_applications
+      summary: Push an application to the registry
+      operationId: registry_applications_push
+      parameters:
+        - type: string
+          description: ID of the application to push
+          name: id
+          in: path
+          required: true
+      responses:
+        '202':
+          description: Success response of the service
+          schema:
+            $ref: '#/definitions/OperationResponse'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        default:
+          $ref: '#/responses/InternalServerError'
+  /1.0/registry/applications/{id}:
+    delete:
+      description: This endpoint deletes a single application from the registry.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - registry_applications
+      summary: Delete an application from the registry
+      operationId: registry_applications_delete
+      parameters:
+        - type: string
+          description: ID of the application to delete
+          name: id
+          in: path
+          required: true
+      responses:
+        '202':
+          description: Success response of the service
+          schema:
+            $ref: '#/definitions/OperationResponse'
+        '400':
+          $ref: '#/responses/ErrorBadRequest'
+        '404':
+          $ref: '#/responses/ErrorNotFound'
+        default:
+          $ref: '#/responses/InternalServerError'
   /1.0/tasks:
     get:
       description: This endpoint returns a list of tasks in AMS.
@@ -3491,6 +4442,7 @@ paths:
           $ref: '#/responses/InternalServerError'
   /1.0/version:
     get:
+      security: []
       description: This endpoint returns the current running version for the service.
       produces:
         - application/json
@@ -3516,6 +4468,14 @@ definitions:
       to containers
     type: object
     properties:
+      entitlements:
+        description: List of entitlements the user has for this addon
+        type: array
+        items:
+          type: string
+        example:
+          - can_view
+          - can_delete
       name:
         description: Name of the addon
         type: string
@@ -3592,6 +4552,15 @@ definitions:
         type: integer
         format: int64
         example: 1532150640
+      entitlements:
+        description: Entitlements available to the user for this application
+        type: array
+        items:
+          type: string
+        example:
+          - can_view
+          - can_edit
+          - can_delete
       id:
         description: ID of the application
         type: string
@@ -3820,10 +4789,22 @@ definitions:
         type: integer
         format: int64
         example: 2
+      gpu-type:
+        description: 'Type of the GPU to select for the instance. If not given the
+
+          GPU with the minimum usage is assigned to the instance on the
+
+          node it is scheduled on. Possible values are: amd, intel, nvidia'
+        type: string
+        example: amd
       memory:
         description: Memory to be assigned to the application
         type: string
         example: 3GB
+      no_disk_reserve:
+        description: NoDiskReserve defines whether to skip reserving the full disk
+          quota upfront
+        type: boolean
       vpu-slots:
         description: Number of VPU slots required by the application
         type: integer
@@ -3848,10 +4829,22 @@ definitions:
         type: integer
         format: int64
         example: 2
+      gpu-type:
+        description: 'Type of the GPU to select for the instance. If not given the
+
+          GPU with the minimum usage is assigned to the instance on the
+
+          node it is scheduled on. Possible values are: amd, intel, nvidia'
+        type: string
+        example: amd
       memory:
         description: Memory to be assigned to the application
         type: string
         example: 3GB
+      no_disk_reserve:
+        description: NoDiskReserve defines whether to skip reserving the full disk
+          quota upfront
+        type: boolean
       vpu-slots:
         description: Number of VPU slots required by the application
         type: integer
@@ -4004,6 +4997,102 @@ definitions:
           - cilsreunfpfec9b1ktg0
           - cilsreunfpfec9b1ktg1
           - myapp
+  AuthGroup:
+    type: object
+    title: AuthGroup is the type for an AMS authorization group.
+    properties:
+      created_at:
+        description: CreatedAt specifies the time at which the group was created.
+          The value is a UTC timestamp.
+        type: integer
+        format: int64
+        example: 1689604498
+      description:
+        description: Description is a short description of the group.
+        type: string
+        example: Developers of application foo.
+      entitlements:
+        description: Entitlements lists the current identity's entitlements on this
+          group
+        type: array
+        items:
+          type: string
+        example:
+          - can_view
+          - can_edit
+      identities:
+        description: Identities is a list of authentication method to slice of group
+          identifiers.
+        type: array
+        items:
+          type: string
+      immutable:
+        description: Immutable defines whether a group is immutable and cannot be
+          deleted or renamed
+        type: boolean
+        example: false
+      name:
+        description: Name is the name of the group.
+        type: string
+        example: default-c1-viewers
+      permissions:
+        description: Permissions represent the list of permissions assigned to an
+          auth group
+        type: array
+        items:
+          $ref: '#/definitions/Permission'
+        example:
+          - entitlement: can_view
+            resource: application:foo
+          - entitlement: can_edit
+            resource: instance:bar
+      updated_at:
+        description: UpdatedAt specifies the time at which the group was last updated.
+          The value is a UTC timestamp.
+        type: integer
+        format: int64
+        example: 1689604498
+  AuthGroupDelete:
+    description: AuthGroupDelete represent the body in a delete method
+    type: object
+    properties:
+      force:
+        description: Force allows the group to be deleted even if it is a part of
+          groups
+        type: boolean
+        example: true
+  AuthGroupPost:
+    type: object
+    title: AuthGroupPost is used for creating a group.
+    properties:
+      description:
+        description: Description is a short description of the group.
+        type: string
+        example: Developers of application foo.
+      name:
+        description: Name is the name of the group.
+        type: string
+        example: default-c1-viewers
+  AuthGroupPut:
+    type: object
+    title: AuthGroupPut replaces the editable fields for an auth group with the required
+      values.
+    properties:
+      description:
+        description: Description is a short description of the group.
+        type: string
+        example: Developers of application foo.
+      permissions:
+        description: Permissions represent the list of permissions assigned to an
+          auth group
+        type: array
+        items:
+          $ref: '#/definitions/Permission'
+        example:
+          - entitlement: can_view
+            resource: application:foo
+          - entitlement: can_edit
+            resource: instance:bar
   Certificate:
     description: Certificate represents an available client certificate
     type: object
@@ -4131,6 +5220,15 @@ definitions:
         type: integer
         format: int64
         example: 1689604498
+      entitlements:
+        description: Entitlements lists the current identity's entitlements on this
+          container
+        type: array
+        items:
+          type: string
+        example:
+          - can_view
+          - can_edit
       error_message:
         description: ErrorMessage provides an error message when the container status
           is set to error.
@@ -4526,6 +5624,113 @@ definitions:
         enum:
           - operation
           - lifecycle
+  EventAuth:
+    description: EventAuth defines the structure of the response sent as metadata
+      for events authentication endpoint
+    type: object
+    properties:
+      token:
+        description: Token represents a signed JWT token issued by AMS.
+        type: string
+  Identity:
+    type: object
+    title: Identity represents an authenticated party that can make requests to the
+      HTTPS API.
+    properties:
+      authentication_method:
+        description: 'The authentication method that the identity
+
+          authenticates to AMS with.'
+        type: string
+        example: tls
+      certificate:
+        description: Base64 encoded certificate content without the header or the
+          footer (for TLS based identities)
+        type: string
+        example: MIIFUTCCAzmgAw...xjKoUEEQOzJ9
+      created_at:
+        description: CreatedAt specifies the time at which the identity was created
+        type: integer
+        format: int64
+        example: 1689604498
+      email:
+        description: Email of the new user for OIDC based identities
+        type: string
+        example: john.doe@example.com
+      entitlements:
+        description: Current identity's entitlements on the object
+        type: array
+        items:
+          type: string
+        example:
+          - can_edit
+          - can_view
+      fingerprint:
+        description: The certificate fingerprint for TLS based identities
+        type: string
+      groups:
+        description: The list of groups for which the identity is a member.
+        type: array
+        items:
+          type: string
+        example:
+          - foo
+          - bar
+      id:
+        description: A unique identifier for the identity
+        type: string
+        example: btavtegj1qm58qg7ru50
+      name:
+        description: Name of the new user
+        type: string
+        example: john-doe
+      updated_at:
+        description: UpdatedAt specifies the time at which the identity was last updated
+        type: integer
+        format: int64
+        example: 1689604498
+  IdentityDelete:
+    description: IdentityDelete represent the body in a delete method
+    type: object
+    properties:
+      force:
+        description: Force allows the identity to be deleted even if it is a part
+          of groups
+        type: boolean
+        example: true
+  IdentityPost:
+    description: IdentityPost is the input body adding for an identity
+    type: object
+    properties:
+      authentication_method:
+        description: AuthenticationMethod is the method used to authenticate the identity
+        type: string
+        example: oidc
+      certificate:
+        description: Base64 encoded certificate content without the header or the
+          footer (for TLS based identities)
+        type: string
+        example: MIIFUTCCAzmgAw...xjKoUEEQOzJ9
+      email:
+        description: Email of the new user (for OIDC based identities)
+        type: string
+        example: john.doe@example.com
+      name:
+        description: Name of the new identity
+        type: string
+        example: john-doe
+  IdentityPut:
+    type: object
+    title: IdentityPut contains the editable fields of an Identity.
+    properties:
+      groups:
+        description: Groups is the list of groups for which the identity is a member.
+        type: array
+        items:
+          type: string
+        example:
+          - foo
+          - bar
   Image:
     description: Image represents an image available in AMS
     type: object
@@ -4539,6 +5744,14 @@ definitions:
           name is provided
         type: boolean
         example: false
+      entitlements:
+        description: List of entitlements the user has for this image
+        type: array
+        items:
+          type: string
+        example:
+          - can_view
+          - can_edit
       id:
         description: ID of the image
         type: string
@@ -4618,6 +5831,11 @@ definitions:
         type: integer
         format: int64
         example: 1610641117
+      error_message:
+        description: 'ErrorMessage describes a potential error which has occured while
+
+          downloading the image.'
+        type: string
       fingerprint:
         description: Fingerprint of the image version
         type: string
@@ -4672,8 +5890,27 @@ definitions:
         description: Path to store the image
         type: string
         example: /save/image
+      source:
+        $ref: '#/definitions/ImagesPostSource'
       type:
         $ref: '#/definitions/ImageType'
+  ImagesPostSource:
+    description: ImagesPostSource specifies the source for creating an image
+    type: object
+    properties:
+      force:
+        description: Force specifies whether to stop a running instance before publishing
+        type: boolean
+        example: false
+      instance:
+        description: Instance specifies the instance to create an image from (when
+          Type="instance")
+        type: string
+        example: btavtegj1qm58qg7ru50
+      type:
+        description: 'Type of source: "instance", "import", "upload"'
+        type: string
+        example: instance
   Instance:
     description: Instance represents a single instance
     type: object
@@ -4766,11 +6003,25 @@ definitions:
               with
             type: string
             example: webrtc
+          security:
+            type: object
+            properties:
+              delete_protected:
+                type: boolean
       created_at:
         description: CreatedAt specifies the time at which the instance was created
         type: integer
         format: int64
         example: 1689604498
+      entitlements:
+        description: Entitlements lists the current identity's entitlements on this
+          instance
+        type: array
+        items:
+          type: string
+        example:
+          - can_view
+          - can_edit
       error_message:
         description: ErrorMessage provides an error message when the instance status
           is set to error.
@@ -4787,6 +6038,13 @@ definitions:
           instance has not been created from an image.'
         type: string
         example: cilshrmnfpfec9b1kte0
+      image_name:
+        description: 'ImageName is the name of the image the instance is created from.
+          Empty if the
+
+          instance has not been created from an image.'
+        type: string
+        example: my-image
       image_version:
         description: 'ImageVersion is the version of the image the instance is created
           from. Empty if the
@@ -4882,7 +6140,8 @@ definitions:
         type: array
         items:
           type: string
-        example: /bin/ls
+        example:
+          - /bin/ls
       environment:
         description: Environment to setup when the command is executed.
         type: object
@@ -4908,6 +6167,17 @@ definitions:
       instance
     type: object
     properties:
+      config:
+        description: Configuration of the instance
+        type: object
+        properties:
+          security:
+            description: Security settings for the instance
+            type: object
+            properties:
+              delete_protected:
+                description: Delete protection for the instance
+                type: boolean
       desired_status:
         description: Desired status of the instance
         type: string
@@ -4931,11 +6201,23 @@ definitions:
         type: integer
         format: int64
         example: 1
+      gpu-type:
+        description: 'Type of the GPU to select for the instance. If not given the
+
+          GPU with the minimum usage is assigned to the instance on the
+
+          node it is scheduled on. Possible values are: amd, intel, nvidia'
+        type: string
+        example: amd
       memory:
         description: Memory assigned to the instance in bytes
         type: integer
         format: int64
         example: 3221225472
+      no_disk_reserve:
+        description: NoDiskReserve defines whether to skip reserving the full disk
+          quota upfront
+        type: boolean
       vpu-slots:
         description: VPUSlots specifies the number of VPU slots the instance
         type: integer
@@ -5001,6 +6283,47 @@ definitions:
         example:
           - tcp
           - udp
+  InstanceSharesPostResponse:
+    description: InstanceSharesPostResponse is returned when sharing an instance
+    type: object
+    properties:
+      error:
+        type: string
+      metadata:
+        $ref: '#/definitions/InstanceSharesPostResponseData'
+      status:
+        type: string
+      status_code:
+        type: integer
+        format: int64
+  InstanceSharesPostResponseData:
+    description: InstanceSharesPostResponseData contains the share URL
+    type: object
+    properties:
+      expiry_at:
+        description: ExpiryAt specifies the exact expiration time for the share
+        type: integer
+        format: int64
+      id:
+        description: ID of the share
+        type: string
+      type:
+        description: Type of the share
+        type: string
+      url:
+        description: URL is the endpoint to reach to start the WebRTC signaling process
+        type: string
+  InstanceSource:
+    type: object
+    title: InstanceSource represents the source for creating a new instance (e.g.,
+      for instance copy).
+    properties:
+      id:
+        description: ID of the source resource.
+        type: string
+        example: cilsreunfpfec9b1ktg0
+      type:
+        $ref: '#/definitions/SourceType'
   InstanceStatus:
     description: InstanceStatus represents the status a instance can be in
     type: integer
@@ -5024,11 +6347,12 @@ definitions:
           - cilsreunfpfec9b1ktg0
           - cilsreunfpfec9b1ktg1
   InstancesPost:
-    description: 'InstancesPost represents the fields required to launch a new instance
-      for
+    description: 'It supports creating instances from an application, an image, or
+      by
 
-      a specific application'
+      copying an existing instance (via the ''source'' field).'
     type: object
+    title: InstancesPost represents the fields required to launch a new instance.
     properties:
       addons:
         description: Addons to enable for the instance
@@ -5108,6 +6432,13 @@ definitions:
               with
             type: string
             example: webrtc
+          security:
+            description: Security settings for the instance
+            type: object
+            properties:
+              delete_protected:
+                description: Delete protection for the instance
+                type: boolean
       image_id:
         description: ID of the image to use. Can be empty if an application ID is
           specified instead.
@@ -5152,11 +6483,25 @@ definitions:
             type: integer
             format: int64
             example: 1
+          gpu-type:
+            description: 'Type of the GPU to select for the instance. If not given
+              the
+
+              GPU with the minimum usage is assigned to the instance on the
+
+              node it is scheduled on. Possible values are: amd, intel, nvidia'
+            type: string
+            example: amd
           memory:
             description: Memory the instance should get assigned in bytes.
             type: integer
             format: int64
             example: 3221225472
+          no_disk_reserve:
+            description: If set to true, prevents the AMS from reserving the full
+              disk quota upfront.
+            type: boolean
+            example: false
           vpu-slots:
             description: Number of VPU slots the instance should get assigned
             type: integer
@@ -5167,6 +6512,8 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/NetworkServiceSpec'
+      source:
+        $ref: '#/definitions/InstanceSource'
       tags:
         description: Tags which will be assigned to the instance
         type: array
@@ -5278,6 +6625,15 @@ definitions:
         description: Disk size for the node
         type: string
         example: 'true'
+      entitlements:
+        description: Entitlements available to the user for this node
+        type: array
+        items:
+          type: string
+        example:
+          - can_view
+          - can_edit
+          - can_delete
       gpu_encoder_slots:
         description: Number of GPU encoder slots present on the node
         type: integer
@@ -5293,6 +6649,14 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/NodeGPU'
+      instance_types:
+        description: Instance Types supported by the LXD node.
+        type: array
+        items:
+          $ref: '#/definitions/InstanceType'
+        example:
+          - container
+          - vm
       is_master:
         description: Flag to represent the master node for the AMS cluster
         type: boolean
@@ -5404,6 +6768,11 @@ definitions:
         type: integer
         format: int64
         example: 20
+      type:
+        description: 'Type is the type of the GPU. Possible values are: nvidia, amd,
+          intel'
+        type: string
+        example: nvidia
   NodeGPUAllocation:
     description: NodeGPUAllocation describes a single allocation on a GPU
     type: object
@@ -5432,7 +6801,7 @@ definitions:
     type: object
     properties:
       encoder_slots:
-        description: Update the number of GPU encoder slots
+        description: Number of GPU encoder slots.
         type: integer
         format: int64
         example: 4
@@ -5442,7 +6811,7 @@ definitions:
         format: uint64
         example: 0
       slots:
-        description: Update the number of the GPU slots available on the Node
+        description: Number of GPU slots available on the node.
         type: integer
         format: int64
         example: 20
@@ -5451,7 +6820,7 @@ definitions:
     type: object
     properties:
       cpu_allocation_rate:
-        description: CPU allocation rate used for over-committing resources
+        description: CPU allocation rate used for over-committing resources.
         type: number
         format: float
         x-docs-ref: sec-over-committing
@@ -5464,17 +6833,19 @@ definitions:
       gpu_encoder_slots:
         description: 'Number of GPU encoder slots available on the node.
 
-          `0` for nodes without GPU
+          Default values: 0 for nodes without GPU;
 
-          `32` for nodes with NVIDIA GPU
+          32 for nodes with NVIDIA GPU;
 
-          `10` for nodes with AMD or Intel GPU'
+          5 for nodes with AMD;
+
+          10 for nodes with Intel GPU.'
         type: integer
         format: int64
         x-docs-ref: sec-gpu-slots
         example: 4
       gpu_slots:
-        description: Update the number of GPU slots to configure on the node
+        description: Number of GPU slots to configure on the node.
         type: integer
         format: int64
         example: 2
@@ -5483,7 +6854,7 @@ definitions:
         items:
           $ref: '#/definitions/NodeGPUPatch'
       memory:
-        description: Update the memory (in GB) for the node
+        description: Update the memory (in GB) for the node.
         type: string
         example: 2GB
       memory_allocation_rate:
@@ -5498,7 +6869,7 @@ definitions:
         format: ipv4
         example: 10.0.0.1
       subnet:
-        description: The network subnet of the machine where the node runs.
+        description: The network subnet of the machine hosting the node.
         type: string
         format: ipv4
         example: 10.0.0.1/24
@@ -5511,7 +6882,7 @@ definitions:
           - created_by=anbox
           - gpu=nvidia
       unscheduable:
-        description: DEPRECATED Flag in favour of `unschedulable` flag
+        description: DEPRECATED Flag in favour of `unschedulable` flag.
         type: boolean
         x-deprecated-since: '1.20'
         example: false
@@ -5650,10 +7021,48 @@ definitions:
         description: Trust password for the LXD instance
         type: string
         example: sUp3rs3cr3t
+      trust_token:
+        description: Trust token for the LXD instance
+        type: string
+        example: csdflkj3lks
       unmanaged:
         description: Flag used to control if AMS can manage the LXD node
         type: boolean
         example: false
+  OIDCResponse:
+    description: OIDCResponse represents the OIDC configuration accepted by AMS
+    type: object
+    properties:
+      audience:
+        description: 'Audience to use when using flows that do not require a client_secret
+          on
+
+          identity provider e.g Device flow grant.'
+        type: string
+        example: http://ams.example.com
+      client_id:
+        description: 'ClientID to use when using flows that do not require a client_secret
+          on
+
+          identity provider e.g Device flow grant.'
+        type: string
+        example: web
+      issuer:
+        description: Issuer URL as configured in AMS
+        type: string
+        example: '"https://myauth.auth0.com/"'
+      required_scopes:
+        description: 'Required Scope for AMS to work. These scopes should be request
+          by clients
+
+          when performing OIDC based authentication with an Identity Provider.'
+        type: array
+        items:
+          type: string
+        example:
+          - openid
+          - email
+          - profile
   Operation:
     description: Operation represents a background operation
     type: object
@@ -5735,6 +7144,57 @@ definitions:
       type:
         type: string
         example: async
+  Permission:
+    type: object
+    title: Permission represents a structure defining a permission within AMS.
+    properties:
+      entitlement:
+        description: Entitlement represents the type of action allowed on a resource
+        type: string
+        example: can_edit
+      resource:
+        description: 'Resource represents the object on which a permission is being
+          assigned.
+
+          The resource can be for the format `<resource_type>:<resource_id>` or `server`
+
+          `server` is a special resource used to assign permissions globally for the
+          server.'
+        type: string
+        example: instance:foo
+  RegistryApplication:
+    description: RegistryApplication describes a single application available in the
+      registry
+    type: object
+    properties:
+      architectures:
+        type: array
+        items:
+          type: string
+      boot_package:
+        type: string
+      instance_type:
+        type: string
+      name:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+      versions: {}
+      vm:
+        type: boolean
+  Response:
+    description: Response is a standard response for AMS API operations
+    type: object
+    properties:
+      error:
+        type: string
+      status:
+        type: string
+      status_code:
+        type: integer
+        format: int64
   ServiceStatus:
     description: ServiceStatus represents the status of the AMS service
     type: object
@@ -5766,6 +7226,19 @@ definitions:
         items:
           type: string
         example: 2waySSL
+      auth_permissions:
+        description: Lists the valid entitlements per resource type in AMS.
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        example:
+          server:
+            - description: Grants access to view server config
+              entitlement_name: can_view_config
       cluster_id:
         description: ID of the subcluster the AMS instance is part of
         type: string
@@ -5774,6 +7247,9 @@ definitions:
         description: Name of the subcluster the AMS instance is part of
         type: string
         example: prod0
+  SourceType:
+    description: SourceType describes the source type of an instance
+    type: string
   StatusCode:
     description: StatusCode represents a valid REST operation
     type: integer
@@ -5834,7 +7310,8 @@ responses:
       type: object
       properties:
         metadata:
-          example: '{}'
+          type: object
+          example: {}
         status:
           type: string
           example: Success
@@ -5873,7 +7350,8 @@ responses:
           format: int64
           example: 400
         metadata:
-          example: '{}'
+          type: object
+          example: {}
         type:
           type: string
           example: error
@@ -5950,7 +7428,17 @@ responses:
           format: int64
           example: 500
         metadata:
-          example: '{}'
+          type: object
+          example: {}
         type:
           type: string
           example: error
+securityDefinitions:
+  bearerAuth:
+    description: 'Provide the Bearer token in the format: "Bearer {token}".'
+    type: apiKey
+    name: Authorization
+    in: header
+security:
+  - bearerAuth:
+      - '[]'

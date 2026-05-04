@@ -1,5 +1,5 @@
 (howto-develop-addons-devmode)=
-# How to develop addons in `--devmode`
+# Develop addons in `--devmode`
 
 Developing and testing addons using the Anbox Management Service (AMS) may be time-consuming. Instead, an instance with `--devmode` enabled can provide a safe environment to develop and test addons and their hooks without having to upload the addon to the AMS.
 
@@ -10,13 +10,15 @@ This guide explains how to use an instance in development mode to develop and te
 Start a raw instance with `--devmode` enabled:
 
 ```
-amc launch --devmode --raw
+amc launch --devmode
 ```
+
 or
 
 ```
-amc launch --vm --devmode --raw
+amc launch --vm --devmode
 ```
+
 The command prints out the ID of the instance. Note down the instance ID for next steps.
 
 Use the `amc shell <instance_id>` command to open a shell inside the instance. `instance_id` is the instance ID from the previous step.
@@ -25,14 +27,15 @@ Alternatively, you can use `amc exec <instance_id> <command_options>` to directl
 
 ## Create an addon within the instance
 
-Use the instance as a remote environment to develop your addon. To make your addon source available within the instance, either copy the addon manifest and hooks using the [`lxc file push`](https://documentation.ubuntu.com/lxd/en/latest/howto/instances_access_files/#push-files-from-the-local-machine-to-the-instance) command or clone a git repository using SSH.
+Use the instance as a remote environment to develop your addon. To make your addon source available within the instance, either copy the addon manifest and hooks using the [`lxc file push`](https://documentation.ubuntu.com/lxd/latest/howto/instances_access_files/#push-files-from-the-local-machine-to-the-instance) command or clone a git repository using SSH.
 
 You can test your addon hooks by running it inside the instance shell. For example, `ADDON_DIR=$PWD ./hooks/install` can help test if the install hook of the addon works. See {ref}`sec-env-variables` for a list of available variables.
 
 To troubleshoot issues within the instance, try either of the following options:
-* Run `amc logs <instance_id>` on the host to see the Anbox runtime logs.
-* Run `journalctl --no-pager` within the instance to view instance logs.
-* Restart the instance using `amc stop <instance_id>` and then `amc start <instance_id>`.
+
+- Run `amc logs <instance_id>` on the host to see the Anbox runtime logs.
+- Run `journalctl --no-pager` within the instance to view instance logs.
+- Restart the instance using `amc stop <instance_id>` and then `amc start <instance_id>`.
 
 ## Example: Launch an SSH-enabled container for remote development
 
@@ -40,7 +43,7 @@ This example uses a container for demonstration, you can create an SSH-enabled V
 
 ```bash
 # Launch and obtain the container id
-id="$(amc launch --devmode -s ssh --raw)"
+id="$(amc launch --devmode -s ssh)"
 # Install the ssh-import-id package
 amc exec $id -- apt install -y ssh-import-id
 # Import SSH keys from GitHub; Use lp:<username> for Launchpad
@@ -53,4 +56,5 @@ node_port="$(amc show $id --format=json | jq -r '.network.services[0].node_port'
 # Connect to the container using SSH
 ssh -p "$node_port" root@"$container_address"
 ```
+
 Once you are logged in to the instance, you can remotely develop and test your addon within the instance. For example, see how to [set up VS Code for remote development using SSH](https://code.visualstudio.com/docs/remote/ssh).

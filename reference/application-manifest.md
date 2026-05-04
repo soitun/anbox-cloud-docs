@@ -74,6 +74,7 @@ resources:
   disk-size: 3GB
 node-selector: [foo, bar]
 ```
+
 (sec-application-manifest-video-encoder)=
 ## Video encoder
 
@@ -86,8 +87,9 @@ Name                     |  Description
 `software`            |  A software-based video encoder
 
 When `gpu` video encoder is specified in the manifest, AMS can fail to create an application if:
- - All GPU slots are used up by running instances.
- - There is no GPU support across the entire LXD cluster.
+
+- All GPU slots are used up by running instances.
+- There is no GPU support across the entire LXD cluster.
 
 (sec-application-manifest-watchdog)=
 ## Watchdog
@@ -143,8 +145,8 @@ The `resources` directive helps you define the required resources for your appli
 Name           | Value type | Minimum value  | Description
 ---------------|------------|----------------|-------------------------
 `cpus`         | integer    |     1          | Number of vCPU cores
-`memory`       | string     |     3 GB       | Memory to be assigned to the application
-`disk-size`    | string     |     3 GB       | Disk size to be assigned to the application
+`memory`       | string     |     3GB       | Memory to be assigned to the application
+`disk-size`    | string     |     3GB       | Disk size to be assigned to the application
 `gpu-slots`(optional) | integer |     0      | Number of GPU slots to be assigned to the application
 
 Note that if all required fields (`cpus`/`memory`/`disk-size`) of `resources` are supplied in the application manifest and the deprecated `instance-type` field is also provided, `instance-type` will be overridden by the requirements in the `resources` fields upon application installation.
@@ -193,10 +195,10 @@ Each item (file or folder) declared in the `extra-data` field of the manifest YA
 
 For security reasons, the target location of the files and directories listed in the `extra-data` section is restricted to a few specific locations in the Android file system. These are:
 
-* `/sdcard/Android/obb/<apk-package-name>`
-* `/sdcard/Android/data/<apk-package-name>`
-* `/data/app/<apk-package-name>`
-* `/data/data/<apk-package-name>`
+- `/sdcard/Android/obb/<apk-package-name>`
+- `/sdcard/Android/data/<apk-package-name>`
+- `/data/app/<apk-package-name>`
+- `/data/data/<apk-package-name>`
 
 The manifest and extra data in our example are placed next to the application package, which must be named `app.apk`:
 
@@ -224,7 +226,7 @@ The `bootstrap` attribute includes the following field definitions:
 
 Name                  | Value type | Description
 ----------------------|------------|-------------------------
-`keep`                |  array     | Contents under the APP_DIR directory to be preserved in the application image after the bootstrap is finished. Wildcard patterns are supported.  See {ref}`sec-env-variables` and [pattern syntax](https://golang.org/pkg/path/filepath/#Match) for more information.
+`keep`                |  array     | Contents under the APP_DIR directory to be preserved in the application image after the bootstrap is finished. Wildcard patterns are supported.  See {ref}`sec-env-variables` and [pattern syntax](https://pkg.go.dev/path/filepath#Match) for more information.
 
 To minimize the application size, most contents under the `APP_DIR` directory are removed when the application bootstrap is finished. By default, only the metadata content is preserved. If a hook requires any other files under the `APP_DIR` directory during the regular instance runtime, you must include them in the application image.
 

@@ -1,9 +1,10 @@
 (howto-add-image)=
-# How to add an image
+# Add an image
 
-````{tabs}
+::::{tab-set}
 
-```{group-tab} CLI
+:::{tab-item} CLI
+:sync: cli
 
 An image can be added with the following command:
 
@@ -17,9 +18,10 @@ You can set any image as your default with the following command:
 
 Running `amc image list` will now show this image marked as default.
 
-```
+:::
 
-```{group-tab} Dashboard
+:::{tab-item} Dashboard
+:sync: dashboard
 
 You can add an image from the *Images* page of the Anbox Cloud dashboard. While adding an image, you can also edit its name and set it as a default.
 
@@ -33,5 +35,5 @@ Click the *Sync* button ( ![sync image icon](/images/icons/sync-image-icon.png) 
 
 The *Sync* button is enabled only for images with the *available* status.
 
-```
-````
+:::
+::::

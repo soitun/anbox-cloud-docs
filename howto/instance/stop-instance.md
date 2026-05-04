@@ -1,5 +1,5 @@
 (howto-stop-instance)=
-# How to stop an instance
+# Stop an instance
 
 A running instance can be stopped using the `amc stop` command:
 

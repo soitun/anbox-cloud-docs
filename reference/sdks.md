@@ -28,13 +28,13 @@ You need the following build dependencies:
 
 The Anbox Platform SDK provides a collection of example platform plugins to help developers get started with plugin development. The following examples are included:
 
-* `minimal` - A platform plugin that provides a sample implementation of a minimal platform plugin to demonstrate the general plugin layout.
-* `audio_streaming` - A platform plugin that provides a more advanced example of how a platform plugin can process audio and input data.
+- `minimal` - A platform plugin that provides a sample implementation of a minimal platform plugin to demonstrate the general plugin layout.
+- `audio_streaming` - A platform plugin that provides a more advanced example of how a platform plugin can process audio and input data.
 
 (sec-ams-sdk)=
 ## AMS SDK
 
-The AMS SDK offers a set of [Go](https://golang.org/) packages and utilities for any external [Go](https://golang.org/) code to be able to connect to the AMS service through the exposed REST API.
+The AMS SDK offers a set of [Go](https://go.dev/) packages and utilities for any external [Go](https://go.dev/) code to be able to connect to the AMS service through the exposed REST API.
 
 See the [AMS SDK documentation](https://github.com/canonical/ams-sdk) on GitHub for more information.
 
@@ -61,8 +61,8 @@ The Anbox Cloud streaming SDK allows the development of custom streaming clients
 
 Under the hood, the SDK is actually comprised of two components:
 
-* The connector that communicates to the stream backend (either the stream gateway or your own middleware) and initiates the WebRTC setup.
-* The stream class that displays the video and audio feed, handle controls, life-cycle events and more.
+- The connector that communicates to the stream backend (either the stream gateway or your own middleware) and initiates the WebRTC setup.
+- The stream class that displays the video and audio feed, handle controls, life-cycle events and more.
 
 Having these two components makes it easier to plug your own software in the SDK rather than having to re-write everything again.
 

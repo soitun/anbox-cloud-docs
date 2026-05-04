@@ -49,6 +49,45 @@ paths:
           description: List of applications
           schema:
             $ref: '#/definitions/api.ApplicationsGetResponse'
+  /1.0/config:
+    get:
+      description: Get all config items
+      produces:
+        - application/json
+      tags:
+        - config
+      summary: Retrieves all config items managed by the stream gateway.
+      operationId: handle-get-config-items
+      responses:
+        '200':
+          description: List of all config items
+          schema:
+            $ref: '#/definitions/api.ShareGetResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+    patch:
+      description: Update the value of the given config item
+      produces:
+        - application/json
+      tags:
+        - config
+      summary: Update the value of a specific configuration item in the stream gateway.
+      operationId: handle-update-config-item
+      responses:
+        '200':
+          description: Empty response to indicate the operation succeeded
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '400':
+          description: Malformed request, invalid value, or unsupported config item
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
   /1.0/regions:
     get:
       security:
@@ -66,7 +105,7 @@ paths:
       operationId: handle-get-regions
       responses:
         '200':
-          description: OK
+          description: List of regions
           schema:
             $ref: '#/definitions/api.RegionsGetResponse'
   /1.0/session/{id}/sockets/adb:
@@ -119,7 +158,7 @@ paths:
           in: query
         - type: boolean
           description: Return full session objects rather than just their ID
-          name: recursive
+          name: recursion
           in: query
         - type: integer
           description: Limit number of results returned
@@ -140,11 +179,15 @@ paths:
           in: query
       responses:
         '200':
-          description: OK
+          description: List of sessions
           schema:
             $ref: '#/definitions/api.SessionsGetResponse'
+        '400':
+          description: Invalid URL query parameter
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
         '500':
-          description: Internal Server Error
+          description: Internal server error. E.g. failed to load sessions
           schema:
             $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
     post:
@@ -312,7 +355,7 @@ paths:
           schema:
             $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
         '500':
-          description: Internal Server Error
+          description: Internal server error
           schema:
             $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
   /1.0/sessions/{id}/connect:
@@ -354,7 +397,18 @@ paths:
 
         returned object contains a URL with the required credentials for a client
 
-        to join the signaling process.'
+        to join the signaling process.
+
+
+        Note: The `disconnect_clients` field, previously accepted in the POST body
+
+        of the join session endpoint, is now deprecated and ignored. Any existing
+
+        clients will be disconnected automatically when a new client joins the session
+
+        even if the `disconnect_clients` field is included in the request body with
+
+        any value.'
       tags:
         - session
       summary: Join session
@@ -412,12 +466,164 @@ paths:
             expiration time
           schema:
             $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '403':
+          description: Share limit exceeded
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
         '404':
           description: The session does not exist
           schema:
             $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
         '500':
           description: Error when failing to generate auth token
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+  /1.0/shares:
+    get:
+      security:
+        - AuthToken: []
+      description: Get all shares
+      produces:
+        - application/json
+      tags:
+        - share
+      summary: Retrieves a detailed list of all shares managed by the stream gateway.
+      operationId: handle-get-shares
+      parameters:
+        - type: boolean
+          description: Return detailed information about a share, rather than just
+            its ID.
+          name: recursion
+          in: query
+        - type: integer
+          description: Limit number of results returned
+          name: limit
+          in: query
+        - type: integer
+          description: Offset to list results from
+          name: offset
+          in: query
+        - type: string
+          description: Filter shares by a specific session ID.
+          name: session_id
+          in: query
+      responses:
+        '200':
+          description: Detailed list of shares when 'recursion' is true
+          schema:
+            $ref: '#/definitions/api.SharesGetResponseRecursive'
+        '400':
+          description: Invalid share ID or incorrect URL query parameter
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+  /1.0/shares/{id}:
+    get:
+      security:
+        - AuthToken: []
+      description: Retrieves detailed information about a specific share using its
+        ID.
+      produces:
+        - application/json
+      tags:
+        - share
+      summary: Retrieve a specific share
+      operationId: handle-get-share
+      parameters:
+        - type: string
+          description: Share ID
+          name: id
+          in: path
+          required: true
+      responses:
+        '200':
+          description: The requested share
+          schema:
+            $ref: '#/definitions/api.ShareGetResponse'
+        '400':
+          description: Invalid share ID
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '404':
+          description: Non-existent share
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+    delete:
+      security:
+        - AuthToken: []
+      description: Delete a share identified by its unique ID. Any active connection
+        to the session associated with this share will be immediately terminated,
+        and the session will no longer be accessible once deleted.
+      tags:
+        - share
+      summary: Delete a share
+      operationId: handle-delete-share
+      parameters:
+        - type: string
+          description: Share ID
+          name: id
+          in: path
+          required: true
+        - type: boolean
+          description: Set to true to wait for the response or to false to return
+            early without waiting for the share to be deleted
+          name: sync
+          in: query
+      responses:
+        '200':
+          description: Empty response to indicate success
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '202':
+          description: Asynchronous share deletion is accepted, only when the parameter
+            `sync` is set to false
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '400':
+          description: Invalid share ID
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '404':
+          description: Non-existent share
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+    patch:
+      security:
+        - AuthToken: []
+      description: Extend the expiration time of a share by specifying an absolute
+        expiration date or update the description of a share.
+      tags:
+        - share
+      summary: Update a share
+      operationId: handle-update-share
+      parameters:
+        - type: string
+          description: Share ID
+          name: id
+          in: path
+          required: true
+      responses:
+        '200':
+          description: The requested share
+          schema:
+            $ref: '#/definitions/api.ShareGetResponse'
+        '400':
+          description: Invalid share ID or expiration date
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '404':
+          description: Non-existent share
+          schema:
+            $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
+        '500':
+          description: Internal server error
           schema:
             $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
   /1.0/status:
@@ -457,7 +663,7 @@ paths:
           schema:
             $ref: '#/definitions/api.StatusGetResponseAuthenticated'
         '500':
-          description: Internal Server Error
+          description: Internal server error
           schema:
             $ref: '#/definitions/github_com_canonical_ams_api_gateway.Response'
         '503':
@@ -904,8 +1110,25 @@ definitions:
   api.SessionSharePost:
     type: object
     properties:
+      description:
+        description: Description is the user provided description for the share to
+          be created
+        type: string
+        example: session shared with john
+      expiry_at:
+        description: 'ExpiryAt specifies the exact expiration time for the share.
+
+          The value is a Unix timestamp (UTC) indicating when the share will expire.
+
+          NOTE: If both `expiry_min`` and `expiry_at`` are provided, the `expiry_at`
+          will take precedence.'
+        type: integer
+        example: 1610645117
       expiry_min:
-        description: ExpiryMin is the expiration time in minutes for the share URL
+        description: 'DEPRECATEDExpiryMin is the expiration time in minutes for the
+          share URL
+
+          NOTE: this field has been deprecated, please use ExpiryAt instead.'
         type: integer
         default: 5
         maximum: 1
@@ -949,10 +1172,30 @@ definitions:
   api.SessionSharePostResponseData:
     type: object
     properties:
-      expiry_min:
-        description: The expiration time in minutes for the share URL
+      expiry_at:
+        description: 'ExpiryAt specifies the exact expiration time for the share.
+
+          The value is a Unix timestamp (UTC) indicating when the share will expire.'
         type: integer
-        example: 5
+        example: 1610645117
+      expiry_min:
+        description: 'DEPRECATEDExpiryMin specifies the expiration time in minutes
+          for the share URL.
+
+          This value indicates how many minutes the share remains valid after it is
+          created.
+
+          NOTE: this field has been deprecated, please use ExpiryAt instead.'
+        type: integer
+        example: 60
+      id:
+        description: ID of the share
+        type: string
+        example: ctigqirc209urni862a0
+      type:
+        description: Type of the share
+        type: string
+        example: adb
       url:
         description: URL is the endpoint to reach to start the WebRTC signaling process.
         type: string
@@ -1067,6 +1310,164 @@ definitions:
         allOf:
           - $ref: '#/definitions/api.ResponseType'
         example: sync
+  api.SessionsGetResponseRecursive:
+    type: object
+    properties:
+      error:
+        description: Error is an optional error message
+        type: string
+        example: invalid body format
+      metadata:
+        type: array
+        items:
+          $ref: '#/definitions/api.Session'
+      status:
+        description: Status of the response
+        enum:
+          - success
+          - failed
+          - unknown
+        allOf:
+          - $ref: '#/definitions/github_com_canonical_ams_api_gateway.ResponseStatus'
+      status_code:
+        description: StatusCode is the HTTP code of the response
+        type: integer
+      total_size:
+        description: TotalSize specifies how many session objects are available in
+          total
+        type: integer
+      type:
+        description: Type of the operation
+        enum:
+          - sync
+          - async
+          - error
+        allOf:
+          - $ref: '#/definitions/api.ResponseType'
+        example: sync
+  api.Share:
+    type: object
+    properties:
+      created_at:
+        description: Creation timestamp of the share
+        type: integer
+        example: 1610641117
+      description:
+        description: Description of the share
+        type: string
+        example: foo
+      expiry_at:
+        description: Expiration timestamp of the share
+        type: integer
+        example: 1610641117
+      id:
+        description: ID of the share
+        type: string
+        example: d8ab7043f14bdb1ecd3
+      session_id:
+        description: ID of the associated session
+        type: string
+        example: c25k8fh3pn6a8q46taug
+      type:
+        description: Type of the share
+        type: string
+        example: adb
+      url:
+        description: URL of the share
+        type: string
+        example: https://api.example.com/1.0/sessions/foo/connect?token=bar
+  api.ShareBase:
+    type: object
+    properties:
+      created_at:
+        description: Creation timestamp of the share
+        type: integer
+        example: 1610641117
+      description:
+        description: Description of the share
+        type: string
+        example: foo
+      expiry_at:
+        description: Expiration timestamp of the share
+        type: integer
+        example: 1610641117
+      id:
+        description: ID of the share
+        type: string
+        example: d8ab7043f14bdb1ecd3
+      session_id:
+        description: ID of the associated session
+        type: string
+        example: c25k8fh3pn6a8q46taug
+      type:
+        description: Type of the share
+        type: string
+        example: adb
+  api.ShareGetResponse:
+    type: object
+    properties:
+      error:
+        description: Error is an optional error message
+        type: string
+        example: invalid body format
+      metadata:
+        $ref: '#/definitions/api.Share'
+      status:
+        description: Status of the response
+        enum:
+          - success
+          - failed
+          - unknown
+        allOf:
+          - $ref: '#/definitions/github_com_canonical_ams_api_gateway.ResponseStatus'
+      status_code:
+        description: StatusCode is the HTTP code of the response
+        type: integer
+      type:
+        description: Type of the operation
+        enum:
+          - sync
+          - async
+          - error
+        allOf:
+          - $ref: '#/definitions/api.ResponseType'
+        example: sync
+  api.SharesGetResponseRecursive:
+    type: object
+    properties:
+      error:
+        description: Error is an optional error message
+        type: string
+        example: invalid body format
+      metadata:
+        type: array
+        items:
+          $ref: '#/definitions/api.ShareBase'
+      status:
+        description: Status of the response
+        enum:
+          - success
+          - failed
+          - unknown
+        allOf:
+          - $ref: '#/definitions/github_com_canonical_ams_api_gateway.ResponseStatus'
+      status_code:
+        description: StatusCode is the HTTP code of the response
+        type: integer
+      total_size:
+        description: TotalSize specifies how many shares objects are available in
+          total
+        type: integer
+        example: 10
+      type:
+        description: Type of the operation
+        enum:
+          - sync
+          - async
+          - error
+        allOf:
+          - $ref: '#/definitions/api.ResponseType'
+        example: sync
   api.StatusGetResponseAuthenticated:
     type: object
     properties:
@@ -1150,6 +1551,41 @@ definitions:
     x-enum-varnames:
       - ServiceStatusHealthy
       - ServiceStatusUnhealthy
+  github_com_canonical_ams_api_gateway.SharesGetResponse:
+    type: object
+    properties:
+      error:
+        description: Error is an optional error message
+        type: string
+        example: invalid body format
+      metadata:
+        type: array
+        items:
+          type: string
+      status:
+        description: Status of the response
+        enum:
+          - success
+          - failed
+          - unknown
+        allOf:
+          - $ref: '#/definitions/github_com_canonical_ams_api_gateway.ResponseStatus'
+      status_code:
+        description: StatusCode is the HTTP code of the response
+        type: integer
+      total_size:
+        description: TotalSize specifies how many share objects are available in total
+        type: integer
+        example: 10
+      type:
+        description: Type of the operation
+        enum:
+          - sync
+          - async
+          - error
+        allOf:
+          - $ref: '#/definitions/api.ResponseType'
+        example: sync
   github_com_canonical_ams_api_gateway.StunServer:
     type: object
     properties:

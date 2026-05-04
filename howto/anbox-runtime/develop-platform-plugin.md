@@ -1,13 +1,13 @@
 (howto-develop-platform-plugin)=
-# How to develop a platform plugin
+# Develop a platform plugin
 
 Anbox Cloud provides a platform SDK that allows the development of custom platform plugins for the Anbox runtime, for use cases where the default platforms (see {ref}`exp-platforms`) don't fit. For example, a custom platform can be used to integrate a custom streaming protocol with the Anbox runtime.
 
-This guide assumes that all steps are run on an Ubuntu 22.04 machine that hosts the Anbox Cloud Appliance. See {ref}`tut-installing-appliance`.
+This guide assumes that all steps are run on an Ubuntu 22.04 LTS machine that hosts the Anbox Cloud Appliance. See {ref}`tut-installing-appliance`.
 
 ## Preparation
 
-A platform module must be built on the same version of Ubuntu as the Anbox runtime. This means that if you're using one of the Anbox images based on Ubuntu 22.04 (for example, `jammy:android12:arm64`), you must build on Ubuntu 22.04.
+A platform module must be built on the same version of Ubuntu as the Anbox runtime. This means that if you're using one of the Anbox images based on Ubuntu 22.04 LTS, for example `jammy:android12:arm64`, you must build on Ubuntu 22.04 LTS.
 
 However, if you're running the Anbox Cloud Appliance on a machine with a different Ubuntu version, you can build the platform on a separate system (for example, in a LXD or docker instance or on another machine).
 
@@ -32,7 +32,7 @@ The build process creates a `platform_minimal.so` module in the `build` director
 
 ## Install the example platform
 
-The Anbox Management Service (AMS) allows launching instances in a special development mode, which is helpful when developing addons or platforms. In development mode, the Anbox runtime does not terminate the instance when it detects failures or other problems. 
+The Anbox Management Service (AMS) allows launching instances in a special development mode, which is helpful when developing addons or platforms. In development mode, the Anbox runtime does not terminate the instance when it detects failures or other problems.
 
 We will be using this development mode to install the platform. See {ref}`sec-dev-mode` for more information.
 
@@ -40,11 +40,11 @@ To try out the `minimal` platform, complete the following steps:
 
 1. Start a raw instance with development mode turned on:
 
-        amc launch --raw --devmode --cpus 4 --memory 3GB
+        amc launch --devmode --cpus 4 --memory 3GB
 
    If you chose the `nvidia` example, you must select an instance type that supports GPUs (See {ref}`sec-application-manifest-instance-type` if you need more information on the different instance types):
 
-        amc launch --raw --devmode --cpus 4 --memory 3GB --gpu-slots 1
+        amc launch --devmode --cpus 4 --memory 3GB --gpu-slots 1
 
     ```{note}
     Use the `--vm` option to launch a VM instance.
@@ -121,12 +121,12 @@ Load this addon into AMS so that it can be used by applications and instances:
 
 When launching an instance, you must explicitly specify the platform that the Anbox runtime inside the instance should use with the `--platform` argument. If not specified, Anbox will use its default. To launch an instance with the `minimal` platform, run the following command:
 
-    amc launch --raw --addon minimal --platform minimal
+    amc launch --addon minimal --platform minimal
 
 Use the `--vm` option to launch a VM instance.
 
 ## Related topics
 
-* {ref}`exp-addons`
-* {ref}`exp-instances`
-* {ref}`howto-create-addon`
+- {ref}`exp-addons`
+- {ref}`exp-instances`
+- {ref}`howto-create-addon`

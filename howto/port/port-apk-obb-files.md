@@ -1,5 +1,5 @@
 (howto-port-apk-oob)=
-# How to port APKs with OBB files
+# Port APKs with OBB files
 
 Google Play has a limit on how big an APK file can be (see [APK Expansion Files](https://developer.android.com/google/play/expansion-files.html)). Larger Android apps must be split up into the main part as an APK file and the expansion part as an OBB file:
 
@@ -26,6 +26,7 @@ Let's assume that you have an application that consists of an APK file and an OB
    │   └── main.203779.com.foo.bar.obb
    ├── manifest.yaml
    ```
+
 1. Declare the OBB file as extra data in the application manifest:
 
    ```yaml

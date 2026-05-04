@@ -1,5 +1,5 @@
 (howto-set-up-tls)=
-# Set up TLS for the Anbox Cloud Appliance
+# Set up TLS for the appliance
 
 The Anbox Cloud Appliance uses a self-signed certificate to provide HTTPS services. If you want to serve the appliance over HTTPS using a valid SSL/TLS certificate, follow the steps in this document to generate and install a valid SSL/TLS certificate on the Anbox Cloud Appliance.
 
@@ -20,7 +20,6 @@ To generate and install a certificate yourself, complete the following steps:
 ### Add a DNS record
 
 Setting up DNS redirection depends on your DNS provider. Refer to the documentation of your provider to create a DNS record pointing to the IP/DNS of the machine where the Anbox Cloud Appliance is running.
-
 
 (ref-appliance-tls-location)=
 ### Configure the location
@@ -86,4 +85,3 @@ The `certbot` snap packages installed on your machine would have already set up 
 ```{note}
 The appliance will be restarted when the renewal of the SSL certificate is complete, to let the reverse proxy reload the certificate.
 ```
-

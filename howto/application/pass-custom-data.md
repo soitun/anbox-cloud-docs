@@ -1,5 +1,5 @@
 (howto-pass-custom-data-application)=
-# How to pass custom data to an application
+# Pass custom data to an application
 
 You can pass custom data to your application, which you can then use in addons or hooks. For example, you might want to pass user IDs, application configuration or display settings.
 
@@ -17,8 +17,8 @@ or the `--userdata-path` option, if you prefer all the custom data to be collate
 
     amc launch <app-name> .... --enable-streaming --userdata-path="my-user-data.json"
 
-* `--userdata` takes a string and stores the provided data in the `/var/lib/anbox/userdata` file in the instance.
-* `--userdata-path` takes a file name and copies the contents of the file to the `/var/lib/anbox/userdata` file in the instance.
+- `--userdata` takes a string and stores the provided data in the `/var/lib/anbox/userdata` file in the instance.
+- `--userdata-path` takes a file name and copies the contents of the file to the `/var/lib/anbox/userdata` file in the instance.
 
 In both cases, the `/var/lib/anbox/userdata` file will contain exactly the data that you provide. The data must be in string form (to send binary data, you must encode it as Base64 text). The size limit for the data is 10 KB.
 

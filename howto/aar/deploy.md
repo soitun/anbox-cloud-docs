@@ -1,5 +1,5 @@
 (howto-deploy-aar)=
-# How to deploy an AAR
+# Deploy
 
 An Anbox Application Registry (AAR) should be deployed on a single unit. After deploying, you can continue to configure and connect it with all AMS units that you want to synchronize.
 
@@ -16,7 +16,7 @@ When using the S3 storage backend, image downloads will be redirected to S3 inst
 
 ### Create and configure an S3 bucket
 
-To use the AWS S3 storage backend, you must create a dedicated S3 bucket for the AAR first. See the [AWS documentation](https://docs.aws.amazon.com/AmazonS3/latest/userguide/creating-bucket.html) for instructions on how to do this.
+To use the AWS S3 storage backend, you must create a dedicated S3 bucket for the AAR first. See the [AWS documentation](https://docs.aws.amazon.com/AmazonS3/latest/userguide/GetStartedWithS3.html#creating-bucket) for instructions on how to do this.
 
 If you don’t plan to use the {ref}`CloudFront CDN <sec-aws-cloudfront-cdn>`, you should use a region close to your Anbox Cloud deployment to keep download times low.
 
@@ -121,6 +121,6 @@ Then update the AAR configuration via the charm configuration:
 
 ## Related topics
 
-* {ref}`exp-aar`
-* {ref}`howto-configure-aar`
-* {ref}`howto-revoke-aar`
+- {ref}`exp-aar`
+- {ref}`howto-configure-aar`
+- {ref}`howto-revoke-aar`
