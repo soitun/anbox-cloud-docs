@@ -1,3 +1,9 @@
+---
+myst:
+  html_meta:
+    "description": "Learn how to build a streaming client for Anbox Cloud. In this tutorial, we set up WebRTC, service accounts, and a Flask proxy server."
+---
+
 (tut-set-up-stream-client)=
 
 # Set up a stream client
@@ -32,7 +38,7 @@ See {ref}`howto-access-stream-gateway` for more information on creating, using a
 Create a streaming enabled Android instance:
 
     arch="$(dpkg-architecture -q DEB_HOST_ARCH)"
-    amc launch --enable-streaming --raw --name a13 jammy:android13:"$arch"
+    amc launch --enable-streaming --name a13 jammy:android13:"$arch"
 
 ### Determine session ID of the Android instance
 

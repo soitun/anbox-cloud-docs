@@ -1,8 +1,8 @@
-## ams.amc show
+# ams.amc show
 
 Show information about an instance
 
-### Synopsis
+## Synopsis
 
 Show information about an instance.
 
@@ -13,7 +13,7 @@ Valid formats are 'json' and 'yaml'.
 ams.amc show <instance_id> [flags]
 ```
 
-### Examples
+## Examples
 
 ```
 $ amc show bknj0n9hpuo01q954fq0
@@ -24,6 +24,7 @@ node: lxd0
 created_at: 2019-07-17T14:27:41Z
 image:
   id: bkkbiaphpuo3mh78ain0
+  name: my-image
 network:
   address: 192.168.100.2
   public_address: 10.48.61.89
@@ -33,14 +34,14 @@ error_message: ""
 
 ```
 
-### Options
+## Options
 
 ```
       --format string   Output format - 'json' or 'yaml' (default "yaml")
   -h, --help            help for show
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [ams.amc](ams.amc.md)	 - Anbox Management Client
 

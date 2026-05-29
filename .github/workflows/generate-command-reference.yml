@@ -1,9 +1,8 @@
 name: Automatically generate command reference topics
 on:
   workflow_dispatch:
-  # Run daily after midnight UTC
   schedule:
-  - cron: '22 1 * * *'
+  - cron: '22 1 10-31 * THU,FRI'
 
 env:
   AMC_COMMAND_REFERENCE_DIR: "./reference/cmd-ref/amc"
@@ -13,45 +12,52 @@ jobs:
   run-tests:
     runs-on: ubuntu-24.04
     steps:
-    - name: Determine base version
-      id: base_version
-      run: |
-        echo "value=$(cat .base_version)" >> "$GITHUB_OUTPUT"
+    - name: Check out repository
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Set up Anbox Cloud
-      uses: canonical/anbox-cloud-github-action@ef6a5352c3be13f788dfc1939e510e5fa73ebc83
+      uses: canonical/anbox-cloud-github-action@ded37ace13709f90281baa9db7379c76ecef7cf1
       with:
-        channel: ${{ steps.base_version.outputs.value }}/stable
-    - name: Checkout repo
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        channel: latest/stable
+    - name: Determine appliance version
+      id: snap_version
+      run: |
+        echo "value=$(snap info anbox-cloud-appliance | awk '/installed/{print $2}')" >> "$GITHUB_OUTPUT"
       # Remove existing files, generate AMC command reference
     - name: Generate AMC command reference documentation
       run: |
         set -e
         # Remove existing files, generate AMC command reference
-        rm -rf $AMC_COMMAND_REFERENCE_DIR/*
-        amc generate documentation -f markdown -d $AMC_COMMAND_REFERENCE_DIR
+        rm -rf "${AMC_COMMAND_REFERENCE_DIR}"/*
+        amc generate documentation -f markdown -d "${AMC_COMMAND_REFERENCE_DIR}"
     - name: Generate appliance command reference documentation
       env:
         SNAP_DOCS_DIR: "/var/snap/anbox-cloud-appliance/common/docs"
       run: |
         set -e
         # Remove existing files, generate appliance command reference
-        rm -rf $APPLIANCE_COMMAND_REFERENCE_DIR/*
+        rm -rf "${APPLIANCE_COMMAND_REFERENCE_DIR}"/*
         # For the appliance command, the files have to be generated inside the Snap
         # and then copied to the desired directory because of Snap confinement
-        sudo mkdir -p $SNAP_DOCS_DIR
-        sudo anbox-cloud-appliance generate documentation -f markdown -d $SNAP_DOCS_DIR
-        cp -r $SNAP_DOCS_DIR/* $APPLIANCE_COMMAND_REFERENCE_DIR
+        sudo mkdir -p "${SNAP_DOCS_DIR}"
+        sudo anbox-cloud-appliance generate documentation -f markdown -d "${SNAP_DOCS_DIR}"
+        cp -r "${SNAP_DOCS_DIR}"/* "${APPLIANCE_COMMAND_REFERENCE_DIR}"
+    - name: Demote markdown headers
+      run: |
+        # Cobra generates headers starting at H2 (##), but we want them at H1 (#)
+        python3 scripts/demote_headers.py \
+          "${AMC_COMMAND_REFERENCE_DIR}" \
+          "${APPLIANCE_COMMAND_REFERENCE_DIR}"
     - name: Create pull request
-      uses: canonical/create-pull-request@5395f8e286168a9cfb613a84cd0ecb6f3420e6c6
+      uses: canonical/create-pull-request@214a47c7e33f3066cc650834a052377912cdccf2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: "Commit changes to command reference documentation"
-        branch-name: update-cmd-ref
-        title: Update command reference documentation
+        commit-message: "feat: update command reference documentation from ${{ steps.snap_version.outputs.value }}"
+        branch-name: update-cmd-ref-${{ steps.snap_version.outputs.value }}
+        title: Update command reference documentation from ${{ steps.snap_version.outputs.value }}
         body: |
-          This updates the command reference topics for the AMC and Anbox Cloud Appliance.
-          
+          This updates the command reference topics for the AMC and Anbox Cloud Appliance as of
+          version ${{ steps.snap_version.outputs.value }}.
+
           You have to close and reopen the PR to trigger checks.
         repository: canonical/anbox-cloud-docs
         upsert: true

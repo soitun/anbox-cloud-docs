@@ -1,5 +1,11 @@
+---
+myst:
+  html_meta:
+    "description": "How to use amc wait to pause automation until an Anbox Cloud instance reaches the running state."
+---
+
 (howto-wait-for-instance)=
-# How to wait for an instance
+# Wait for an instance
 
 When launching an instance, the instance should not be considered started until it reaches the running state. Sometimes if you want to interact with the instance (with the `amc shell` command, for example), you must wait until the instance reaches a `running` status.
 

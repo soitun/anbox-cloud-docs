@@ -1,24 +1,19 @@
 name: Update API specs
 on:
   workflow_dispatch:
-  # Run daily after midnight UTC
   schedule:
-  - cron: '0 1 * * *'
+  - cron: '0 1 10-31 * THU,FRI'
 
 jobs:
   update-api-specs:
     runs-on: ubuntu-24.04
     steps:
     - name: Check out repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-    - name: Determine base version
-      id: base_version
-      run: |
-        echo "value=$(cat .base_version)" >> "$GITHUB_OUTPUT"
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     - name: Set up Anbox Cloud
-      uses: canonical/anbox-cloud-github-action@ef6a5352c3be13f788dfc1939e510e5fa73ebc83
+      uses: canonical/anbox-cloud-github-action@ded37ace13709f90281baa9db7379c76ecef7cf1
       with:
-        channel: ${{ steps.base_version.outputs.value }}/stable
+        channel: latest/stable
     - name: Determine appliance version
       id: snap_version
       run: |
@@ -35,12 +30,12 @@ jobs:
         sudo curl \
           --unix-socket /var/snap/anbox-cloud-appliance/common/gateway/internal.sock \
           s/1.0/swagger.json | yq -y > ./reference/api-reference/gateway-api.yaml
-    - name: Create PR
-      uses: canonical/create-pull-request@5395f8e286168a9cfb613a84cd0ecb6f3420e6c6
+    - name: Create pull request
+      uses: canonical/create-pull-request@214a47c7e33f3066cc650834a052377912cdccf2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: "feat: update API specs from ${{ steps.snap_version.outputs.value }}"
-        branch-name: new-branch
+        branch-name: update-api-specs-${{ steps.snap_version.outputs.value }}
         title: Update API specs from ${{ steps.snap_version.outputs.value }}
         body: |
           This updates the AMS API specification as taken from the `anbox-cloud-appliance` as of

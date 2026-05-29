@@ -1,5 +1,11 @@
+---
+myst:
+  html_meta:
+    "description": "How to access an Anbox Cloud instance for debugging using amc shell or amc exec."
+---
+
 (howto-access-instance)=
-# How to access an instance
+# Access an instance
 
 In some cases, it might be necessary to access an individual instance for debugging reasons.
 You can do this on the command line with the `amc` command.
