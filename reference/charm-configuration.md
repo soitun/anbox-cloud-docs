@@ -1,3 +1,9 @@
+---
+myst:
+  html_meta:
+    "description": "Reference documentation for Anbox Cloud Juju charm configuration options and their defaults."
+---
+
 (ref-charm-configuration)=
 # Charm Configuration
 
@@ -37,7 +43,6 @@ Name          | Value type | Status |
 `ua_use_staging` | string   | Removed since 1.25.0 |
 `public_interface` | string   | Removed since 1.25.0 |
 `snapd_refresh` | string   | Removed since 1.25.0 |
-
 
 ## [Anbox Stream Gateway](https://charmhub.io./anbox-stream-gateway)
 
