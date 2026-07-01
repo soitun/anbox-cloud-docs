@@ -1,3 +1,9 @@
+---
+myst:
+  html_meta:
+    "description": "Reference documentation for Anbox Cloud release notes, with links to per-version changelogs."
+---
+
 (ref-release-notes)=
 # Release notes
 
@@ -9,55 +15,66 @@ For instructions on how to update your Anbox Cloud deployment to later versions,
 
 | Release date   |  Release notes  |
 |----|----|
-| March 12, 2025 | [Anbox Cloud 1.25.1](1.25.1.md) |
-| February 12, 2025 | [Anbox Cloud 1.25.0](1.25.0.md) |
+| June 17, 2026 | [Anbox Cloud 1.30.0](1.30.0.md) |
+| April 15, 2026 | [Anbox Cloud 1.29.2](1.29.2.md) |
+| March 18, 2026 | [Anbox Cloud 1.29.1](1.29.1.md) |
 
 ## Upcoming release roadmap
 
-The current minor release is **1.25.0** and the next one will be **1.26.0**.
+The current supported minor release is **1.30.0**. The next one will be **1.31.0**, expected in November 2026.
 
-The following target dates for upcoming releases are not final and could vary depending on various factors such as availability of Android security patches. The release notes link will be updated on the day of the release.
+Target dates for upcoming releases are not final and could vary depending on various factors such as availability of Android security patches.
 
 | Target date | Version | Planned updates |
 |----|----|----|
-| April 16, 2025 | Anbox Cloud 1.25.2 | * Android security updates for April 2025<br/> * Bug fixes |
-| May 14, 2025 | Anbox Cloud 1.26.0 | * Terraform plan replacing Anbox Cloud bundles<br/> * Support Ubuntu 24.04 for all charms<br/> * Initial work for secret management via Juju secrets<br/> * Enhancements to the Anbox Management Service<br/> * `anbox-modules` package will no longer be required for GPU and software rendering<br/> * Anbox Cloud images with Android 15 |
-| June 12, 2025 | Anbox Cloud 1.26.1 | * Android security updates for June 2025<br/> * Bug fixes |
+| November 25, 2026 | Anbox Cloud 1.31.0 | *New features*<br/>*Android security updates*<br/>Bug fixes |
 
 ## Release and support policy
 
-Anbox Cloud follows a defined release cycle with frequent minor and patch releases.
+Anbox Cloud follows a defined release cycle with minor and patch releases.
 
 Minor releases
-: A new minor release of Anbox Cloud is released every three months. It includes new features and bug fixes.
+: Anbox Cloud delivers three minor releases per year, in March, June, and November. Minor releases include new features, bug fixes and security updates.
 
 Patch releases
-: A patch release for Anbox Cloud is released every month and includes Android and Chrome security updates alongside Anbox Cloud specific bug fixes.
+: Patch releases are delivered between minor releases and include Android and Chrome security updates alongside Anbox Cloud specific bug fixes. No new features are introduced in patch releases.
 
-Anbox Cloud currently officially supports only the most recent release. Older releases are only supported for a short time after a new minor release was published.
+Anbox Cloud supports only the most recent release. Older releases are only supported for a short time after a new minor release is published.
 
 Feature deprecations are generally announced two releases in advance before the deprecated features are dropped. See {ref}`ref-deprecation-notes` for details.
 
-To ensure you receive latest security updates and bug fixes, you should upgrade to a new release of Anbox Cloud shortly after it is released.
+To ensure you receive the latest security updates and bug fixes, you should upgrade to a new release of Anbox Cloud shortly after it is released.
 
 If you are looking for additional support, see [Ubuntu Pro](https://ubuntu.com/support). Canonical can also provide [managed solutions](https://ubuntu.com/managed) for Anbox Cloud.
 
+### What's new in 1.30.x?
 
-### What's new in 1.25.x?
+Along with bug fixes and general improvements, Anbox Cloud 1.30.x includes:
 
-Along with bug fixes and general improvements, Anbox Cloud 1.25.x includes:
-
-* Integration with the [Canonical Observability Stack](https://charmhub.io/topics/canonical-observability-stack)
-* Enhancements to the Anbox Management Service (AMS)
-* Enhancements to Anbox Cloud dashboard
-* Upgrade to LXD 5.21
-* Android security updates
-* Bug fixes
+- Stream controls overhaul with a redesigned and expanded stream page actions sidebar in the dashboard
+- Instance copy support in the dashboard for near-instantaneous cloning of existing instances
+- Anbox Cloud Terraform plan as the supported method for charm-based deployments
+- Virtualized Android as a new execution environment using Cuttlefish virtual machines, with new `resolute:*-cf:*` images for Android 16 on `amd64` and `arm64`
+- Experimental userspace scheduler support via the Linux kernel's `sched_ext` framework
+- NVIDIA driver series 580 as a hard requirement for NVIDIA GPU deployments
 
 <details><summary>Click to view earlier releases' notes</summary>
 
 |  Release date  |  Release notes  |
 |----|----|
+| February 18, 2026 | [Anbox Cloud 1.29.0](1.29.0.md) |
+| January 21, 2026 | [Anbox Cloud 1.28.2](1.28.2.md) |
+| December 10, 2025 | [Anbox Cloud 1.28.1](1.28.1.md) |
+| November 12, 2025 | [Anbox Cloud 1.28.0](1.28.0.md) |
+| October 15, 2025 | [Anbox Cloud 1.27.2](1.27.2.md) |
+| September 17, 2025 | [Anbox Cloud 1.27.1](1.27.1.md) |
+| August 13, 2025 | [Anbox Cloud 1.27.0](1.27.0.md) |
+| July 16, 2025 | [Anbox Cloud 1.26.2](1.26.2.md) |
+| June 18, 2025 | [Anbox Cloud 1.26.1](1.26.1.md) |
+| May 14, 2025 | [Anbox Cloud 1.26.0](1.26.0.md) |
+| April 16, 2025 | [Anbox Cloud 1.25.2](1.25.2.md) |
+| March 12, 2025 | [Anbox Cloud 1.25.1](1.25.1.md) |
+| February 12, 2025 | [Anbox Cloud 1.25.0](1.25.0.md) |
 | January 15, 2025 | [Anbox Cloud 1.24.2](1.24.2.md) |
 | December 11, 2024 | [Anbox Cloud 1.24.1](1.24.1.md) |
 | December 4, 2024 | [Anbox Cloud 1.23.3](1.23.3.md) |
@@ -108,7 +125,7 @@ Along with bug fixes and general improvements, Anbox Cloud 1.25.x includes:
 |November 30 2021|[Anbox Cloud 1.12.1](1.12.1.md)|
 |November 16 2021|[Anbox Cloud 1.12.0](1.12.0.md)|
 |November 1 2021|[Anbox Cloud 1.11.4](1.11.4.md)|
-|October 18 2021|[Anbox cloud 1.11.3](1.11.3.md)|
+|October 18 2021|[Anbox Cloud 1.11.3](1.11.3.md)|
 |September 20 2021|[Anbox Cloud 1.11.2](1.11.2.md)|
 |August 17 2021|[Anbox Cloud 1.11.1](1.11.1.md)|
 |August 5 2021|[Anbox Cloud 1.11.0](1.11.0.md)|
@@ -149,8 +166,9 @@ Along with bug fixes and general improvements, Anbox Cloud 1.25.x includes:
 |January 2019|[Anbox Cloud 1.1.0](1.1.0.md)|
 |December 2018|[Anbox Cloud 1.0.1](1.0.1.md)|
 |November 2018|[Anbox Cloud 1.0.0](1.0.0.md)|
+
 </details>
 
 ## Security policy
 
-The Anbox Cloud security policy is available at {ref}`ref-security-policy`.
+Read Anbox Cloud's security policy at {ref}`ref-security-policy`.

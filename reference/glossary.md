@@ -1,3 +1,9 @@
+---
+myst:
+  html_meta:
+    "description": "Reference documentation for Anbox Cloud terminology, with definitions for AMS, AAR, instances, and more."
+---
+
 (ref-glossary)=
 # Glossary
 
@@ -64,10 +70,11 @@ Anbox Platform SDK
 
     See {ref}`sec-platform-sdk` for more information.
 
-Anbox shell
-    A command-line tool (`anbox-shell`) that provides an ADB shell with root permissions granted, which you can use to access the Android system in the instance.
+anbox-connect
+    A tool that helps you to remotely connect to an Android container that is running inside the Anbox instance. through a secure ADB connection. It must be installed on your host machine.
 
-    See {ref}`howto-access-android-instance` for more information.
+anbox-shell
+    A command-line tool for interacting with the Android container within the Anbox instance. It acts as a streamlined Android Debug Bridge (ADB) interface, allowing access to the Android environment with `root` privileges. It must be used within the context of an Anbox instance.
 
 Anbox Streaming SDK
     An SDK that allows the development of custom streaming clients, using JavaScript.
@@ -83,9 +90,9 @@ Android Archive (AAR)
     See [Create an Android library](https://developer.android.com/studio/projects/android-library) in the Android developer documentation.
 
 Android Debug Bridge (ADB)
-    A command-line tool that is included in the Android SDK Platform-Tools package and that allows to connect to and communicate with an Android device from your computer.
+    A command-line tool that is included in the Android SDK Platform-Tools package and that allows connecting to and communicating with an Android device from your computer.
 
-    See [Android Debug Bridge (ADB)](https://developer.android.com/studio/command-line/adb) in the Android developer documentation.
+    See [Android Debug Bridge (ADB)](https://developer.android.com/tools/adb) in the Android developer documentation.
 
 Android Package Kit (APK)
     The file format used to package apps for the Android operating system.
@@ -123,6 +130,9 @@ Bootstrap process
 
     See {ref}`sec-application-bootstrap` for more information.
 
+Containerized Android
+    An {ref}`Android execution environment <exp-android-execution-environments>` where the Android system runs directly inside the LXD container. Used by `jammy:*` images. Supports the full application model, addons, and platform plugins.
+
 Control node
     The machine on which the components that make up the management layer, AMS, AMC, and etcd, are installed.
 
@@ -133,7 +143,8 @@ Core stack
     - etcd
     - At least 1 LXD worker
     - 1 AMS Node Controller per LXD worker
-    - Easy-RSA
+    - EasyRSA (deprecated)
+    - Self-signed-certificates (CA)
 
     See {ref}`exp-anbox-cloud` for more information.
 
@@ -179,12 +190,12 @@ Instance type
 Juju
     A charmed operator framework that helps you deploy, integrate and manage applications across multiple environments. Anbox Cloud is installed using Juju. The Anbox Cloud Appliance uses Juju under the hood.
 
-    See [the Juju website](https://juju.is/) for more information.
+    See [the Juju website](https://canonical.com/juju) for more information.
 
 LXD
     A system container and virtual machine manager that offers a unified user experience around full Linux systems running inside containers or virtual machines. Anbox Cloud is based on LXD.
 
-    See [the LXD website](https://ubuntu.com/lxd) for more information.
+    See [the LXD website](https://canonical.com/lxd) for more information.
 
 LXD cluster
     A set of LXD nodes that share the same distributed database that holds the configuration for the cluster members and their instances.
@@ -264,6 +275,9 @@ Ubuntu One
     A central user account system used by all Canonical sites and services. You need an Ubuntu One account to purchase the Ubuntu Pro subscription that is required to run Anbox Cloud, and to log in to the web dashboard.
 
     See [Ubuntu One](https://login.ubuntu.com/) for more information.
+
+Virtualized Android
+    An {ref}`Android execution environment <exp-android-execution-environments>` where the Android system runs inside a Cuttlefish virtual machine within the LXD instance. Used by `resolute:*-cf:*` images.
 
 Watchdog
     A software component that monitors the app in an instance and terminates the instance if the app crashes or is moved to the background.

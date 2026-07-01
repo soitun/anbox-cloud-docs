@@ -1,46 +1,101 @@
+---
+myst:
+  html_meta:
+    "description": "Run Android at scale in the cloud. Anbox Cloud delivers high-density streaming using LXD containers or VMs on public or private infrastructure."
+---
+
+(home)=
 # Anbox Cloud documentation
 
-Anbox Cloud enables running Android apps on any cloud platform at scale. It uses system containers or virtual machines to run the nested Android containers and [Juju](https://juju.is/) for deployment in a cloud environment.
+**Anbox Cloud runs Android in the cloud using lightweight LXD system containers or full virtual machines.**
 
-Anbox Cloud supports x86 and ARM64 hardware, providing the same set of features for both architectures.
+**Built on Ubuntu, it provides a scalable platform to deploy, manage, and stream Android workloads across public and private infrastructure with consistent performance and low latency.** It can run up to 100 Android instances per server while maintaining security and isolation.
 
-By using system containers or virtual machines to emulate Android systems, Anbox Cloud achieves the isolation and security levels of a virtual machine without the associated overhead. Compared to other Android emulation solutions, Anbox Cloud can provide at least twice the density and can serve up to 100 Android instances per server.
+Anbox Cloud is available as a single-machine {ref}`appliance <sec-variants>` for small-scale deployments or as a {ref}`charmed deployment <sec-variants>` using Juju for production environments and multi-cluster scaling.
 
-Due to its highly scalable nature and performance optimization, delivering device-agnostic mobile applications is very easy. Popular use cases of Anbox Cloud include mobile game streaming services, corporate application streaming, application automation and testing.
+**You should consider Anbox Cloud for the wide range of Android workloads it supports.** Cloud gaming providers can deliver high-performance streaming at scale, automotive OEMs can test infotainment systems without physical hardware, Android developers can preview UI changes instantly, and enterprises can provide remote Android workspaces as a service.
 
 ## In this documentation
 
-| | |
-|--|--|
-|  [Tutorials](/tutorial/landing.md)</br>  Get started - a hands-on introduction to Anbox Cloud for new users </br> |  [How-to guides](/howto/landing.md) </br> Step-by-step guides covering key operations and common tasks |
-|  [Explanation](/explanation/landing.md) </br> Concepts - discussion and clarification of key topics, architecture  | [Reference](/reference/landing.md) </br> Technical information - specifications, APIs |
+### Lifecycle
+
+- **Installation:** {ref}`ref-requirements` • {ref}`tut-installing-appliance` • {ref}`howto-deploy-anbox-baremetal`
+- **Authentication and authorization:** {ref}`howto-set-up-idp` • {ref}`howto-configure-oidc` • {ref}`howto-auth` • {ref}`exp-auth` • {ref}`ref-auth`
+- **Configuration:** {ref}`ref-appliance-preseed-config` • {ref}`ref-addon-manifest` • {ref}`ref-application-manifest` • {ref}`ref-ams-configuration` • {ref}`ref-ams-instance-configuration`
+- **Deployment:** {ref}`howto-validate-deployment` • {ref}`howto-use-ceph-storage` • {ref}`howto-customize-installation`
+- **Scaling:** {ref}`exp-nodes` • {ref}`exp-clustering` • {ref}`howto-configure-cluster-nodes` • {ref}`howto-scale-up-cluster` • {ref}`howto-scale-down-cluster`
+- **Upgrading:** {ref}`howto-upgrade-appliance` • {ref}`howto-upgrade-anbox-cloud`
+
+### Artifacts and interfaces
+
+- **Appliance:** {ref}`sec-variants` • {doc}`CLI </reference/cmd-ref/appliance/anbox-cloud-appliance>` • {ref}`exp-web-dashboard`
+- **Anbox Management Service:** {ref}`exp-ams` • {ref}`howto-access-ams-remote` • {doc}`CLI </reference/cmd-ref/amc/ams.amc>`
+- **Anbox Application Registry:** {ref}`exp-aar` • {ref}`howto-configure-aar` • {ref}`howto-deploy-aar` • {ref}`howto-revoke-aar`
+- **Images:** {ref}`exp-images` • {ref}`howto-configure-image-server` • {ref}`howto-add-image` • {ref}`howto-delete-image` • {ref}`howto-use-specific-release`
+- **Instances:** {ref}`exp-instances` • {ref}`exp-resources-presets` • {ref}`howto-create-instance` • {ref}`howto-configure-instance` • {ref}`howto-start-instance` • {ref}`howto-stop-instance` • {ref}`howto-delete-instance` • {ref}`howto-expose-services` • {ref}`howto-view-instance-logs` • {ref}`howto-backup-restore-application-data` • {ref}`ref-hooks`
+- **Applications:** {ref}`howto-create-application` • {ref}`howto-delete-application` • {ref}`howto-update-application` • {ref}`howto-pass-custom-data-application` • {ref}`howto-extend-application` • {ref}`howto-stream-applications`
+- **Addons:** {ref}`howto-create-addon` • {ref}`howto-enable-addons-globally` • {ref}`howto-migrate-addons` • {ref}`howto-update-addons` • {ref}`exp-addons`
+- **SDKs:** {ref}`ref-sdks` • [Platform SDK API](https://canonical.github.io/anbox-cloud.github.com/latest/anbox-platform-sdk/)
+
+### Features
+
+- **Streaming:** {ref}`exp-application-streaming` • {ref}`tut-set-up-stream-client` • {doc}`Stream Gateway API </reference/api-reference/gateway-api>` • {ref}`ref-webrtc` • {ref}`exp-platforms` • {ref}`howto-share-session`
+- **Rendering:** {ref}`exp-rendering-architecture` • {ref}`exp-rendering-graphics`
+- **Images:** {ref}`exp-custom-images` • {ref}`exp-aaos`
+- **Supported features:** {ref}`ref-android-features` • {ref}`ref-aosp-aaos` • {ref}`ref-rendering-resources` • {ref}`ref-codecs` • {ref}`ref-feature-flags`
+
+### Quality
+
+- **Security:** {ref}`ref-security-policy` • {ref}`howto-harden` • {ref}`howto-set-up-tls` • {ref}`exp-security`
+- **Performance:** {ref}`howto-run-benchmarks` • {ref}`ref-performance-benchmarks` • {ref}`ref-prometheus-metrics`
+- **Plan a deployment:** {ref}`exp-capacity-planning` • {ref}`exp-production-planning` • {ref}`howto-enable-ha` • {ref}`howto-monitor-anbox`
+
+## How this documentation is organised
+
+This documentation uses the [Diátaxis documentation structure](https://diataxis.fr/).
+
+- The {ref}`tutorials` take you step-by-step through installing Anbox Cloud Appliance, creating your first virtual Android device,  and setting up a stream client.
+- {ref}`how-to-guides` assume you have basic familiarity with Anbox Cloud. They cover key operations such as managing applications, instances, and clusters.
+- {ref}`reference` provides technical details on configuration options, APIs, CLI commands, and system requirements.
+- {ref}`explanation` offers topic overviews and context on architecture, working with Anbox Cloud, deploying, and security.
 
 ## Project and community
 
-Anbox Cloud is a Canonical product. It originally grew out of the [Anbox open-source project](https://github.com/anbox), but its code base is now completely independent.
+Anbox Cloud is a product developed by [Canonical](https://canonical.com/). While it was initially based on the open-source Anbox project (archived in [GitHub](https://github.com/anbox)), its codebase has since become entirely independent.
 
-We welcome community involvement through suggestions, fixes and constructive feedback both on the product and its documentation. You can engage with the Anbox Cloud team and the community using the following channels:
+We welcome community involvement through suggestions, fixes and constructive feedback both on the product and its documentation.
 
-- Engage with the Anbox Cloud team and community:
-  - [Discourse](https://discourse.ubuntu.com/c/anbox-cloud/users/148)
-  - [Matrix](https://matrix.to/#/#anbox-cloud:ubuntu.com)
-- {ref}`Troubleshoot Anbox Cloud <howto-ts-anbox-cloud>`
-- [Report a bug](https://bugs.launchpad.net/anbox-cloud/+bugs) with the product or documentation
+### Get involved
+
+- [Discourse forum](https://discourse.ubuntu.com/c/project/anbox-user/148?_gl=1*1q03mla*_ga*Mjg0ODIyOTM5LjE3NzY3MDY4ODQ.*_ga_892F83CXG5*czE3Nzk4NjkzMzEkbzcyJGcxJHQxNzc5ODc0MTQzJGo2MCRsMCRoMA..)
+- [Matrix channel](https://matrix.to/#/#anbox-cloud:ubuntu.com)
 - {ref}`contribute`
+- [Issue tracker](https://bugs.launchpad.net/anbox-cloud/+bugs)
+- [Support](https://ubuntu.com/support?_gl=1*1396238*_ga*Mjg0ODIyOTM5LjE3NzY3MDY4ODQ.*_ga_892F83CXG5*czE3Nzk4NzY2NjUkbzczJGcxJHQxNzc5ODc2OTE0JGo1OSRsMCRoMA..)
 
-The {ref}`ref-release-notes` helps you get familiar with Anbox Cloud, its releases and roadmap.
+### Releases
 
-For official support requirements, you can get support through [Ubuntu Pro](https://ubuntu.com/support).
+- {ref}`ref-release-notes`
+- {ref}`ref-component-versions`
+- {ref}`ref-deprecation-notes`
+- {ref}`ref-provided-images`
 
+### Governance and policies
 
-Thinking about using Anbox Cloud for your next project? [Get in touch!](https://anbox-cloud.io/contact-us)
+- {ref}`ref-license-information`
+- {ref}`ref-charm-configuration`
+- [Code of conduct](https://ubuntu.com/community/code-of-conduct)
+
+### Commercial support
+
+Thinking about using Anbox Cloud for your next project? [Get in touch\!](https://canonical.com/anbox-cloud?_gl=1*1hm0lj*_ga*Mjg0ODIyOTM5LjE3NzY3MDY4ODQ.*_ga_892F83CXG5*czE3Nzk4NzY2NjUkbzczJGcxJHQxNzc5ODc3NzAwJGo1OSRsMCRoMA..*_gcl_au*NTcyOTk1ODc5LjE3NzYyNjY3MjQ.*_ga_5LTL1CNEJM*czE3Nzk4NzY2NjQkbzYyJGcxJHQxNzc5ODc3NzAwJGo1OSRsMCRoMA..#get-in-touch)
 
 ```{toctree}
 :hidden:
-tutorial/landing
-howto/landing
-explanation/landing
-reference/landing
-Contribute <contribute/landing>
+tutorial/index
+howto/index
+explanation/index
+reference/index
+Contribute <contribute/index>
 reference/release-notes/release-notes
 ```
