@@ -1,4 +1,37 @@
-(howto-upgrade-appliance)=
-# How to upgrade the appliance
+---
+myst:
+  html_meta:
+    "description": "How to upgrade the Anbox Cloud Appliance by refreshing the snap to the target channel."
+---
 
-The Anbox Cloud Appliance does not require any specific steps to upgrade other than apply any pending snap package updates. Internally the snap will automatically apply necessary configuration changes and restart services as needed.
+(howto-upgrade-appliance)=
+# Upgrade appliance
+
+The upgrade process for the Anbox Cloud Appliance is as simple as updating the snap package to the appropriate channel. Before upgrading the appliance, consider the changes that the new version brings as downgrades are not supported.
+
+If you are on the `latest` track, upgrade to the newest snap version by running:
+
+    sudo snap refresh anbox-cloud-appliance
+
+Automatic updates may install the new version without manual intervention.
+
+For installations on a versioned track (e.g. 1.29), change the track explicitly with:
+
+    sudo snap refresh --channel=1.29/stable anbox-cloud-appliance
+
+After refreshing the snap, the appliance will automatically apply the necessary configuration changes and restart services as needed.
+
+For the host system, run the upgrade script manually. This script performs additional updates, including:
+
+1. Upgrading the kernel modules required by Anbox Cloud, if necessary.
+2. Upgrading GPU driver packages from the Ubuntu archive and applying required tuning settings (if a GPU is available).
+
+Review the upgrade script by running:
+
+    anbox-cloud-appliance upgrade-node-script
+
+Then execute the script with:
+
+    anbox-cloud-appliance upgrade-node-script | sudo bash -ex
+
+After the script completes, verify the output to determine if a system reboot is necessary.
