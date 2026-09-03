@@ -1,8 +1,8 @@
-## ams.amc node show
+# ams.amc node show
 
 Show information about a node
 
-### Synopsis
+## Synopsis
 
 Show information about a node.
 
@@ -13,7 +13,7 @@ Valid formats are 'json' and 'yaml'.
 ams.amc node show <name> [flags]
 ```
 
-### Examples
+## Examples
 
 ```
 $ amc node show node1
@@ -43,15 +43,16 @@ config:
 
 ```
 
-### Options
+## Options
 
 ```
-      --allocations     Show resource allocations
-  -f, --format string   Output format - 'json' or 'yaml' (default "yaml")
-  -h, --help            help for show
+      --allocations       Show resource allocations
+  -f, --format string     Output format - 'json' or 'yaml' (default "yaml")
+      --gpu-allocations   Show GPU allocations
+  -h, --help              help for show
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [ams.amc node](ams.amc_node.md)	 - Manage nodes
 

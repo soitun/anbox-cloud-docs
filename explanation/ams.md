@@ -1,3 +1,9 @@
+---
+myst:
+  html_meta:
+    "description": "Explanation of the Anbox Management Service (AMS), which handles instance and application lifecycle, scheduling, and resource management."
+---
+
 (exp-ams)=
 # Anbox Management Service
 
@@ -7,7 +13,7 @@ The Anbox Management Service (AMS) sits at the heart of Anbox Cloud and handles 
 
 AMS is usually managed through the command line interface, the Anbox Management Client (AMC), which can run either on the same machine as AMS or on a remote machine.
 
-Since AMS exposes an HTTP interface, any tool can use the [AMS HTTP API](https://documentation.ubuntu.com/anbox-cloud/reference/api-reference/ams-api/) to interact with AMS. Both the AMC (when running as a remote client) and the Anbox Application Registry (AAR) use the AMS HTTP API to interact with AMS.
+Since AMS exposes an HTTP interface, any tool can use the [AMS HTTP API](/reference/api-reference/ams-api.md) to interact with AMS. Both the AMC (when running as a remote client) and the Anbox Application Registry (AAR) use the AMS HTTP API to interact with AMS.
 
 You can also develop your own client by using the {ref}`sec-ams-sdk`.
 
@@ -54,6 +60,6 @@ If your client requires the AMS certificate, you can find it in `/var/snap/ams/c
 
 ## Related topics
 
-* {ref}`exp-aar`
-* {ref}`howto-access-ams-remote`
-* {ref}`ref-ams-configuration`
+- {ref}`exp-aar`
+- {ref}`howto-access-ams-remote`
+- {ref}`ref-ams-configuration`

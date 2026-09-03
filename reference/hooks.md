@@ -1,5 +1,15 @@
+---
+myst:
+  html_meta:
+    "description": "Reference documentation for Anbox Cloud addon hooks, covering supported hook names and environment variables."
+---
+
 (ref-hooks)=
 # Hooks
+
+```{caution}
+Addons and apps, including hooks, are deprecated and are being removed from Anbox Cloud. See {ref}`ref-deprecation-notes` for the removal schedule and {ref}`howto-migrate-from-addon-and-app-hooks` for how to replicate hook behavior without addons.
+```
 
 Hooks are scripts that automatically trigger actions based on an event performed in the life cycle of an instance. A hook can be any executable file that is placed in the `hooks` directory of an addon or an application folder.
 

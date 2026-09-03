@@ -1,6 +1,12 @@
+---
+myst:
+  html_meta:
+    "description": "How to revoke a compromised client certificate from the Anbox Application Registry."
+---
+
 (howto-revoke-aar)=
 
-# How to revoke an AAR client
+# Revoke a client
 
 If a client gets compromised, it's important to block its access to the Anbox Application Registry (AAR) by revoking its certificate.
 
@@ -16,6 +22,6 @@ This operation is irreversible. You cannot reverse a revocation or add the certi
 
 ## Related topics
 
-* {ref}`exp-aar`
-* {ref}`howto-configure-aar`
-* {ref}`howto-deploy-aar`
+- {ref}`exp-aar`
+- {ref}`howto-configure-aar`
+- {ref}`howto-deploy-aar`
