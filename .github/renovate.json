@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigestsToSemver",
+    ":disableDependencyDashboard",
+    ":ignoreUnstable",
+    "group:allNonMajor"
+  ],
+  "minimumReleaseAge": "90 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
+  "prCreation": "not-pending",
+  "packageRules": [
+    {
+      "description": "Schedule canonical/create-pull-request updates on the first day of each week to decrease noise.",
+      "matchPackageNames": [
+        "canonical/create-pull-request"
+      ],
+      "schedule": [
+        "on the first day of the week"
+      ]
+    },
+    {
+      "groupName": "GitHub actions",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "patch",
+        "minor",
+        "major"
+      ]
+    }
+  ]
+}

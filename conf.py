@@ -1,7 +1,7 @@
 import datetime
-import ast
 import os
 import subprocess
+import yaml
 
 # Configuration for the Sphinx documentation builder.
 # All configuration specific to your project should be done in this file.
@@ -12,7 +12,7 @@ import subprocess
 # A complete list of built-in Sphinx configuration values:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 #
-# Our starter pack uses the custom Canonical Sphinx extension
+# Our Sphinx Stack uses the custom Canonical Sphinx extension
 # to keep all documentation based on it consistent and on brand:
 # https://github.com/canonical/canonical-sphinx
 
@@ -40,7 +40,7 @@ html_title = "Anbox Cloud" + " documentation"
 
 # Copyright string; shown at the bottom of the page
 #
-# Now, the starter pack uses CC-BY-SA as the license
+# Now, the Sphinx Stack uses CC-BY-SA as the license
 # and the current year as the copyright year.
 #
 # If your docs need another license, specify it instead of 'CC-BY-SA'.
@@ -61,7 +61,7 @@ html_title = "Anbox Cloud" + " documentation"
 #         -H 'Accept: application/vnd.github.v3.raw' \
 #         https://api.github.com/repos/canonical/<REPO> | jq '.created_at'
 
-copyright = "%s CC-BY-SA, %s" % (datetime.date.today().year, author)
+copyright = f"{datetime.date.today().year}"
 
 
 # Documentation website URL
@@ -71,7 +71,7 @@ copyright = "%s CC-BY-SA, %s" % (datetime.date.today().year, author)
 # NOTE: The Open Graph Protocol (OGP) enhances page display in a social graph
 #       and is used by social media platforms; see https://ogp.me/
 
-ogp_site_url = "https://documentation.ubuntu.com/anbox-cloud/"
+ogp_site_url = "https://canonical.com/anbox-cloud/docs/"
 
 
 # Preview name of the documentation website
@@ -85,14 +85,14 @@ ogp_site_name = "Anbox Cloud"
 #
 # To customise the preview image, update as needed.
 
-ogp_image = "https://assets.ubuntu.com/v1/253da317-image-document-ubuntudocs.svg"
+ogp_image = "https://assets.ubuntu.com/v1/cc828679-docs_illustration.svg"
 
 
 # Product favicon; shown in bookmarks, browser tabs, etc.
 
 # To customise the favicon, uncomment and update as needed.
 
-html_favicon = '.sphinx/_static/favicon.png'
+html_favicon = '_dev/_static/favicon.png'
 
 
 # Dictionary of values to pass into the Sphinx context for all pages:
@@ -106,8 +106,8 @@ html_context = {
     #
     # If there's no such website,
     #       remove the {{ product_page }} link from the page header template
-    #       (usually .sphinx/_templates/header.html; also, see README.rst).
-    "product_page": "anbox-cloud.io",
+    #       (usually _dev/_templates/header.html; also, see README.rst).
+    "product_page": "canonical.com/anbox-cloud",
     # Product tag image; the orange part of your logo, shown in the page header
     #
     # To add a tag image, uncomment and update as needed.
@@ -137,7 +137,7 @@ html_context = {
     # Docs branch in the repo; used in links for viewing the source files
     #
     # To customise the branch, uncomment and update as needed.
-    'repo_version': 'main',
+    'repo_default_branch': 'main',
     # Docs location in the repo; used in links for viewing the source files
     #
 
@@ -152,6 +152,15 @@ html_context = {
 
     # Required for feedback button
     'github_issues': 'enabled',
+
+    # Inherit the author value
+    "author": author,
+
+    # License information
+    "license": {
+        "name": "CC-BY-SA-3.0",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/",
+    },
 }
 
 # To enable the edit button on pages, uncomment and change the link to a
@@ -170,51 +179,80 @@ html_context = {
 # If your documentation is hosted on https://docs.ubuntu.com/,
 #       uncomment and update as needed.
 
-slug = 'anbox-cloud'
+slug = 'anbox-cloud/docs'
+
+#######################
+# Sitemap configuration: https://sphinx-sitemap.readthedocs.io/
+#######################
+
+# Base URL of RTD hosted project
+# Include the trailing slash in the URL, it makes a difference
+
+html_baseurl = "https://canonical.com/anbox-cloud/docs/"
+
+# URL scheme; {link} is the default configuration
+
+sitemap_url_scheme = "{link}"
+
+# Include lastmod dates in the sitemap
+sitemap_show_lastmod = True
+
+# Custom sitemap filename to avoid conflict with RTD-generated sitemap
+sitemap_filename = "doc-sitemap.xml"
 
 # Template and asset locations
 
-html_static_path = [".sphinx/_static"]
-templates_path = [".sphinx/_templates"]
+html_static_path = [
+    "_dev/_static",
+    # This is required for Google Analytics to work till we unify
+    # all the static files into one well-known directory.
+    "_static",
+]
+templates_path = [
+    # This is required for Google Analytics to work.
+    "_templates",
+]
+
+# Exclude unnecessary URLs for better indexing
+
+sitemap_excludes = [
+    "genindex/",
+    "404/",
+    "search/",
+]
 
 
 #############
 # Redirects #
 #############
 
-# To set up redirects: https://documatt.gitlab.io/sphinx-reredirects/usage.html
-# For example: 'explanation/old-name.html': '../how-to/prettify.html',
+# Redirects are defined in redirects.txt
+# https://sphinxext-rediraffe.readthedocs.io/en/latest/
 
 # To set up redirects in the Read the Docs project dashboard:
 # https://docs.readthedocs.io/en/stable/guides/redirects.html
 
-# NOTE: If undefined, set to None, or empty,
-#       the sphinx_reredirects extension will be disabled.
+rediraffe_redirects = "redirects.txt"
 
-redirects = {
+# Strips '/index.html' from destination URLs when building with 'dirhtml'
+rediraffe_dir_only = True
 
-    'reference/roadmap': '../release-notes/release-notes',
-    'reference/supported-versions': '../release-notes/release-notes',
-    'explanation/gpus-instances': '../rendering-graphics',
-    'howto/update/landing': '../../upgrade/landing',
-    'howto/update/upgrade-anbox': '../../upgrade/upgrade-anbox',
-    'howto/update/upgrade-appliance': '../../upgrade/upgrade-appliance',
-    'howto/update/control-updates': '../../upgrade/landing',
-    'howto/addons/customise-android-example': '../customize-android-example',
-    'howto/install/customise-installation': '../customize-installation',
-    'howto/anbox/manage-images': '../../images/landing',
-    'tutorial/getting-started-aaos': '../../howto/android/set-automotive-properties',
-    'tutorial/getting-started-dashboard': '../create-test-virtual-device',
-    'tutorial/getting-started': '../create-test-virtual-device',
-    'tutorial/creating-addon': '../../howto/addons/create-addon',
-    'explanation/cryptography/crypto_ams': '../../security/crypto_ams',
-    'explanation/cryptography/crypto_anbox_runtime': '../../security/crypto_anbox_runtime',
-    'explanation/cryptography/crypto_charms': '../../security/crypto_charms',
-    'explanation/cryptography/crypto_dashboard': '../../security/crypto_dashboard',
-    'explanation/cryptography/crypto_stream_agent': '../../security/crypto_stream_agent',
-    'explanation/cryptography/crypto_stream_gateway': '../../security/crypto_stream_gateway',
-    'explanation/anbox-security': '../security/landing',
-}
+
+############################
+# sphinx-llm configuration #
+############################
+
+# Description included at the top of llms.txt to give LLMs initial context.
+# This repo has no pyproject.toml, so the description must be set explicitly;
+# otherwise the extension has no project description to fall back on.
+llms_txt_description = (
+    "This is the documentation for Anbox Cloud, which runs Android in the "
+    "cloud using lightweight LXD system containers or full virtual machines."
+)
+
+# Base URL prepended to links in the generated Markdown so they are absolute.
+# Reuses the hardcoded html_baseurl defined in the sitemap section above.
+markdown_http_base = html_baseurl
 
 
 ###########################
@@ -225,6 +263,7 @@ redirects = {
 #
 # Remove or adjust the ACME entry after you update the contributing guide
 
+# We're getting a 403 for vulkan.org in CI for some reason
 linkcheck_ignore = [
     'http://127.0.0.1:8000',
     'https://support.canonical.com/',
@@ -232,7 +271,9 @@ linkcheck_ignore = [
     'https://images.anbox-cloud.io/stable/',
     'https://10.2.9.2/',
     'http://Add-SECURITY.md',
-    'https://jwt.io/'
+    'https://jwt.io/',
+    'https://www.vulkan.org/',
+    'https://registry.khronos.org/',
     ]
 
 # This setting will check the links but not the anchors
@@ -254,7 +295,25 @@ linkcheck_exclude_documents = [
 
 # give linkcheck multiple tries on failure
 linkcheck_timeout = 30
-linkcheck_retries = 3
+linkcheck_retries = 5
+
+# decrease parallelism to avoid rate-limiting at the cost of longer runs
+linkcheck_workers = 3
+
+# Specific headers for link checking
+# ceph.io fails with 500 if the Accept-Language is unset, so set it to something
+# to let it pass
+linkcheck_request_headers = {
+    "https://ceph.io/": {
+        "Accept-Language": "en-US",
+    }
+}
+
+##########################
+# Search result scoring  #
+##########################
+
+html_search_scorer = "_static/js/search_scorer.js"
 
 ########################
 # Configuration extras #
@@ -266,31 +325,37 @@ linkcheck_retries = 3
 # NOTE: By default, the following MyST extensions are enabled:
 #       substitution, deflist, linkify
 
-# myst_enable_extensions = set()
+myst_enable_extensions = set({"colon_fence"})
 
 
 # Custom Sphinx extensions; see
 # https://www.sphinx-doc.org/en/master/usage/extensions/index.html
 
-# NOTE: The canonical_sphinx extension is required for the starter pack.
-#       It automatically enables the following extensions:
-#       - custom-rst-roles
-#       - myst_parser
-#       - notfound.extension
-#       - related-links
-#       - sphinx_copybutton
-#       - sphinx_design
-#       - sphinx_reredirects
-#       - sphinx_tabs.tabs
-#       - sphinxcontrib.jquery
-#       - sphinxext.opengraph
-#       - terminal-output
-#       - youtube-links
+# NOTE: The canonical_sphinx extension is required for the Sphinx Stack.
+#       canonical_sphinx v0.6 does not reliably auto-load all extensions,
+#       so all required extensions are listed explicitly below.
 
 extensions = [
     "canonical_sphinx",
+    "myst_parser",
+    "notfound.extension",
+    "sphinx_config_options",
+    "sphinx_contributor_listing",
+    "sphinx_design",
+    "sphinx_filtered_toctree",
+    "sphinx_related_links",
+    "sphinx_rerediraffe",
+    "sphinx_roles",
+    "sphinx_tabs.tabs",
+    "sphinx_terminal",
+    "sphinx_ubuntu_images",
+    "sphinx_youtube_links",
     "sphinxcontrib.cairosvgconverter",
+    "sphinxcontrib.jquery",
+    "sphinxext.opengraph",
     "sphinx_last_updated_by_git",
+    "sphinx_sitemap",
+    "sphinx_llm.txt",
 ]
 
 # Excludes files or directories from processing
@@ -300,16 +365,24 @@ exclude_patterns = [
     'README.md',
     'SECURITY.md',
     '.github/pull_request_template.md',
+    '.venv',
+    '**/*.dist-info/**',
+    '_dev',
 ]
 
 # Adds custom CSS files, located under 'html_static_path'
 
-# html_css_files = []
+html_css_files = [
+    "https://assets.ubuntu.com/v1/d86746ef-cookie_banner.css",
+]
 
 
 # Adds custom JavaScript files, located under 'html_static_path'
 
-# html_js_files = []
+html_js_files = [
+    "https://assets.ubuntu.com/v1/287a5e8f-bundle.js",
+    "js/overwrite_links.js",
+]
 
 
 # Specifies a reST snippet to be appended to each .rst file
@@ -354,17 +427,22 @@ rst_prolog = """
 # Workaround for https://github.com/canonical/canonical-sphinx/issues/34
 
 if "discourse_prefix" not in html_context and "discourse" in html_context:
-    html_context["discourse_prefix"] = html_context["discourse"] + "/t/"
+    html_context["discourse_prefix"] = f"{html_context['discourse']}/t/"
+
+# Workaround for substitutions.yaml
+if os.path.exists('./reuse/substitutions.yaml'):
+    with open('./reuse/substitutions.yaml', 'r') as fd:
+        myst_substitutions = yaml.safe_load(fd.read())
 
 #============================================#
 # Anbox Cloud specific configurations
 # The following configuration won't be available
-# in the starter pack. It is maintained by the
+# in the Sphinx Stack. It is maintained by the
 # Anbox cloud team.
 #============================================#
 
 ## Generate dynamic configuration using scripts
-# Inject AMS configuration valuues and Node configuration values from the swagger
+# Inject AMS configuration values and Node configuration values from the swagger
 # specification hosted on Github.
 
 custom_required_modules = []
@@ -385,14 +463,14 @@ def generate_ams_configuration():
     parse_swagger(swagger, ams_configuration_file)
 
 # Anbox specific function to generate dynamic AMS configuration
-# Add this change to conf.py every time the starter pack is upgraded to a later version.
+# Add this change to conf.py every time the Sphinx Stack is upgraded to a later version.
 generate_ams_configuration()
 
 
 ## The following code is to automatically load the API from swagger into documentation.
 
 # Path to copy the YAML files during build
-html_extra_path = ['.sphinx/_extra']
+html_extra_path = ['_dev/_extra']
 
 # The swagger-ui repository is required to be able to render the swagger YAML
 # file as browseable API documentation. The below variable specifies which
@@ -400,14 +478,14 @@ html_extra_path = ['.sphinx/_extra']
 swagger_ui_repository = "https://github.com/swagger-api/swagger-ui"
 
 # Download and link swagger-ui files
-if not os.path.isdir('.sphinx/deps/swagger-ui'):
-    subprocess.check_call(["git", "clone", "--depth=1", swagger_ui_repository, ".sphinx/deps/swagger-ui"])
+if not os.path.isdir('_dev/deps/swagger-ui'):
+    subprocess.check_call(["git", "clone", "--depth=1", swagger_ui_repository, "_dev/deps/swagger-ui"])
 
-os.makedirs('.sphinx/_static/swagger-ui/', exist_ok=True)
+os.makedirs('_dev/_static/swagger-ui/', exist_ok=True)
 
-if not os.path.islink('.sphinx/_static/swagger-ui/swagger-ui-bundle.js'):
-    os.symlink('../../deps/swagger-ui/dist/swagger-ui-bundle.js', '.sphinx/_static/swagger-ui/swagger-ui-bundle.js')
-if not os.path.islink('.sphinx/_static/swagger-ui/swagger-ui-standalone-preset.js'):
-    os.symlink('../../deps/swagger-ui/dist/swagger-ui-standalone-preset.js', '.sphinx/_static/swagger-ui/swagger-ui-standalone-preset.js')
-if not os.path.islink('.sphinx/_static/swagger-ui/swagger-ui.css'):
-    os.symlink('../../deps/swagger-ui/dist/swagger-ui.css', '.sphinx/_static/swagger-ui/swagger-ui.css')
+if not os.path.islink('_dev/_static/swagger-ui/swagger-ui-bundle.js'):
+    os.symlink('../../deps/swagger-ui/dist/swagger-ui-bundle.js', '_dev/_static/swagger-ui/swagger-ui-bundle.js')
+if not os.path.islink('_dev/_static/swagger-ui/swagger-ui-standalone-preset.js'):
+    os.symlink('../../deps/swagger-ui/dist/swagger-ui-standalone-preset.js', '_dev/_static/swagger-ui/swagger-ui-standalone-preset.js')
+if not os.path.islink('_dev/_static/swagger-ui/swagger-ui.css'):
+    os.symlink('../../deps/swagger-ui/dist/swagger-ui.css', '_dev/_static/swagger-ui/swagger-ui.css')

@@ -1,8 +1,8 @@
-## ams.amc image
+# ams.amc image
 
 Manage images
 
-### Synopsis
+## Synopsis
 
 Manage images.
 
@@ -12,17 +12,17 @@ necessary to properly run an Android application in a container.
 Images can be provided manually or via an image server. You can add, update or
 delete them from AMS.
 
-See https://documentation.ubuntu.com/anbox-cloud/en/latest/reference/provided-images/ and
-https://documentation.ubuntu.com/anbox-cloud/en/latest/howto/anbox/manage-images/ for more information.
+See https://canonical.com/anbox-cloud/docs/reference/provided-images/ and
+https://canonical.com/anbox-cloud/docs/howto/anbox/manage-images/ for more information.
 
 
-### Options
+## Options
 
 ```
   -h, --help   help for image
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [ams.amc](ams.amc.md)	 - Anbox Management Client
 * [ams.amc image add](ams.amc_image_add.md)	 - Add an image
