@@ -1,23 +1,23 @@
-## ams.amc node
+# ams.amc node
 
 Manage nodes
 
-### Synopsis
+## Synopsis
 
 Manage nodes.
 
 Nodes are LXD machines that run Anbox containers and are managed by AMS.
 
-See https://documentation.ubuntu.com/anbox-cloud/en/latest/explanation/clustering/ for more information.
+See https://canonical.com/anbox-cloud/docs/explanation/clustering/ for more information.
 
 
-### Options
+## Options
 
 ```
   -h, --help   help for node
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [ams.amc](ams.amc.md)	 - Anbox Management Client
 * [ams.amc node add](ams.amc_node_add.md)	 - Add a node to AMS
