@@ -1,5 +1,15 @@
+---
+myst:
+  html_meta:
+    "description": "Explanation of Anbox Cloud addons, which extend images by running hook scripts at instance lifecycle events."
+---
+
 (exp-addons)=
 # Addons
+
+```{caution}
+Addons including hooks, are deprecated and are being removed from Anbox Cloud. See {ref}`ref-deprecation-notes` for the removal schedule and {ref}`howto-migrate-from-addon-and-app-hooks` for how to replicate hook behavior without addons.
+```
 
 Addons provide a way to extend and customize images in Anbox Cloud. Once you have created addons, you can create hooks for them that are triggered based on events in the life cycle of an instance. You can create addons independently and later attach it to individual applications.
 
@@ -27,12 +37,9 @@ Try to attach addons to individual applications unless you need a global addon. 
 
 For base instances, if your addon needs additional tools and dependencies during its installation, make sure you remove them afterwards (as part of the `post-stop` hook). This will make your application image lighter and all instances launched from it will start faster.
 
-
 ## Related topics
 
-* {ref}`exp-instances`
-* {ref}`howto-create-addon`
-* {ref}`howto-addons`
-* {ref}`ref-hooks`
-
-
+- {ref}`exp-instances`
+- {ref}`howto-create-addon`
+- {ref}`howto-addons`
+- {ref}`ref-hooks`
