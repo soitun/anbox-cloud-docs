@@ -1,6 +1,10 @@
 ---
 orphan: true
+myst:
+  html_meta:
+    "description": "Reference documentation for MyST Markdown syntax used in Anbox Cloud docs."
 ---
+
 (cheat-sheet-myst)=
 # Markdown/MyST cheat sheet
 
@@ -165,16 +169,15 @@ The following example uses local images folder:
 
 ## Tabs
 
-````{tabs}
-```{group-tab} Tab 1
-
+::::{tab-set}
+:::{tab-item} Tab 1
 Content Tab 1
-```
+:::
 
-```{group-tab} Tab 2
+:::{tab-item} Tab 2
 Content Tab 2
-```
-````
+:::
+::::
 
 ## Glossary
 
@@ -205,10 +208,10 @@ Terms that should not be checked by the spelling checker: {spellexception}`Incrr
 A single-line terminal view that separates input from output:
 
 ```{terminal}
-   :input: command
    :user: root
    :host: vampyr
    :dir: /home/user/directory/
+command
 
 the output
 ```
@@ -219,10 +222,11 @@ A multi-line version of the same:
    :user: root
    :host: vampyr
    :dir: /home/user/directory/
+command 1
 
-:input: command 1
 output 1
-:input: command 2
+command 2
+
 output 2
 ```
 

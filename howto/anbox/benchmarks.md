@@ -1,5 +1,11 @@
+---
+myst:
+  html_meta:
+    "description": "How to run Anbox Cloud benchmarks with amc benchmark to measure instance launch throughput and GPU performance."
+---
+
 (howto-run-benchmarks)=
-# How to run benchmarks
+# Run benchmarks
 
 Anbox Cloud provides tools for benchmarking different aspects of your deployment. These tools enable you to put Anbox Cloud under load and use the results to evaluate the performance for a well-defined workload.
 
