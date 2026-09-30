@@ -1,5 +1,11 @@
+---
+myst:
+  html_meta:
+    "description": "How to list and inspect Anbox Cloud applications using amc application list or the dashboard."
+---
+
 (howto-list-applications)=
-# How to list applications
+# List applications
 
 When using the CLI, to list all available applications, run:
 

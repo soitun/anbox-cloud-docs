@@ -5,8 +5,6 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    paths:
-      - '/**'   # Removed docs as everything is in the root directory
 
   workflow_dispatch:
     # Manual trigger
@@ -18,7 +16,7 @@ concurrency:
 
 jobs:
   documentation-checks:
-    uses: canonical/documentation-workflows/.github/workflows/documentation-checks.yaml@d86428a8aa00b3d8c5b3f43af0a1ffe42028d4ad
+    uses: canonical/documentation-workflows/.github/workflows/documentation-checks.yaml@aaeaf091e8f55145184ad897cb9834f224bd31de
     with:
-      working-directory: "/"
+      working-directory: "."
       fetch-depth: 0

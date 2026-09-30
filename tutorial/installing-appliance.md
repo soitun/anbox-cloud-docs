@@ -1,7 +1,13 @@
+---
+myst:
+  html_meta:
+    "description": "Learn how to install the Anbox Cloud Appliance. In this tutorial, we set up the snap inside a Multipass VM and access the web dashboard."
+---
+
 (tut-installing-appliance)=
 # Install the appliance
 
-In this tutorial, we will install the [Anbox Cloud Appliance snap](https://snapcraft.io/anbox-cloud-appliance), initialize the appliance within a [Multipass](https://canonical.com/multipass) virtual machine. By the end of this tutorial, we should be able to interact with the appliance using the Anbox Cloud dashboard.
+In this tutorial, we will install the [Anbox Cloud Appliance snap](https://snapcraft.io/anbox-cloud-appliance) and initialize the appliance within a [Multipass](https://canonical.com/multipass) virtual machine. By the end of this tutorial, we should be able to interact with the appliance using the Anbox Cloud dashboard.
 
 Before beginning the tutorial, it is important to understand that:
 
@@ -9,36 +15,52 @@ Before beginning the tutorial, it is important to understand that:
 
 - Remember that installing the appliance will take over the entire instance, install packages and override existing components. For example, if you have existing LXD containers, installing and initializing the appliance could override any existing configuration.
 
-> A [video version](https://youtu.be/D9iEd88IYBs) of this tutorial is also available.
+**A video version of this tutorial is also available:**
+
+```{raw} html
+<iframe width="640" height="360"
+        src="https://www.youtube.com/embed/D9iEd88IYBs"
+        title="How to install Anbox Cloud Appliance"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+</iframe>
+```
 
 ## Prerequisites
 
 To proceed with the tutorial, we need:
 
 - An Ubuntu SSO account. If you don't have one yet, [create one now](https://login.ubuntu.com).
-- Your Ubuntu Pro token for an Ubuntu Pro subscription. If you don't have one yet, [speak to your Canonical representative](https://anbox-cloud.io/contact-us). If you already have a valid Ubuntu Pro token, log in to [Ubuntu Pro](https://ubuntu.com/pro) to retrieve it.
+- An Ubuntu Pro subscription token. Ubuntu Pro is **required** to install and run Anbox Cloud, and it is **free for personal use on up to 5 machines**. Log in to [Ubuntu Pro](https://ubuntu.com/pro) to get your token at no cost.
+
 ```{note}
 The *Ubuntu Pro (Infra-only)* token does not work and will result in a failed deployment. You need an *Ubuntu Pro* subscription.
 ```
-- A virtual or a bare metal machine running Ubuntu 22.04. We will be using a Multipass virtual machine.
+
+- A virtual or a bare metal machine running a {ref}`supported Ubuntu version <ref-requirements>`. We will be using a Multipass virtual machine.
 
 ## Prepare a Multipass instance
 
 1. Install Multipass:
 
-        snap install multipass
+       snap install multipass
 
 2. Create a virtual machine:
 
-        multipass launch --name=anbox --cpus 8 --disk 50G --memory 8G
-    
+       multipass launch --name=anbox --cpus 8 --disk 50G --memory 8G
+
 Make sure to allocate sufficient disk space, memory and CPUs as shown in the example. Otherwise, the VM will run out of space while creating the application. See {ref}`ref-requirements` for information on minimum resource requirements.
 
 3. Shell into the virtual machine:
 
-        multipass shell anbox
+       multipass shell anbox
 
 ## Attach the machine to Ubuntu Pro
+
+```{important}
+You must attach the machine to Ubuntu Pro before enabling the `anbox-cloud` service. Without an attached Ubuntu Pro subscription, you cannot enable the service or access the Android images required to use Anbox Cloud.
+```
 
 Run the following command by replacing `$token` with your Ubuntu Pro token:
 
@@ -60,7 +82,7 @@ Then, it installs the `anbox-cloud-appliance` snap from the `latest/stable` trac
 (sec-install-additional-packages)=
 ## Install additional packages
 
-After enabling the `anbox-cloud` service, we still need some additional packages, kernel modules and optionally GPU driver packages
+After enabling the `anbox-cloud` service, we still need some additional packages, kernel modules and optionally GPU driver packages.
 
 To do all this, we offer a script that helps prepare machines. Let's first review the script:
 
@@ -68,9 +90,8 @@ To do all this, we offer a script that helps prepare machines. Let's first revie
 
 The generated bash script will do the following:
 
-1. Install `linux-modules-extra` packages to ensure that the binder kernel driver is available.
-2. Install additional Anbox Cloud specific kernel modules.
-3. (If GPU is available) Install GPU driver packages from the Ubuntu archive and apply tuning settings for the driver.
+1. Install `linux-modules-extra` packages if necessary to ensure that the binder kernel driver is available.
+2. (If GPU is available) Install GPU driver packages from the Ubuntu archive and apply tuning settings for the driver.
 
 To apply the script after reviewing it, run:
 
@@ -93,12 +114,16 @@ For the purpose of this tutorial, let's leave the default answers for all questi
 
 The reason we switch from the default answer *No* to *Yes* for this question is that the snap strict confinement policy requires the application manifest and other necessary files such as the APK to be located in the home directory of the user executing the commands. If this answer is not set, you will still be able to use the dashboard path of the {ref}`tut-create-virtual-device` tutorial but you will not be able to use the command line path.
 
-For everything else, accept the defaults for everything else until the bootstrap process starts.
+Accept the defaults for everything else until the bootstrap process starts.
 
 (sec-register-dashboard)=
 ## Register with the dashboard
 
 When the initialization process has finished, we can see the welcome page on the local host. Try accessing `https://multipass-machine-address` using a browser.
+
+```{important}
+Version 1.29.0 onward: If an OIDC provider is configured, dashboard user registration is not required and the steps in this section can be skipped. {ref}`sec-create-identity` instead.
+```
 
 To start using Anbox Cloud, there is still one last command we need to run to register a user account. Run the following command with your Ubuntu SSO account email address:
 
@@ -108,7 +133,7 @@ The command outputs a link to finish the registration. By default, this registra
 
 When the registration is complete, you can use Ubuntu SSO to sign in to the dashboard.
 
-## Success!
+## Success
 
 After registering, you can log into the appliance dashboard at `https://multipass-machine-address` with your Ubuntu SSO account.
 

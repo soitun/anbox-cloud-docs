@@ -1,0 +1,36 @@
+matrix:
+  - name: rST files
+    aspell:
+      lang: en
+      d: en_US
+    dictionary:
+      wordlists:
+        - _dev/.wordlist.txt
+        - .custom_wordlist.txt
+      output: _dev/.wordlist.dic
+    sources:
+      - _build/**/*.html|!_build/venv/**/*.html|!_build/reference/cmd-ref/appliance/**/*.html|!_build/reference/cmd-ref/amc/**/*.html|!_build/reference/api-reference/**/*.html|!_build/reference/ams-configuration/index.html|!_build/reference/cmd-ref/aar/**/*.html
+    pipeline:
+      - pyspelling.filters.context:
+          context_visible_first: true
+          delimiters:
+          # Ignore possessive endings
+          - open: '(?<=\w)’s(?!\w)'
+            close: '\b'
+      - pyspelling.filters.html:
+          comments: false
+          attributes:
+            - title
+            - alt
+          ignores:
+            - code
+            - pre
+            - spellexception
+            - link
+            - title
+            - div.relatedlinks
+            - strong.command
+            - div.visually-hidden
+            - img
+            - a.p-navigation__link
+            - a.contributor

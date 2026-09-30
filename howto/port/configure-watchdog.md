@@ -1,5 +1,11 @@
+---
+myst:
+  html_meta:
+    "description": "How to configure the Anbox Cloud watchdog to monitor a running Android app and trigger restarts."
+---
+
 (howto-configure-watchdog)=
-# How to configure the watchdog
+# Configure the watchdog
 
 The {ref}`sec-application-manifest-watchdog` monitors the app installed by the boot package. By default, it terminates the instance if the app crashes or is moved to the background.
 
@@ -16,7 +22,7 @@ watchdog:
 ...
 ```
 
-When you finish debugging your application, make sure to enable the watchdog again. The watchdog must be running for Anbox Cloud to collect tombstones or [ANR](https://developer.android.com/topic/performance/vitals/anr) if a crash happens during the application runtime, and to terminate the failing instance.
+When you finish debugging your application, make sure to enable the watchdog again. The watchdog must be running for Anbox Cloud to collect tombstones or [ANR](https://developer.android.com/topic/performance/issues/anr) if a crash happens during the application runtime, and to terminate the failing instance.
 
 ## Add exceptions for allowed apps
 
