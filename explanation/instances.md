@@ -1,3 +1,9 @@
+---
+myst:
+  html_meta:
+    "description": "Explanation of instances in Anbox Cloud, covering lifecycle states, types, resource handling, and how each runs a full Android system."
+---
+
 (exp-instances)=
 # Instances
 
@@ -24,6 +30,8 @@ Instances are based on either {ref}`exp-applications` or {ref}`Images <ref-provi
 Application instances are containers or virtual machines created when launching an application and run the full Android system. If the application is based on an Android app (an APK package), this app is launched after the system boots and monitored by the {ref}`sec-application-manifest-watchdog`. With the default configuration, you will see only the app and not the Android launcher.
 
 Raw instances are containers or virtual machines created when launching an image. They run the full Android system, without any additional apps installed.
+
+Instances can be based on images with containerized Android or images with virtualized Android. The image determines the {ref}`Android execution model <exp-android-execution-models>` used by the instance.
 
 ## Life cycle of an instance
 
@@ -74,12 +82,12 @@ An instance moves through different stages and correspondingly can have the foll
 | `error`           | An error occurred while processing the instance. The instance is stopped. |
 | `unknown`         | A possible error occurred and the real state of the instance cannot be determined. |
 
-If you encounter the `error` or the `unknown` status, use [`amc show <instance_id>`](https://documentation.ubuntu.com/anbox-cloud/reference/cmd-ref/amc/ams.amc_show/) or [`amc-showlog`](https://documentation.ubuntu.com/anbox-cloud/reference/cmd-ref/amc/ams.amc_show-log/) to troubleshoot. If you are still unable to figure out the issue, [file a bug](https://bugs.launchpad.net/anbox-cloud) with the {ref}`relevant instance logs <sec-view-stored-logs>`.
+If you encounter the `error` or the `unknown` status, use [`amc show <instance_id>`](/reference/cmd-ref/amc/ams.amc_show.md) or [`amc-showlog`](/reference/cmd-ref/amc/ams.amc_show-log.md) to troubleshoot. If you are still unable to figure out the issue, [file a bug](https://bugs.launchpad.net/anbox-cloud) with the {ref}`relevant instance logs <sec-view-stored-logs>`.
 
 (sec-dev-mode)=
 ## Development mode
 
-AMS allows to start an instance in development mode. This mode turns off some features that are usually active in an instance. It is mainly useful when developing addons inside an instance.
+AMS allows starting an instance in development mode. This mode turns off some features that are usually active in an instance. It is mainly useful when developing addons inside an instance.
 
 When development mode is enabled, the instance sends status updates to AMS when the Anbox runtime is terminated, however, AMS allows the instance to continue running. This allows you to restart the Anbox runtime inside the instance, providing an easy way to test addons or develop a platform plugin.
 
@@ -87,16 +95,16 @@ To check whether development mode is enabled, run `amc show <instance_ID>` or lo
 
 ## Related topics
 
-* {ref}`exp-addons`
-* [Platform plugin](https://canonical.github.io/anbox-cloud.github.com/latest/anbox-platform-sdk/)
-* {ref}`howto-access-instance`
-* {ref}`howto-backup-restore-application-data`
-* {ref}`howto-create-instance`
-* {ref}`howto-configure-geographic-location`
-* {ref}`howto-delete-instance`
-* {ref}`howto-expose-services`
-* {ref}`howto-list-instances`
-* {ref}`howto-start-instance`
-* {ref}`howto-stop-instance`
-* {ref}`howto-view-instance-logs`
-* {ref}`howto-wait-for-application`
+- {ref}`exp-addons`
+- [Platform plugin](https://canonical.github.io/anbox-cloud.github.com/latest/anbox-platform-sdk/)
+- {ref}`howto-access-instance`
+- {ref}`howto-backup-restore-application-data`
+- {ref}`howto-create-instance`
+- {ref}`howto-configure-geographic-location`
+- {ref}`howto-delete-instance`
+- {ref}`howto-expose-services`
+- {ref}`howto-list-instances`
+- {ref}`howto-start-instance`
+- {ref}`howto-stop-instance`
+- {ref}`howto-view-instance-logs`
+- {ref}`howto-wait-for-application`

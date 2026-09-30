@@ -1,27 +1,33 @@
+---
+myst:
+  html_meta:
+    "description": "How to validate a new Anbox Cloud deployment by running the built-in test suite."
+---
+
 (howto-validate-deployment)=
-# How to validate the deployment
+# Validate your deployment
 
 Anbox Cloud includes a test suite which allows the validation of an Anbox Cloud deployment. It comes with various tests covering different features of Anbox Cloud and can be used to ensure everything works as expected.
 
 The validation tests currently cover the following areas of an Anbox Cloud deployment:
 
-* AMS
-   * Instance creation and deletion in different configurations
-   * Expected images are present
-   * Configuration is setup as expected
-* Anbox Stream Gateway API
+- AMS
+  * Instance creation and deletion in different configurations
+  * Expected images are present
+  * Configuration is set up as expected
+- Anbox Stream Gateway API
   * Session creation and deletion
   * Stress testing
-* Streaming
+- Streaming
   * Stream selected applications in different configurations from Anbox Cloud while ensuring performance is as expected
 
-## Install Validation Tests
+## Install validation tests
 
 The validation tests are packaged as a snap and are distributed via the Canonical snap store. You can install them via
 
     snap install anbox-cloud-tests
 
-## Configure the Validation Tests
+## Configure the validation tests
 
 To run the validation tests, you must generate a configuration file for it first. The tests include an interactive generator that you can use to generate the configuration file. Run the following command:
 
@@ -34,7 +40,7 @@ Do you want to test AMS? [default=yes]
 What is the address of AMS? https://1.2.3.4:8444
 Generating TLS certificate and key for AMS ...
 NOTE: You have to register the certificate generated manually with
- AMS. See https://anbox-cloud.io/docs/manage/managing-ams-access for
+ AMS. See https://documentation.ubuntu.com/anbox-cloud/howto/anbox/control-ams-remotely/ for
  details
 Do you want to test the Anbox Stream Gateway? [default=yes]
 What is the location of the Anbox Stream Gateway? https://2.3.4.5
@@ -94,7 +100,7 @@ Depending on your deployment you can further customize the generated configurati
 
 If you have support for real GPUs, set the `suites.ams.gpu-type` item to the right GPU type (supported values are: `nvidia`, `amd`, `intel`, `none`) and add GPU based instance types (see {ref}`sec-application-manifest-instance-type` for more details) to the `suites.ams.instance-types`.
 
-## Run the Validation Tests
+## Run the validation tests
 
 You can run the validation tests with the following command:
 
@@ -106,6 +112,6 @@ If you want to focus on a specific subset of the tests you can specify a focus f
 
 The following focus areas are available
 
-* `streaming`
-* `gateway`
-* `ams`
+- `streaming`
+- `gateway`
+- `ams`

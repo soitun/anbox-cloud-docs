@@ -1,10 +1,10 @@
-## anbox-cloud-appliance prepare-node-script
+# anbox-cloud-appliance prepare-node-script
 
-Generate a shell script to prepare a machine for the Anbox Cloud Appliance
+Generate a shell script to prepare or upgrade a machine for the Anbox Cloud Appliance
 
-### Synopsis
+## Synopsis
 
-Generate a shell script to prepare a machine for the Anbox Cloud Appliance
+Generate a shell script to prepare or upgrade a machine for the Anbox Cloud Appliance
 
 The command generates a shell script which needs to be executed outside
 of the snap execution environment to install additional dependency and
@@ -29,20 +29,20 @@ Once the script has finished all preparation is completed.
 anbox-cloud-appliance prepare-node-script [flags]
 ```
 
-### Examples
+## Examples
 
 ```
 $ anbox-cloud-appliance prepare-node-script
 ```
 
-### Options
+## Options
 
 ```
       --force-nvidia   Force including NVIDIA GPU driver installation steps even if no GPU is detected
   -h, --help           help for prepare-node-script
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [anbox-cloud-appliance](anbox-cloud-appliance.md)	 - Anbox Cloud Appliance, bringing Android at scale to any cloud
 

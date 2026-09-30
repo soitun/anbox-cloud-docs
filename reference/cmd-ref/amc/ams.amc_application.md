@@ -1,8 +1,8 @@
-## ams.amc application
+# ams.amc application
 
 Manage applications
 
-### Synopsis
+## Synopsis
 
 Manage applications.
 
@@ -12,7 +12,7 @@ An application usually encapsulates one Android application and manages it
 within the cluster.
 The application installs the supplied APK to make it available to users.
 Applications can be updated, pushed to a central registry and more.
-See https://documentation.ubuntu.com/anbox-cloud/en/latest/explanation/applications/ for more information.
+See https://canonical.com/anbox-cloud/docs/explanation/applications/ for more information.
 
 Android applications must go through a bootstrap process before they can
 run on Anbox Cloud. This bootstrap process helps to improve the performance
@@ -27,13 +27,13 @@ Once ready for use, you can publish a specific version. It will then be used
 for any container launched for the application.
 
 
-### Options
+## Options
 
 ```
   -h, --help   help for application
 ```
 
-### SEE ALSO
+## SEE ALSO
 
 * [ams.amc](ams.amc.md)	 - Anbox Management Client
 * [ams.amc application create](ams.amc_application_create.md)	 - Create an application
